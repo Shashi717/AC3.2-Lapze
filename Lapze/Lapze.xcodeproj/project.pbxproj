@@ -11,6 +11,8 @@
 		1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FD1E6789EB00F6B28C /* Assets.xcassets */; };
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
+		9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */; };
+		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		1A9768021E6789EB00F6B28C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
+		9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +54,8 @@
 		1A4AA7C11E678BB1006EC158 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
+				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -260,7 +266,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
+				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
