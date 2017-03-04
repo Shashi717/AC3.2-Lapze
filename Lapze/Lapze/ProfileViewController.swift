@@ -29,9 +29,26 @@ class ProfileViewController: UIViewController {
     func fillMockData() {
         
         profileImageView.image = UIImage(named: "mock_profile_pic")
+        usernameLabel.text = "CoolGuy123"
+        userRankLabel.text = "Rank: 321"
+        activitiesLabel.text = "Activities: Biking, Running"
+        challengesLabel.text = "Challenges: Running"
+        
         
     }
     
+    func segementedControlValueChanged(sender: UISegmentedControl) {
+        let segment = eventSegmentedControl.selectedSegmentIndex
+        
+        switch segment {
+        case 0:
+            print("\(segments[0])")
+        case 1:
+            print("\(segments[1])")
+        default:
+            print("none")
+        }
+    }
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
@@ -50,7 +67,6 @@ class ProfileViewController: UIViewController {
             view.top.equalToSuperview().inset(8.0)
             view.centerX.equalToSuperview()
         }
-        
         usernameLabel.snp.makeConstraints { (view) in
             view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
             view.centerX.equalToSuperview()
@@ -58,28 +74,24 @@ class ProfileViewController: UIViewController {
             view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(20.0)
         }
-        
         userRankLabel.snp.makeConstraints { (view) in
             view.top.equalTo(usernameLabel.snp.bottom).offset(8.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(20.0)
         }
-        
         activitiesLabel.snp.makeConstraints { (view) in
             view.top.equalTo(userRankLabel.snp.bottom).offset(16.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(50.0)
         }
-        
         challengesLabel.snp.makeConstraints { (view) in
             view.top.equalTo(activitiesLabel.snp.bottom).offset(16.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(50.0)
         }
-        
         eventSegmentedControl.snp.makeConstraints { (view) in
             view.bottom.equalToSuperview()
             view.left.equalToSuperview()
@@ -114,28 +126,25 @@ class ProfileViewController: UIViewController {
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
         segmentedControl.backgroundColor = ColorPalette.purpleThemeColor
+        segmentedControl.addTarget(self, action: #selector(segementedControlValueChanged(sender:)), for: .valueChanged)
         return segmentedControl
     }()
     internal lazy var usernameLabel: UILabel! = {
         let label = UILabel()
-        label.text = "CoolGuy123"
         label.textAlignment = .center
         return label
     }()
     internal lazy var userRankLabel: UILabel! = {
         let label = UILabel()
-        label.text = "Rank: 321"
         label.textAlignment = .center
         return label
     }()
     internal lazy var activitiesLabel: UILabel! = {
         let label = UILabel()
-        label.text = "Activities: Biking, Running"
         return label
     }()
     internal lazy var challengesLabel: UILabel! = {
         let label = UILabel()
-        label.text = "Challenges: Running"
         return label
     }()
 }

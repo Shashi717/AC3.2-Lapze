@@ -14,6 +14,8 @@ public enum Activity: String {
     case cycling = "Cycling"
     case skateBoarding = "Skate Boarding"
     case rollerSkating = "Roller Skating"
+    case basketBall = "Basket Ball"
+    case soccer = "Soccer"
 }
 
 enum DatePickerType {
@@ -24,7 +26,8 @@ enum DatePickerType {
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
+    let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
+    let noTimeLimitActivities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
@@ -138,9 +141,19 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        pickedActivityLabel.text = activities[row].rawValue
+        
+        let pickedActivity = activities[row]
+        pickedActivityLabel.text = pickedActivity.rawValue
+        
+        //end time can only be configured for certain activities 
+        if noTimeLimitActivities.contains(pickedActivity) {
+            pickedEndTimeLabel.isUserInteractionEnabled = false
+        }
+        else {
+            pickedEndTimeLabel.isUserInteractionEnabled = true
+        }
+        
     }
-    
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
@@ -356,7 +369,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         let label = UILabel()
         label.text = "..."
         label.textAlignment = .right
-        label.isUserInteractionEnabled = true
+        label.isUserInteractionEnabled = false
         let tap = UITapGestureRecognizer(target: self, action: #selector(endTimeLabelTapped(sender:)))
         label.addGestureRecognizer(tap)
         return label
