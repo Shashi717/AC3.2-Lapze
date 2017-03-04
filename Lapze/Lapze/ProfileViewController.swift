@@ -103,7 +103,7 @@ class ProfileViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
-        imageView.layer.borderColor = UIColor.purple.cgColor
+        imageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -113,7 +113,7 @@ class ProfileViewController: UIViewController {
         let font = UIFont.systemFont(ofSize: 20)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        segmentedControl.backgroundColor = .purple
+        segmentedControl.backgroundColor = ColorPalette.purpleThemeColor
         return segmentedControl
     }()
     internal lazy var usernameLabel: UILabel! = {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public enum Activity: String {
     case running = "Running"

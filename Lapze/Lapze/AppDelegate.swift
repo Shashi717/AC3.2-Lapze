@@ -20,9 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
+        let eventsVC = UINavigationController(rootViewController: EventsViewController())
         
         let tabs = UITabBarController()
-        tabs.viewControllers = [profileVC, createEventVC]
+        tabs.viewControllers = [profileVC, createEventVC, eventsVC]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
@@ -31,6 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let createEventTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         createEventTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         createEventVC.tabBarItem = createEventTab
+        
+        let eventsTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
+        eventsTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        eventsVC.tabBarItem = eventsTab
         
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 20.0),
                                                             NSForegroundColorAttributeName : UIColor.white]
