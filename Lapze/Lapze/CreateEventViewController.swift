@@ -26,14 +26,36 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
     var currentPickerType: DatePickerType = .date
+    var shareLocation = false
+    var shareProfile = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
         self.view.backgroundColor = .white
+        
         setupViewHierarchy()
         configureConstraints()
         
+    }
+    
+    func locationSwitchValueChanged(sender: UISwitch) {
+        print("Before status: \(shareLocation)")
+        shareLocation = !shareLocation
+        print("Now status: \(shareLocation)")
+    }
+    
+    func privacySwitchValueChanged(sender: UISwitch) {
+        shareProfile = !shareProfile
+    }
+    
+    func cancelButtonTapped(sender: UIBarButtonItem) {
+        print("cancel tapped")
+    }
+    
+    func doneButtonTapped(sender: UIBarButtonItem) {
+        print("done tapped")
     }
     
     func showDatePicker() {
@@ -81,13 +103,20 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
     
     func datePicked(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
         switch currentPickerType {
         case DatePickerType.date:
-            pickedDateLabel.text = String(describing: datePicker.date)
+            datePicker.datePickerMode = UIDatePickerMode.date
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            pickedDateLabel.text = dateFormatter.string(from: datePicker.date)
         case DatePickerType.startTime:
-            pickedStartTimeLabel.text = String(describing: datePicker.date)
+            datePicker.datePickerMode = UIDatePickerMode.time
+            dateFormatter.dateFormat = "hh:mm a"
+            pickedStartTimeLabel.text = dateFormatter.string(from: datePicker.date)
         case DatePickerType.endTime:
-            pickedEndTimeLabel.text = String(describing: datePicker.date)
+            datePicker.datePickerMode = UIDatePickerMode.time
+            dateFormatter.dateFormat = "hh:mm a"
+            pickedEndTimeLabel.text = dateFormatter.string(from: datePicker.date)
         }
     }
     
@@ -115,6 +144,9 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
+        
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = doneButton
         self.view.addSubview(activityContainer)
         self.view.addSubview(dateContainer)
         self.view.addSubview(startTimeContainer)
@@ -347,10 +379,12 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var locationSwitch: UISwitch! = {
         let theSwitch = UISwitch()
+        theSwitch.addTarget(self, action: #selector(locationSwitchValueChanged(sender:)), for: .valueChanged)
         return theSwitch
     }()
     internal lazy var privacySwitch: UISwitch! = {
         let theSwitch = UISwitch()
+        theSwitch.addTarget(self, action: #selector(privacySwitchValueChanged(sender:)), for: .valueChanged)
         return theSwitch
     }()
     internal lazy var datePicker: UIDatePicker! = {
@@ -361,6 +395,16 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     internal lazy var activityPickerView: UIPickerView! = {
         let pickerView = UIPickerView()
         return pickerView
+    }()
+    internal lazy var doneButton: UIBarButtonItem! = {
+        var barButton = UIBarButtonItem()
+        barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped(sender:)))
+        return barButton
+    }()
+    internal lazy var cancelButton: UIBarButtonItem! = {
+        var barButton = UIBarButtonItem()
+        barButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelButtonTapped(sender:)))
+        return barButton
     }()
     
 }
