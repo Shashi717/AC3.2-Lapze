@@ -16,13 +16,13 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
         fillMockData()
         
     }
-    
     
     
     
@@ -118,18 +118,24 @@ class ProfileViewController: UIViewController {
     }()
     internal lazy var usernameLabel: UILabel! = {
         let label = UILabel()
+        label.text = "CoolGuy123"
+        label.textAlignment = .center
         return label
     }()
     internal lazy var userRankLabel: UILabel! = {
         let label = UILabel()
+        label.text = "Rank: 321"
+        label.textAlignment = .center
         return label
     }()
     internal lazy var activitiesLabel: UILabel! = {
         let label = UILabel()
+        label.text = "Activities: Biking, Running"
         return label
     }()
     internal lazy var challengesLabel: UILabel! = {
         let label = UILabel()
+        label.text = "Challenges: Running"
         return label
     }()
 }
