@@ -11,7 +11,7 @@ import SnapKit
 
 class ProfileViewController: UIViewController {
     
-    let segments = ["Create", "Challenge"]
+    let segments = ["Create Event", "Create Challenge"]
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -27,7 +27,7 @@ class EventsViewController: UIViewController {
         setupViewHierarchy()
         configureConstraints()
         //createPopup()
-        createThumbView(userName: "noo")
+        //createThumbView(userName: "noo")
         
         
     }

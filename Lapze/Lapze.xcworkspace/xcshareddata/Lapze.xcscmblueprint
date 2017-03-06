@@ -4,12 +4,12 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "4D754A481DF78E9EBB9161285712C564F888BBF5" : 9223372036854775807,
+    "DE5BB8B9A57DD779848A243A54D79680CB107D28" : 9223372036854775807,
     "8CC2C59E3BE44F6B88614AA30B3D088DB5C67666" : 9223372036854775807
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "538CC469-E37E-49AF-AAF6-F5B4F7349A2E",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C7547112-3862-443C-8AC2-A5B0587F0622",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "4D754A481DF78E9EBB9161285712C564F888BBF5" : "",
+    "DE5BB8B9A57DD779848A243A54D79680CB107D28" : "",
     "8CC2C59E3BE44F6B88614AA30B3D088DB5C67666" : "AC3.2-Lapze\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Lapze",
@@ -17,14 +17,14 @@
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Lapze\/Lapze.xcworkspace",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "\/\/",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4D754A481DF78E9EBB9161285712C564F888BBF5"
-    },
-    {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/C4Q\/AC3.2-Lapze.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8CC2C59E3BE44F6B88614AA30B3D088DB5C67666"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/C4Q\/AC3.2-groupThree-ImmigrantServices.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DE5BB8B9A57DD779848A243A54D79680CB107D28"
     }
   ]
 }
