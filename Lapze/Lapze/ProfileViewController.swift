@@ -16,7 +16,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
         self.navigationItem.title = "My Profile"
         self.view.backgroundColor = .white
         setupViewHierarchy()
@@ -44,7 +43,7 @@ class ProfileViewController: UIViewController {
         case 0:
             print("\(segments[0])")
             let createEventVc = CreateEventViewController()
-            self.show(createEventVc, sender: self)
+            //self.show(createEventVc, sender: self)
         case 1:
             print("\(segments[1])")
         default:
