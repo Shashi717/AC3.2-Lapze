@@ -23,34 +23,39 @@ class EventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "test")!)
+        self.navigationItem.title = "Current Events"
+        
         setupViewHierarchy()
         configureConstraints()
         //createPopup()
         //createThumbView(userName: "noo")
         
+        //initial view of events
+        self.eventSegmentedControl.selectedSegmentIndex = 0
         
+        //tap gesture
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        view.addGestureRecognizer(tap)
+      
     }
-
+    
+    //MARK: - Utilities
     func segementedControlValueChanged(sender: UISegmentedControl) {
         let segment = eventSegmentedControl.selectedSegmentIndex
-        
         switch segment {
         case 0:
             print("\(events[0])")
             //thumbButton.setTitle("Join", for: .normal)
             self.navigationItem.title = "Current Events"
-            thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
-            fillPopupForCreateEvent()
-            
+            //real time public user event data
             
         case 1:
             print("\(events[1])")
             //thumbButton.setTitle("Challenge", for: .normal)
             self.navigationItem.title = "Challenge!"
-            thumbButton.setImage(UIImage(named: "Challenge"), for: .normal)
-            fillPopupForChallenge()
-            fillMockupDataForThumbView()
+            //saved event data - start locations, and stats
+
         default:
             print("none")
         }
@@ -79,9 +84,9 @@ class EventsViewController: UIViewController {
         
     }
     
-    //MARK: - setup
+    //MARK: - Setup
     func createThumbView(userName: String) {
-        self.view.addSubview(thumbStatContainerView)
+        self.blurView.addSubview(thumbStatContainerView)
         self.thumbStatContainerView.addSubview(thumbButton)
         self.thumbStatContainerView.addSubview(thumbProfileImageView)
         self.thumbStatContainerView.addSubview(thumbUserNameLabel)
@@ -124,8 +129,8 @@ class EventsViewController: UIViewController {
     }
     
     func createPopup() {
-        
         self.view.addSubview(popupContainerView)
+        self.view.addSubview(blurView)
         self.popupContainerView.addSubview(profileImageView)
         self.popupContainerView.addSubview(challengeStatsLabel)
         self.popupContainerView.addSubview(challengeDescriptionLabel)
@@ -157,14 +162,9 @@ class EventsViewController: UIViewController {
         
         switch selectedSegmentIndex {
         case 0:
-            print("Join Event")
-            let content = UNMutableNotificationContent()
-            content.title = "Join Event"
-            content.subtitle = "Phoebe's event"
-            content.body = "You are joining Phoebe's yoga session"
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
-            let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
-            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            notificationEvent()
+            joinedCurrentEvent()
+            
         case 1:
             print("Challenge Event")
         default:
@@ -172,23 +172,68 @@ class EventsViewController: UIViewController {
         }
     }
     
-    //MARK: - Setup
+    func addButtonTapped(sender: UIButton) {
+        print("add button tapped")
+        let createEventVc = CreateEventViewController()
+        self.show(createEventVc, sender: self)
+    }
+    
+    func joinedCurrentEvent() {
+        print("Join event")
+        //this should change mapview to specific event
+        dismissPopup()
+    }
+    
+    func notificationEvent() {
+        let content = UNMutableNotificationContent()
+        content.title = "Join Event"
+        content.subtitle = "Phoebe's event"
+        content.body = "You are joining Phoebe's yoga session"
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+        let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    func testButtonTapped(sender: UIButton) {
+        print("test button tapped")
+        eventPopup()
+        self.view.addSubview(blurView)
+    }
+    
+    func eventPopup() {
+        print("want to join this event?")
+        //popup box
+        self.thumbStatContainerView.isHidden = false
+        thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
+        fillPopupForCreateEvent()
+        fillMockupDataForThumbView()
+    }
+    
+    func dismissPopup() {
+        print("tap gesture")
+        self.thumbStatContainerView.isHidden = true
+        self.blurView.removeFromSuperview()
+    }
+    
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(eventSegmentedControl)
         
+        let item1 = UIBarButtonItem(customView: addButton)
+        self.navigationItem.setLeftBarButton(item1, animated: true)
+        
+        let item2 = UIBarButtonItem(customView: testButton)
+        self.navigationItem.setRightBarButton(item2, animated: true)
     }
     
     func configureConstraints() {
-        
         eventSegmentedControl.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(25.0)
             view.width.equalTo(160.0)
             view.height.equalTo(40.0)
             view.centerX.equalToSuperview()
         }
-        
     }
     
     //MARK: - Views
@@ -268,5 +313,27 @@ class EventsViewController: UIViewController {
         button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
+    internal lazy var addButton: UIButton! = {
+        let button = UIButton()
+        button.setImage(#imageLiteral(resourceName: "Add"), for: .normal)
+        button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        return button
+    }()
+    internal lazy var testButton: UIButton! = {
+        let button = UIButton()
+        button.setTitle("test", for: .normal)
+        button.addTarget(self, action: #selector(testButtonTapped(sender:)), for: .touchUpInside)
+        button.frame = CGRect(x:0, y:0, width: 30, height: 30)
+        return button
+    }()
     
+    internal lazy var blurView: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = self.view.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return blurView
+    }()
 }
+
