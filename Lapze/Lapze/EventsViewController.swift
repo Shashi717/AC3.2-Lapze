@@ -23,7 +23,6 @@ class EventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "test")!)
         self.navigationItem.title = "Current Events"
         
         setupViewHierarchy()
@@ -220,6 +219,7 @@ class EventsViewController: UIViewController {
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
+        self.view.addSubview(googleMapView)
         self.view.addSubview(eventSegmentedControl)
         
         let item1 = UIBarButtonItem(customView: addButton)
@@ -236,9 +236,32 @@ class EventsViewController: UIViewController {
             view.height.equalTo(40.0)
             view.centerX.equalToSuperview()
         }
+        
+        googleMapView.snp.makeConstraints { (view) in
+            view.top.bottom.leading.trailing.equalToSuperview()
+        }
     }
     
     //MARK: - Views
+    
+    private let googleMapView: GMSMapView = {
+        let mapview: GMSMapView = GMSMapView()
+        mapview.translatesAutoresizingMaskIntoConstraints = false
+        mapview.mapType = .normal
+        mapview.isBuildingsEnabled = false
+        
+        do {
+            // Set the map style by passing the URL of the local file.
+            if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+                mapview.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+            } else {
+                NSLog("Unable to find style.json")
+            }
+        } catch {
+            NSLog("One or more of the map styles failed to load. \(error)")
+        }
+        return mapview
+    }()
     
     internal lazy var eventSegmentedControl: UISegmentedControl! = {
         var segmentedControl = UISegmentedControl()
