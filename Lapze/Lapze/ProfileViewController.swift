@@ -21,7 +21,6 @@ class ProfileViewController: UIViewController {
         setupViewHierarchy()
         configureConstraints()
         fillMockData()
-        
     }
     
     

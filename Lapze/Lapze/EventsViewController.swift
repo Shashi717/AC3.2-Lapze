@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import GoogleMaps
 
 public enum Event: String {
     case currentEvents = "Events"
@@ -30,16 +31,7 @@ class EventsViewController: UIViewController {
         
         
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
     func segementedControlValueChanged(sender: UISegmentedControl) {
         let segment = eventSegmentedControl.selectedSegmentIndex
         
@@ -171,6 +163,8 @@ class EventsViewController: UIViewController {
         }
     }
     
+    //MARK: - Setup
+    
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(eventSegmentedControl)
@@ -187,6 +181,8 @@ class EventsViewController: UIViewController {
         }
         
     }
+    
+    //MARK: - Views
     
     internal lazy var eventSegmentedControl: UISegmentedControl! = {
         var segmentedControl = UISegmentedControl()
