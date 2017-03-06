@@ -8,6 +8,8 @@
 
 import UIKit
 import SnapKit
+import UserNotifications
+import GoogleMaps
 
 public enum Event: String {
     case currentEvents = "Events"
@@ -21,7 +23,6 @@ class EventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
@@ -30,16 +31,7 @@ class EventsViewController: UIViewController {
         
         
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
     func segementedControlValueChanged(sender: UISegmentedControl) {
         let segment = eventSegmentedControl.selectedSegmentIndex
         
@@ -47,6 +39,7 @@ class EventsViewController: UIViewController {
         case 0:
             print("\(events[0])")
             //thumbButton.setTitle("Join", for: .normal)
+            self.navigationItem.title = "Current Events"
             thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
             fillPopupForCreateEvent()
             
@@ -54,6 +47,7 @@ class EventsViewController: UIViewController {
         case 1:
             print("\(events[1])")
             //thumbButton.setTitle("Challenge", for: .normal)
+            self.navigationItem.title = "Challenge!"
             thumbButton.setImage(UIImage(named: "Challenge"), for: .normal)
             fillPopupForChallenge()
             fillMockupDataForThumbView()
@@ -85,6 +79,7 @@ class EventsViewController: UIViewController {
         
     }
     
+    //MARK: - setup
     func createThumbView(userName: String) {
         self.view.addSubview(thumbStatContainerView)
         self.thumbStatContainerView.addSubview(thumbButton)
@@ -163,13 +158,21 @@ class EventsViewController: UIViewController {
         switch selectedSegmentIndex {
         case 0:
             print("Join Event")
-            
+            let content = UNMutableNotificationContent()
+            content.title = "Join Event"
+            content.subtitle = "Phoebe's event"
+            content.body = "You are joining Phoebe's yoga session"
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+            let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         case 1:
             print("Challenge Event")
         default:
             break
         }
     }
+    
+    //MARK: - Setup
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
@@ -187,6 +190,8 @@ class EventsViewController: UIViewController {
         }
         
     }
+    
+    //MARK: - Views
     
     internal lazy var eventSegmentedControl: UISegmentedControl! = {
         var segmentedControl = UISegmentedControl()

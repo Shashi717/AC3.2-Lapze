@@ -7,17 +7,32 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
+        //User Notifications
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (allowd, error) in
+            
+        }
+        
+        UNUserNotificationCenter.current().delegate = self
+
+        
+        //Tab Init
         self.window = UIWindow(frame: UIScreen.main.bounds)
+        let navAppearance = UINavigationBar.appearance()
+        navAppearance.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        navAppearance.barTintColor = ColorPalette.greenThemeColor
+        
+        
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
         let eventsVC = UINavigationController(rootViewController: EventsViewController())
@@ -39,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 20.0),
                                                             NSForegroundColorAttributeName : UIColor.white]
-        tabs.tabBar.backgroundColor = .gray
+        tabs.tabBar.backgroundColor = ColorPalette.greenThemeColor
         tabs.tabBar.barTintColor = .white
         tabs.tabBar.tintColor = ColorPalette.greenThemeColor
         
@@ -47,6 +62,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = tabs
         self.window?.makeKeyAndVisible()
         return true
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.alert)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        //
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

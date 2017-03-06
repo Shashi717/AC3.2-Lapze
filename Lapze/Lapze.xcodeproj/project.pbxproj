@@ -51,7 +51,6 @@
 				1A9767FD1E6789EB00F6B28C /* Assets.xcassets */,
 				1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */,
 				1A9768021E6789EB00F6B28C /* Info.plist */,
-				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -97,6 +96,7 @@
 		1A4AA7C71E678C34006EC158 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
