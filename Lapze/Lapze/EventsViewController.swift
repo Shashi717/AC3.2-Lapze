@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import GoogleMaps
 
 public enum Event: String {
     case currentEvents = "Events"
@@ -27,6 +28,9 @@ class EventsViewController: UIViewController {
         configureConstraints()
         //createPopup()
         createThumbView(userName: "noo")
+        
+       
+        
         
         
     }
