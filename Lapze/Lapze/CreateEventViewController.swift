@@ -57,6 +57,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func cancelButtonTapped(sender: UIBarButtonItem) {
         print("cancel tapped")
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func doneButtonTapped(sender: UIBarButtonItem) {
