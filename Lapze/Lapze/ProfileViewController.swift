@@ -16,7 +16,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
+        //navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
+        self.navigationItem.title = "My Profile"
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
@@ -42,6 +43,8 @@ class ProfileViewController: UIViewController {
         switch segment {
         case 0:
             print("\(segments[0])")
+            let createEventVc = CreateEventViewController()
+            self.show(createEventVc, sender: self)
         case 1:
             print("\(segments[1])")
         default:
@@ -49,6 +52,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    //MARK: - setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(profileImageView)
@@ -98,16 +102,8 @@ class ProfileViewController: UIViewController {
             view.height.equalTo(50.0)
         }
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
+    //MARK: - Views
     internal lazy var profileImageView: UIImageView! = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 75.0

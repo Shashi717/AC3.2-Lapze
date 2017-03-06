@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import UserNotifications
 import GoogleMaps
 
 public enum Event: String {
@@ -22,7 +23,6 @@ class EventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
@@ -39,6 +39,7 @@ class EventsViewController: UIViewController {
         case 0:
             print("\(events[0])")
             //thumbButton.setTitle("Join", for: .normal)
+            self.navigationItem.title = "Current Events"
             thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
             fillPopupForCreateEvent()
             
@@ -46,6 +47,7 @@ class EventsViewController: UIViewController {
         case 1:
             print("\(events[1])")
             //thumbButton.setTitle("Challenge", for: .normal)
+            self.navigationItem.title = "Challenge!"
             thumbButton.setImage(UIImage(named: "Challenge"), for: .normal)
             fillPopupForChallenge()
             fillMockupDataForThumbView()
@@ -77,6 +79,7 @@ class EventsViewController: UIViewController {
         
     }
     
+    //MARK: - setup
     func createThumbView(userName: String) {
         self.view.addSubview(thumbStatContainerView)
         self.thumbStatContainerView.addSubview(thumbButton)
@@ -155,7 +158,13 @@ class EventsViewController: UIViewController {
         switch selectedSegmentIndex {
         case 0:
             print("Join Event")
-            
+            let content = UNMutableNotificationContent()
+            content.title = "Join Event"
+            content.subtitle = "Phoebe's event"
+            content.body = "You are joining Phoebe's yoga session"
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+            let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         case 1:
             print("Challenge Event")
         default:

@@ -35,13 +35,15 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
+        self.navigationItem.title = "Create Event"
         self.view.backgroundColor = .white
         
         setupViewHierarchy()
         configureConstraints()
         
     }
+    
+    //MARK: - Utilities
     
     func locationSwitchValueChanged(sender: UISwitch) {
         print("Before status: \(shareLocation)")
