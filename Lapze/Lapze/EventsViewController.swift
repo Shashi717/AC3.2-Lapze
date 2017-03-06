@@ -29,7 +29,7 @@ class EventsViewController: UIViewController {
         setupViewHierarchy()
         configureConstraints()
         //createPopup()
-        createThumbView(userName: "noo")
+        //createThumbView(userName: "noo")
         
         //initial view of events
         self.eventSegmentedControl.selectedSegmentIndex = 0

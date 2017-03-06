@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import UserNotifications
 
 @UIApplicationMain
@@ -16,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        FIRApp.configure()
+        
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
         //User Notifications
@@ -36,9 +39,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
         let eventsVC = UINavigationController(rootViewController: EventsViewController())
+        let loginVC = UINavigationController(rootViewController: LoginViewController())
+        let registerVC = UINavigationController(rootViewController: RegisterViewController())
         
         let tabs = UITabBarController()
-        tabs.viewControllers = [eventsVC, profileVC, createEventVC]
+        tabs.viewControllers = [eventsVC, profileVC, createEventVC, loginVC, registerVC]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
