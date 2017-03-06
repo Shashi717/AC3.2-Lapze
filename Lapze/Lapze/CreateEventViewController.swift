@@ -35,13 +35,15 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = ColorPalette.greenThemeColor
+        self.navigationItem.title = "Create Event"
         self.view.backgroundColor = .white
         
         setupViewHierarchy()
         configureConstraints()
         
     }
+    
+    //MARK: - Utilities
     
     func locationSwitchValueChanged(sender: UISwitch) {
         print("Before status: \(shareLocation)")
@@ -55,6 +57,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func cancelButtonTapped(sender: UIBarButtonItem) {
         print("cancel tapped")
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func doneButtonTapped(sender: UIBarButtonItem) {
@@ -154,6 +157,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         }
         
     }
+    //MARK: - Setup
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
@@ -278,15 +282,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         }
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    //MARK: - Views
     // Acitivity, Date, Start Time, End, Location, Public
     
     internal lazy var activityContainer: UIView! = {

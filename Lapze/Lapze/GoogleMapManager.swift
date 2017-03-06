@@ -11,13 +11,13 @@ import GoogleMaps
 
 class GoogleMapManager{
     static let shared: GoogleMapManager = GoogleMapManager()
-    public var map: GMSMapView?
+    private var map: GMSMapView?
     private init(){}
     
     private var dict: [String: GMSMarker] = [:]
     
-    static func manage(map: GMSMapView){
-        self.map = map
+    func manage(map: GMSMapView){
+       self.map = map
     }
     
     func addMarkerToDic(name: String, with dict:[String:Double]){

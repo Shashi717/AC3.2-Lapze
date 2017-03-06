@@ -15,6 +15,9 @@
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */; };
 		9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C231E6A6830003EE1D7 /* ColorPalette.swift */; };
+		9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */; };
+		9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B19204E1E6DED8400868AB2 /* LoginViewController.swift */; };
+		9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */; };
 		9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */; };
 		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +35,9 @@
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
 		9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		9B170C231E6A6830003EE1D7 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9B19204E1E6DED8400868AB2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,6 +61,7 @@
 				1A9767FD1E6789EB00F6B28C /* Assets.xcassets */,
 				1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */,
 				1A9768021E6789EB00F6B28C /* Info.plist */,
+				9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */,
 				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 			);
 			name = "Supporting Files";
@@ -66,6 +73,8 @@
 				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
+				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
+				9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -218,6 +227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */,
 				1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */,
 				1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */,
 			);
@@ -280,7 +290,11 @@
 			files = (
 				1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */,
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
+
+				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
+
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
+				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,

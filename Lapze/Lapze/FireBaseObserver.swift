@@ -38,7 +38,6 @@ class FirebaseObserver{
         })
         
         childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-            GoogleMapManager.shared.removeMarker(name: snapshot)
             
         })
         
