@@ -100,6 +100,7 @@
 		1A4AA7C71E678C34006EC158 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
