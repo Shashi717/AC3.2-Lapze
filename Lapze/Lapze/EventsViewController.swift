@@ -19,8 +19,11 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
+
+
 class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate {
     private var userLocation: CLLocation?{
+
         didSet{
             findUser()
             //addLocationtoFireBase(location: userLocation!)
@@ -66,12 +69,16 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
             //thumbButton.setTitle("Join", for: .normal)
             self.navigationItem.title = "Current Events"
             //real time public user event data
+            //self.addButton.setBackgroundImage(UIImage(named: "add2"), for: .normal)
+            self.addButton.backgroundColor = ColorPalette.purpleThemeColor
             
         case 1:
             print("\(events[1])")
             //thumbButton.setTitle("Challenge", for: .normal)
             self.navigationItem.title = "Challenge!"
             //saved event data - start locations, and stats
+            //self.addButton.setBackgroundImage(UIImage(named: "addChallenge"), for: .normal)
+            self.addButton.backgroundColor = ColorPalette.orangeThemeColor
             
         default:
             print("none")
@@ -144,35 +151,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
             view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
         }
     }
-    
-    //    func createPopup() {
-    //        self.thumbStatContainerView.addSubview(popupContainerView)
-    //        self.popupContainerView.addSubview(profileImageView)
-    //        self.popupContainerView.addSubview(challengeStatsLabel)
-    //        self.popupContainerView.addSubview(challengeDescriptionLabel)
-    //
-    //        popupContainerView.snp.makeConstraints { (view) in
-    //            view.centerX.centerY.equalToSuperview()
-    //            view.height.equalTo(200.0)
-    //            view.width.equalTo(250.0)
-    //        }
-    //        profileImageView.snp.makeConstraints { (view) in
-    //            view.top.equalToSuperview().offset(16.0)
-    //            view.height.width.equalTo(70.0)
-    //            view.centerX.equalToSuperview()
-    //        }
-    //        challengeStatsLabel.snp.makeConstraints { (view) in
-    //            view.left.right.bottom.equalToSuperview()
-    //            view.height.equalTo(10.0)
-    //        }
-    //        challengeDescriptionLabel.snp.makeConstraints { (view) in
-    //            view.centerX.equalToSuperview()
-    //            view.width.equalTo(160.0)
-    //            view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
-    //            view.bottom.equalTo(challengeStatsLabel.snp.top).inset(8.0)
-    //        }
-    //    }
-    //
+
     func thumbButtonTapped(sender: UIButton) {
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -190,8 +169,20 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     func addButtonTapped(sender: UIButton) {
         print("add button tapped")
-        let createEventVc = CreateEventViewController()
-        self.show(createEventVc, sender: self)
+        let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
+        
+        switch selectedSegmentIndex {
+        case 0:
+            let createEventVc = CreateEventViewController()
+            self.show(createEventVc, sender: self)
+            
+        case 1:
+            let createEventVc = CreateChallengeViewController()
+            self.show(createEventVc, sender: self)
+            
+        default:
+            break
+        }
     }
     
     func joinedCurrentEvent() {
@@ -324,7 +315,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         let view: GoogleMapThumbView = GoogleMapThumbView()
         view.profileImageView.image = marker.icon
-        view.nameLabel.text = FIRAuth.auth()?.currentUser?.uid ?? "No name"
+        view.nameLabel.text = marker.title
         return view
     }
     
@@ -433,7 +424,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     internal lazy var addButton: UIButton! = {
         let button: UIButton = UIButton()
-        button.setImage(UIImage(named: "add2"), for: .normal)
+        button.setImage(UIImage(named: "add-1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
             view.size.equalTo(CGSize(width: 30, height: 30))
@@ -441,7 +432,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         button.layer.shadowOpacity = 0.4
         button.layer.shadowOffset = CGSize(width: 1, height: 5)
         button.layer.shadowRadius = 2
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button

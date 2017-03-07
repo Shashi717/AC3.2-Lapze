@@ -26,8 +26,8 @@ class GoogleMapManager{
             let marker = GMSMarker(position: cllocation)
             self.dict[name] = marker
             marker.map = map
-//            marker.title = name
             marker.icon = UIImage(named: "010-man")
+            marker.title = name
         }
     }
     
@@ -50,5 +50,4 @@ class GoogleMapManager{
     func allMarkers()->[String:GMSMarker]{
         return dict
     }
-    
 }
