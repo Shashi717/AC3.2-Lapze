@@ -20,7 +20,7 @@ public enum Event: String {
 }
 
 class EventsViewController: UIViewController,CLLocationManagerDelegate {
-    private var userLocation: CLLocation?{
+    private var userLocation: CLLocation? {
         didSet{
             findUser()
             addLocationtoFireBase(location: userLocation!)
@@ -146,6 +146,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
             view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
         }
     }
+    
     
 //    func createPopup() {
 //        self.thumbStatContainerView.addSubview(popupContainerView)
