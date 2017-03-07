@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     
@@ -43,7 +44,7 @@ class ProfileViewController: UIViewController {
         case 0:
             print("\(segments[0])")
             let createEventVc = CreateEventViewController()
-            //self.show(createEventVc, sender: self)
+        //self.show(createEventVc, sender: self)
         case 1:
             print("\(segments[1])")
         default:
@@ -51,9 +52,26 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    func logoutButtonTapped(sender: UIBarButtonItem) {
+        do {
+            try? FIRAuth.auth()?.signOut()
+            let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+        }
+        catch
+        {
+            let alertController = showAlert(title: "Logout Unsuccessul!", message: "Error occured. Please try again.", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+
+        }
+        
+    }
+    
     //MARK: - setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
+        
+        navigationItem.rightBarButtonItem = logoutButton
         self.view.addSubview(profileImageView)
         self.view.addSubview(usernameLabel)
         self.view.addSubview(userRankLabel)
@@ -141,4 +159,10 @@ class ProfileViewController: UIViewController {
         let label = UILabel()
         return label
     }()
+    internal lazy var logoutButton: UIBarButtonItem! = {
+        var barButton = UIBarButtonItem()
+        barButton = UIBarButtonItem(title: "Logout", style: .done, target: self, action: #selector(logoutButtonTapped(sender:)))
+        return barButton
+    }()
+    
 }

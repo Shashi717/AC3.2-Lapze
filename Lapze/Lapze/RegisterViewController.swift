@@ -49,17 +49,18 @@ class RegisterViewController: UIViewController {
                 else {
                     let alertController = showAlert(title: "Signup Successful!", message: "Successfully Registered. You will be automatically logged in!", useDefaultAction: false)
                     
-                    self.present(alertController, animated: true, completion: nil)
-                    
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         //self.present(tbvc, animated: true, completion: nil)
                         
                         let userDict = ["name": username]
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
                         print("pressed ok")
+                        self.clearTextFields()
+                        let tabVC = EventsViewController()
+                        self.navigationController?.pushViewController(tabVC, animated:true)
                         
                     }))
-                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
             })
         }
@@ -111,6 +112,12 @@ class RegisterViewController: UIViewController {
         
     }
     
+    func clearTextFields() {
+        emailTextField.text = nil
+        passwordTextField.text = nil
+        usernameTextField.text = nil
+    }
+    
     internal lazy var logoImageView: UIImageView! = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
@@ -143,7 +150,6 @@ class RegisterViewController: UIViewController {
         button.addTarget(self, action: #selector(registerTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
 }
 
 public func showAlert(title: String, message: String?, useDefaultAction: Bool) -> UIAlertController {

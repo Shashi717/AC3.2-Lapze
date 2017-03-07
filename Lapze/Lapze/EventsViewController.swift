@@ -31,8 +31,10 @@ class EventsViewController: UIViewController {
         //createPopup()
         //createThumbView(userName: "noo")
         
+
         //initial view of events
         self.eventSegmentedControl.selectedSegmentIndex = 0
+
         
         //tap gesture
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
