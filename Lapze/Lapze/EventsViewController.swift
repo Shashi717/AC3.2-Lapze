@@ -10,20 +10,28 @@ import UIKit
 import SnapKit
 import UserNotifications
 import GoogleMaps
+import CoreLocation
+import FirebaseDatabase
+import FirebaseAuth
 
 public enum Event: String {
     case currentEvents = "Events"
     case challenges = "Challenges"
 }
 
-class EventsViewController: UIViewController {
+class EventsViewController: UIViewController,CLLocationManagerDelegate {
+    private var userLocation: CLLocation?{
+        didSet{
+            findUser()
+            addLocationtoFireBase(location: userLocation!)
+        }
+    }
     
     let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "test")!)
         self.navigationItem.title = "Current Events"
         
         setupViewHierarchy()
@@ -31,15 +39,24 @@ class EventsViewController: UIViewController {
         //createPopup()
         //createThumbView(userName: "noo")
         
-
+        
         //initial view of events
         self.eventSegmentedControl.selectedSegmentIndex = 0
-
+        
         
         //tap gesture
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
         view.addGestureRecognizer(tap)
-      
+        GoogleMapManager.shared.manage(map: self.googleMapView)
+        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        FirebaseObserver.manager.stopObserving()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        FirebaseObserver.manager.startObserving(node: .location)
     }
     
     //MARK: - Utilities
@@ -57,7 +74,7 @@ class EventsViewController: UIViewController {
             //thumbButton.setTitle("Challenge", for: .normal)
             self.navigationItem.title = "Challenge!"
             //saved event data - start locations, and stats
-
+            
         default:
             print("none")
         }
@@ -224,13 +241,17 @@ class EventsViewController: UIViewController {
     
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
+        self.view.addSubview(googleMapView)
         self.view.addSubview(eventSegmentedControl)
+        self.googleMapView.addSubview(locateMeButton)
         
         let item1 = UIBarButtonItem(customView: addButton)
         self.navigationItem.setLeftBarButton(item1, animated: true)
         
         let item2 = UIBarButtonItem(customView: testButton)
         self.navigationItem.setRightBarButton(item2, animated: true)
+        
+        locationManager.delegate = self
     }
     
     func configureConstraints() {
@@ -240,9 +261,99 @@ class EventsViewController: UIViewController {
             view.height.equalTo(40.0)
             view.centerX.equalToSuperview()
         }
+        
+        googleMapView.snp.makeConstraints { (view) in
+            view.top.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        locateMeButton.snp.makeConstraints { (view) in
+            view.trailing.centerY.equalToSuperview()
+        }
+        
+    }
+    
+    //MARK: Location Utilities
+    private func addUserToMap(){
+        
+    }
+    
+    func addLocationtoFireBase(location: CLLocation){
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
+        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+            if error != nil{
+                print(error?.localizedDescription)
+                
+            }else{
+                print("Success adding location")
+            }
+        }
+    }
+    
+    func findUser(){
+        if let location = userLocation{
+            let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+            googleMapView.animate(toLocation: clocation)
+            googleMapView.animate(toZoom: 15)
+        }
+    }
+    //MARK: Location manager Delegate
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        guard let validLocation: CLLocation = locations.last else { return }
+        self.userLocation = validLocation
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status{
+        case .authorizedAlways, .authorizedWhenInUse:
+            print("All good")
+            //manager.startUpdatingLocation()
+            manager.startMonitoringSignificantLocationChanges()
+            
+        case .denied, .restricted:
+            print("NOPE")
+            locationManager.requestAlwaysAuthorization()
+            
+        case .notDetermined:
+            print("IDK")
+            locationManager.requestAlwaysAuthorization()
+        }
     }
     
     //MARK: - Views
+    private let googleMapView: GMSMapView = {
+        let mapview: GMSMapView = GMSMapView()
+        mapview.translatesAutoresizingMaskIntoConstraints = false
+        mapview.mapType = .normal
+        mapview.isBuildingsEnabled = false
+        
+        do {
+            // Set the map style by passing the URL of the local file.
+            if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+                mapview.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+            } else {
+                NSLog("Unable to find style.json")
+            }
+        } catch {
+            NSLog("One or more of the map styles failed to load. \(error)")
+        }
+        return mapview
+    }()
+    
+    private let locationManager: CLLocationManager = {
+        let locMan: CLLocationManager = CLLocationManager()
+        locMan.desiredAccuracy = 100.0
+        locMan.distanceFilter = 50.0
+        return locMan
+    }()
+    
+    private let locateMeButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setTitle("Me", for: .normal)
+        button.addTarget(self, action: #selector(findUser), for: .touchUpInside)
+        button.backgroundColor = ColorPalette.logoGreenColor
+        return button
+    }()
     
     internal lazy var eventSegmentedControl: UISegmentedControl! = {
         var segmentedControl = UISegmentedControl()
@@ -312,10 +423,10 @@ class EventsViewController: UIViewController {
     }()
     internal lazy var thumbButton: UIButton! = {
         let button = UIButton()
-       // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
-       // button.backgroundColor = ColorPalette.logoGreenColor
-//        button.layer.cornerRadius = 10.0
-//        button.layer.masksToBounds = false
+        // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
+        // button.backgroundColor = ColorPalette.logoGreenColor
+        //        button.layer.cornerRadius = 10.0
+        //        button.layer.masksToBounds = false
         button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
