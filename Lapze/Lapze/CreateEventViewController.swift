@@ -36,7 +36,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         super.viewDidLoad()
         
         self.navigationItem.title = "Create Event"
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = ColorPalette.spaceGrayColor
         
         setupViewHierarchy()
         configureConstraints()
@@ -113,7 +113,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         switch currentPickerType {
         case DatePickerType.date:
             datePicker.datePickerMode = UIDatePickerMode.date
-            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dateFormatter.dateFormat = "MMM dd, yyyy"
             pickedDateLabel.text = dateFormatter.string(from: datePicker.date)
         case DatePickerType.startTime:
             datePicker.datePickerMode = UIDatePickerMode.time
@@ -148,7 +148,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         let pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
         
-        //end time can only be configured for certain activities 
+        //end time can only be configured for certain activities
         if noTimeLimitActivities.contains(pickedActivity) {
             pickedEndTimeLabel.isUserInteractionEnabled = false
         }
@@ -188,93 +188,98 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func configureConstraints() {
         activityContainer.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(16.0)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.top.equalToSuperview().offset(22.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         dateContainer.snp.makeConstraints { (view) in
-            view.top.equalTo(activityContainer.snp.bottom)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.top.equalTo(activityContainer.snp.bottom).offset(22.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         startTimeContainer.snp.makeConstraints { (view) in
-            view.top.equalTo(dateContainer.snp.bottom)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.top.equalTo(dateContainer.snp.bottom).offset(1.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         endTimeContainer.snp.makeConstraints { (view) in
-            view.top.equalTo(startTimeContainer.snp.bottom)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.top.equalTo(startTimeContainer.snp.bottom).offset(1.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         privacyLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(endTimeContainer.snp.bottom)
+            view.top.equalTo(endTimeContainer.snp.bottom).offset(22.0)
             view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.height.equalTo(26.0)
         }
         locationContainer.snp.makeConstraints { (view) in
             view.top.equalTo(privacyLabel.snp.bottom)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         privacyContainer.snp.makeConstraints { (view) in
-            view.top.equalTo(locationContainer.snp.bottom)
-            view.left.equalToSuperview().offset(16.0)
-            view.right.equalToSuperview().inset(16.0)
-            view.height.equalTo(50.0)
+            view.top.equalTo(locationContainer.snp.bottom).offset(1.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
         }
         
         activityLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         pickedActivityLabel.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
             view.width.equalTo(150.0)
         }
         dateLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         pickedDateLabel.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
             view.width.equalTo(150.0)
         }
         startTimeLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         pickedStartTimeLabel.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
             view.width.equalTo(150.0)
         }
         endTimeLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         pickedEndTimeLabel.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
             view.width.equalTo(150.0)
         }
         locationLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         locationSwitch.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.centerY.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
         }
         sharingStatusLabel.snp.makeConstraints { (view) in
-            view.top.bottom.left.equalToSuperview()
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
             view.width.equalTo(100.0)
         }
         privacySwitch.snp.makeConstraints { (view) in
-            view.top.bottom.right.equalToSuperview()
+            view.centerY.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
         }
         pickerContainer.snp.makeConstraints { (view) in
             view.top.equalTo(privacyContainer.snp.bottom).offset(16.0)
@@ -287,30 +292,37 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     internal lazy var activityContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var dateContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var startTimeContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var endTimeContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var locationContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var privacyContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var pickerContainer: UIView! = {
         let view = UIView()
+        view.backgroundColor = .white
         return view
     }()
     internal lazy var activityLabel: UILabel! = {
@@ -325,17 +337,18 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var startTimeLabel: UILabel! = {
         let label = UILabel()
-        label.text = "Start Time"
+        label.text = "Start"
         return label
     }()
     internal lazy var endTimeLabel: UILabel! = {
         let label = UILabel()
-        label.text = "End Time"
+        label.text = "End"
         return label
     }()
     internal lazy var pickedActivityLabel: UILabel! = {
         let label = UILabel()
         label.text = "..."
+        label.textColor = .lightGray
         label.textAlignment = .right
         label.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(activityLabelTapped(sender:)))
@@ -346,6 +359,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     internal lazy var pickedDateLabel: UILabel! = {
         let label = UILabel()
         label.text = "..."
+        label.textColor = .lightGray
         label.textAlignment = .right
         label.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(dateLabelTapped(sender:)))
@@ -355,6 +369,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     internal lazy var pickedStartTimeLabel: UILabel! = {
         let label = UILabel()
         label.text = "..."
+        label.textColor = .lightGray
         label.textAlignment = .right
         label.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(startTimeLabelTapped(sender:)))
@@ -364,6 +379,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     internal lazy var pickedEndTimeLabel: UILabel! = {
         let label = UILabel()
         label.text = "..."
+        label.textColor = .lightGray
         label.textAlignment = .right
         label.isUserInteractionEnabled = false
         let tap = UITapGestureRecognizer(target: self, action: #selector(endTimeLabelTapped(sender:)))
@@ -372,8 +388,10 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var privacyLabel: UILabel! = {
         let label = UILabel()
-        label.text = "Privacy"
-        label.textAlignment = .center
+        label.text = "PRIVACY"
+        label.textColor = .gray
+        label.font = label.font.withSize(14)
+        label.textAlignment = .left
         return label
     }()
     internal lazy var locationLabel: UILabel! = {
