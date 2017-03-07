@@ -81,7 +81,6 @@ class EventsViewController: UIViewController {
         thumbUserNameLabel.text = "CoolGuy123"
         thumbChallengeDescriptionLabel.text = "Bike Champ"
         thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
-        
     }
     
     //MARK: - Setup
@@ -101,6 +100,7 @@ class EventsViewController: UIViewController {
             //should be changed to the location of the pin
             view.centerX.centerY.equalToSuperview()
         }
+        
         thumbButton.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(4.0)
             view.right.equalToSuperview().inset(4.0)
