@@ -11,6 +11,7 @@
 		1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FD1E6789EB00F6B28C /* Assets.xcassets */; };
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
 		1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */; };
+		1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */; };
 		1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
@@ -25,6 +26,7 @@
 		E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2F91E6F41B2005BE3B8 /* dayStyle.json */; };
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
 		E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */; };
+		E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,7 @@
 		1A9768001E6789EB00F6B28C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A9768021E6789EB00F6B28C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkBlueStyle.json; sourceTree = "<group>"; };
+		1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapThumbView.swift; sourceTree = "<group>"; };
 		1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireBaseObserver.swift; sourceTree = "<group>"; };
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +53,7 @@
 		E363F2F91E6F41B2005BE3B8 /* dayStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dayStyle.json; sourceTree = "<group>"; };
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
+		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,7 @@
 				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
+				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
 				9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */,
 			);
@@ -97,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
+				1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -311,7 +317,9 @@
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
+				E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
+				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
