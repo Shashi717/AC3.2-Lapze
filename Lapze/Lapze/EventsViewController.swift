@@ -19,8 +19,11 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
+
+
 class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate {
     private var userLocation: CLLocation?{
+
         didSet{
             findUser()
             addLocationtoFireBase(location: userLocation!)
@@ -68,12 +71,16 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
             //thumbButton.setTitle("Join", for: .normal)
             self.navigationItem.title = "Current Events"
             //real time public user event data
+            //self.addButton.setBackgroundImage(UIImage(named: "add2"), for: .normal)
+            self.addButton.backgroundColor = ColorPalette.purpleThemeColor
             
         case 1:
             print("\(events[1])")
             //thumbButton.setTitle("Challenge", for: .normal)
             self.navigationItem.title = "Challenge!"
             //saved event data - start locations, and stats
+            //self.addButton.setBackgroundImage(UIImage(named: "addChallenge"), for: .normal)
+            self.addButton.backgroundColor = ColorPalette.orangeThemeColor
             
         default:
             print("none")
@@ -147,6 +154,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         }
     }
     
+    
 //    func createPopup() {
 //        self.thumbStatContainerView.addSubview(popupContainerView)
 //        self.popupContainerView.addSubview(profileImageView)
@@ -192,8 +200,20 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     func addButtonTapped(sender: UIButton) {
         print("add button tapped")
-        let createEventVc = CreateEventViewController()
-        self.show(createEventVc, sender: self)
+        let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
+        
+        switch selectedSegmentIndex {
+        case 0:
+            let createEventVc = CreateEventViewController()
+            self.show(createEventVc, sender: self)
+            
+        case 1:
+            let createEventVc = CreateChallengeViewController()
+            self.show(createEventVc, sender: self)
+            
+        default:
+            break
+        }
     }
     
     func joinedCurrentEvent() {
@@ -438,7 +458,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
 
     internal lazy var addButton: UIButton! = {
         let button: UIButton = UIButton()
-        button.setImage(UIImage(named: "add2"), for: .normal)
+        button.setImage(UIImage(named: "add-1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
             view.size.equalTo(CGSize(width: 30, height: 30))
@@ -446,7 +466,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         button.layer.shadowOpacity = 0.4
         button.layer.shadowOffset = CGSize(width: 1, height: 5)
         button.layer.shadowRadius = 2
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
