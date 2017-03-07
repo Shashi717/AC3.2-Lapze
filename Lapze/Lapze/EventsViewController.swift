@@ -23,7 +23,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     private var userLocation: CLLocation?{
         didSet{
             findUser()
-            addLocationtoFireBase(location: userLocation!)
+            //addLocationtoFireBase(location: userLocation!)
         }
     }
     
@@ -50,13 +50,11 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
         
+        FirebaseObserver.manager.startObserving(node: .location)
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         FirebaseObserver.manager.stopObserving()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        FirebaseObserver.manager.startObserving(node: .location)
     }
     
     //MARK: - Utilities
@@ -147,34 +145,34 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         }
     }
     
-//    func createPopup() {
-//        self.thumbStatContainerView.addSubview(popupContainerView)
-//        self.popupContainerView.addSubview(profileImageView)
-//        self.popupContainerView.addSubview(challengeStatsLabel)
-//        self.popupContainerView.addSubview(challengeDescriptionLabel)
-//        
-//        popupContainerView.snp.makeConstraints { (view) in
-//            view.centerX.centerY.equalToSuperview()
-//            view.height.equalTo(200.0)
-//            view.width.equalTo(250.0)
-//        }
-//        profileImageView.snp.makeConstraints { (view) in
-//            view.top.equalToSuperview().offset(16.0)
-//            view.height.width.equalTo(70.0)
-//            view.centerX.equalToSuperview()
-//        }
-//        challengeStatsLabel.snp.makeConstraints { (view) in
-//            view.left.right.bottom.equalToSuperview()
-//            view.height.equalTo(10.0)
-//        }
-//        challengeDescriptionLabel.snp.makeConstraints { (view) in
-//            view.centerX.equalToSuperview()
-//            view.width.equalTo(160.0)
-//            view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
-//            view.bottom.equalTo(challengeStatsLabel.snp.top).inset(8.0)
-//        }
-//    }
-//    
+    //    func createPopup() {
+    //        self.thumbStatContainerView.addSubview(popupContainerView)
+    //        self.popupContainerView.addSubview(profileImageView)
+    //        self.popupContainerView.addSubview(challengeStatsLabel)
+    //        self.popupContainerView.addSubview(challengeDescriptionLabel)
+    //
+    //        popupContainerView.snp.makeConstraints { (view) in
+    //            view.centerX.centerY.equalToSuperview()
+    //            view.height.equalTo(200.0)
+    //            view.width.equalTo(250.0)
+    //        }
+    //        profileImageView.snp.makeConstraints { (view) in
+    //            view.top.equalToSuperview().offset(16.0)
+    //            view.height.width.equalTo(70.0)
+    //            view.centerX.equalToSuperview()
+    //        }
+    //        challengeStatsLabel.snp.makeConstraints { (view) in
+    //            view.left.right.bottom.equalToSuperview()
+    //            view.height.equalTo(10.0)
+    //        }
+    //        challengeDescriptionLabel.snp.makeConstraints { (view) in
+    //            view.centerX.equalToSuperview()
+    //            view.width.equalTo(160.0)
+    //            view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
+    //            view.bottom.equalTo(challengeStatsLabel.snp.top).inset(8.0)
+    //        }
+    //    }
+    //
     func thumbButtonTapped(sender: UIButton) {
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -214,7 +212,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     func testButtonTapped(sender: UIButton) {
         print("test button tapped")
-       //eventPopup()
+        //eventPopup()
         let popVc = PopupViewController()
         popVc.modalTransitionStyle = .crossDissolve
         popVc.modalPresentationStyle = .overCurrentContext
@@ -275,14 +273,9 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
         }
-        
     }
     
     //MARK: Location Utilities
-    private func addUserToMap(){
-        
-    }
-    
     func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
@@ -331,6 +324,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         let view: GoogleMapThumbView = GoogleMapThumbView()
         view.profileImageView.image = marker.icon
+        view.nameLabel.text = FIRAuth.auth()?.currentUser?.uid ?? "No name"
         return view
     }
     
@@ -345,6 +339,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         mapview.translatesAutoresizingMaskIntoConstraints = false
         mapview.mapType = .normal
         mapview.isBuildingsEnabled = false
+        mapview.isMyLocationEnabled = true
         
         do {
             if let styleURL = Bundle.main.url(forResource: "darkBlueStyle", withExtension: "json") {
@@ -425,7 +420,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         label.textAlignment = .center
         return label
     }()
-
+    
     internal lazy var thumbButton: UIButton! = {
         let button = UIButton()
         // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
@@ -435,7 +430,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
-
+    
     internal lazy var addButton: UIButton! = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "add2"), for: .normal)
@@ -459,7 +454,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         button.frame = CGRect(x:0, y:0, width: 30, height: 30)
         return button
     }()
-
+    
     
 }
 
