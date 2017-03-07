@@ -81,16 +81,16 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     func fillPopupForCreateEvent() {
-        popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
-        profileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
+        //popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
+        //profileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
         
         thumbStatContainerView.backgroundColor = ColorPalette.purpleThemeColor
         thumbProfileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
     }
     
     func fillPopupForChallenge() {
-        popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
+        //popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
+        //profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
         
         thumbStatContainerView.backgroundColor = ColorPalette.orangeThemeColor
         thumbProfileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
@@ -147,34 +147,34 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         }
     }
     
-    func createPopup() {
-        self.thumbStatContainerView.addSubview(popupContainerView)
-        self.popupContainerView.addSubview(profileImageView)
-        self.popupContainerView.addSubview(challengeStatsLabel)
-        self.popupContainerView.addSubview(challengeDescriptionLabel)
-        
-        popupContainerView.snp.makeConstraints { (view) in
-            view.centerX.centerY.equalToSuperview()
-            view.height.equalTo(200.0)
-            view.width.equalTo(250.0)
-        }
-        profileImageView.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(16.0)
-            view.height.width.equalTo(70.0)
-            view.centerX.equalToSuperview()
-        }
-        challengeStatsLabel.snp.makeConstraints { (view) in
-            view.left.right.bottom.equalToSuperview()
-            view.height.equalTo(10.0)
-        }
-        challengeDescriptionLabel.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.width.equalTo(160.0)
-            view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
-            view.bottom.equalTo(challengeStatsLabel.snp.top).inset(8.0)
-        }
-    }
-    
+//    func createPopup() {
+//        self.thumbStatContainerView.addSubview(popupContainerView)
+//        self.popupContainerView.addSubview(profileImageView)
+//        self.popupContainerView.addSubview(challengeStatsLabel)
+//        self.popupContainerView.addSubview(challengeDescriptionLabel)
+//        
+//        popupContainerView.snp.makeConstraints { (view) in
+//            view.centerX.centerY.equalToSuperview()
+//            view.height.equalTo(200.0)
+//            view.width.equalTo(250.0)
+//        }
+//        profileImageView.snp.makeConstraints { (view) in
+//            view.top.equalToSuperview().offset(16.0)
+//            view.height.width.equalTo(70.0)
+//            view.centerX.equalToSuperview()
+//        }
+//        challengeStatsLabel.snp.makeConstraints { (view) in
+//            view.left.right.bottom.equalToSuperview()
+//            view.height.equalTo(10.0)
+//        }
+//        challengeDescriptionLabel.snp.makeConstraints { (view) in
+//            view.centerX.equalToSuperview()
+//            view.width.equalTo(160.0)
+//            view.top.equalTo(profileImageView.snp.bottom).offset(8.0)
+//            view.bottom.equalTo(challengeStatsLabel.snp.top).inset(8.0)
+//        }
+//    }
+//    
     func thumbButtonTapped(sender: UIButton) {
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -229,13 +229,13 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         fillPopupForCreateEvent()
         fillMockupDataForThumbView()
         self.thumbStatContainerView.isHidden = false
-        self.view.addSubview(blurView)
+        //self.view.addSubview(blurView)
     }
     
     func dismissPopup() {
         print("tap gesture")
         self.thumbStatContainerView.isHidden = true
-        self.blurView.removeFromSuperview()
+        //self.blurView.removeFromSuperview()
     }
     
     
@@ -244,9 +244,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         self.view.addSubview(googleMapView)
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
-        
-        let item1 = UIBarButtonItem(customView: addButton)
-        self.navigationItem.setLeftBarButton(item1, animated: true)
+        self.googleMapView.addSubview(addButton)
         
         let item2 = UIBarButtonItem(customView: testButton)
         self.navigationItem.setRightBarButton(item2, animated: true)
@@ -257,8 +255,8 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
     func configureConstraints() {
         eventSegmentedControl.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(25.0)
-            view.width.equalTo(160.0)
-            view.height.equalTo(40.0)
+            view.width.equalToSuperview().multipliedBy(0.85)
+            view.height.equalTo(30.0)
             view.centerX.equalToSuperview()
         }
         
@@ -267,7 +265,15 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         }
         
         locateMeButton.snp.makeConstraints { (view) in
-            view.trailing.centerY.equalToSuperview()
+            view.trailing.equalToSuperview().inset(10)
+            view.width.height.equalTo(50)
+            view.bottom.equalToSuperview().inset(10)
+        }
+        
+        addButton.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.height.equalTo(50)
+            view.bottom.equalToSuperview().inset(10)
         }
         
     }
@@ -301,14 +307,15 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         
         guard let validLocation: CLLocation = locations.last else { return }
         self.userLocation = validLocation
+        print("loccation change")
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status{
         case .authorizedAlways, .authorizedWhenInUse:
             print("All good")
-            //manager.startUpdatingLocation()
-            manager.startMonitoringSignificantLocationChanges()
+            manager.startUpdatingLocation()
+            //manager.startMonitoringSignificantLocationChanges()
             
         case .denied, .restricted:
             print("NOPE")
@@ -328,8 +335,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         mapview.isBuildingsEnabled = false
         
         do {
-            // Set the map style by passing the URL of the local file.
-            if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+            if let styleURL = Bundle.main.url(forResource: "darkBlueStyle", withExtension: "json") {
                 mapview.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
             } else {
                 NSLog("Unable to find style.json")
@@ -349,9 +355,17 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
     
     private let locateMeButton: UIButton = {
         let button: UIButton = UIButton()
-        button.setTitle("Me", for: .normal)
+        button.setImage(UIImage(named: "locate"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ (view) in
+            view.size.equalTo(CGSize(width: 30, height: 30))
+        })
+        button.layer.shadowOpacity = 0.4
+        button.layer.shadowOffset = CGSize(width: 1, height: 5)
+        button.layer.shadowRadius = 2
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(findUser), for: .touchUpInside)
-        button.backgroundColor = ColorPalette.logoGreenColor
         return button
     }()
     
@@ -361,34 +375,11 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        segmentedControl.backgroundColor = ColorPalette.purpleThemeColor
+        segmentedControl.backgroundColor = ColorPalette.greenThemeColor
         segmentedControl.addTarget(self, action: #selector(segementedControlValueChanged(sender:)), for: .valueChanged)
         return segmentedControl
     }()
-    internal lazy var popupContainerView: UIView! = {
-        let view = UIView()
-        view.layer.cornerRadius = 15.0
-        view.layer.masksToBounds = false
-        return view
-    }()
-    internal lazy var profileImageView: UIImageView! = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 35.0
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderWidth = 2
-        imageView.layer.masksToBounds = false
-        return imageView
-    }()
-    internal lazy var challengeDescriptionLabel: UILabel! = {
-        let label = UILabel()
-        label.textColor = .white
-        return label
-    }()
-    internal lazy var challengeStatsLabel: UILabel! = {
-        let label = UILabel()
-        label.textColor = .white
-        return label
-    }()
+    
     internal lazy var thumbStatContainerView: UIView! = {
         let view = UIView()
         view.layer.cornerRadius = 5.0
@@ -415,12 +406,14 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         label.textAlignment = .center
         return label
     }()
+    
     internal lazy var thumbChallengeStatsLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
+
     internal lazy var thumbButton: UIButton! = {
         let button = UIButton()
         // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
@@ -430,13 +423,23 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
+
     internal lazy var addButton: UIButton! = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "Add"), for: .normal)
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "add2"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ (view) in
+            view.size.equalTo(CGSize(width: 30, height: 30))
+        })
+        button.layer.shadowOpacity = 0.4
+        button.layer.shadowOffset = CGSize(width: 1, height: 5)
+        button.layer.shadowRadius = 2
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
-        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return button
     }()
+    
     internal lazy var testButton: UIButton! = {
         let button = UIButton()
         button.setTitle("test", for: .normal)
@@ -444,13 +447,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         button.frame = CGRect(x:0, y:0, width: 30, height: 30)
         return button
     }()
+
     
-    internal lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .light)
-        let blurView = UIVisualEffectView(effect: blur)
-        blurView.frame = self.view.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        return blurView
-    }()
 }
 
