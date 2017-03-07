@@ -55,12 +55,14 @@ class RegisterViewController: UIViewController {
                         let userDict = ["name": username]
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
                         print("pressed ok")
+
                         self.clearTextFields()
                         let tabVC = EventsViewController()
                         self.navigationController?.pushViewController(tabVC, animated:true)
                         
                     }))
                     self.present(alertController, animated: true, completion: nil)
+
                 }
             })
         }
@@ -112,12 +114,14 @@ class RegisterViewController: UIViewController {
         
     }
     
+
     func clearTextFields() {
         emailTextField.text = nil
         passwordTextField.text = nil
         usernameTextField.text = nil
     }
     
+
     internal lazy var logoImageView: UIImageView! = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
@@ -150,6 +154,7 @@ class RegisterViewController: UIViewController {
         button.addTarget(self, action: #selector(registerTapped(sender:)), for: .touchUpInside)
         return button
     }()
+
 }
 
 public func showAlert(title: String, message: String?, useDefaultAction: Bool) -> UIAlertController {

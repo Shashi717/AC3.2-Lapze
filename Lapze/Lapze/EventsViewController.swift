@@ -83,12 +83,11 @@ class EventsViewController: UIViewController {
         thumbUserNameLabel.text = "CoolGuy123"
         thumbChallengeDescriptionLabel.text = "Bike Champ"
         thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
-        
     }
     
     //MARK: - Setup
     func createThumbView(userName: String) {
-        self.blurView.addSubview(thumbStatContainerView)
+        self.view.addSubview(thumbStatContainerView)
         self.thumbStatContainerView.addSubview(thumbButton)
         self.thumbStatContainerView.addSubview(thumbProfileImageView)
         self.thumbStatContainerView.addSubview(thumbUserNameLabel)
@@ -103,6 +102,7 @@ class EventsViewController: UIViewController {
             //should be changed to the location of the pin
             view.centerX.centerY.equalToSuperview()
         }
+        
         thumbButton.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(4.0)
             view.right.equalToSuperview().inset(4.0)
@@ -131,8 +131,7 @@ class EventsViewController: UIViewController {
     }
     
     func createPopup() {
-        self.view.addSubview(popupContainerView)
-        self.view.addSubview(blurView)
+        self.thumbStatContainerView.addSubview(popupContainerView)
         self.popupContainerView.addSubview(profileImageView)
         self.popupContainerView.addSubview(challengeStatsLabel)
         self.popupContainerView.addSubview(challengeDescriptionLabel)
@@ -183,7 +182,7 @@ class EventsViewController: UIViewController {
     func joinedCurrentEvent() {
         print("Join event")
         //this should change mapview to specific event
-        dismissPopup()
+        //dismissPopup()
     }
     
     func notificationEvent() {
@@ -198,17 +197,22 @@ class EventsViewController: UIViewController {
     
     func testButtonTapped(sender: UIButton) {
         print("test button tapped")
-        eventPopup()
-        self.view.addSubview(blurView)
+       //eventPopup()
+        let popVc = PopupViewController()
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
+        self.present(popVc, animated: true, completion: nil)
+        
     }
     
     func eventPopup() {
         print("want to join this event?")
         //popup box
-        self.thumbStatContainerView.isHidden = false
         thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
         fillPopupForCreateEvent()
         fillMockupDataForThumbView()
+        self.thumbStatContainerView.isHidden = false
+        self.view.addSubview(blurView)
     }
     
     func dismissPopup() {

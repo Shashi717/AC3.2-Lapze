@@ -20,6 +20,7 @@
 		9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */; };
 		9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */; };
 		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
+		E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 		1A4AA7C31E678BC5006EC158 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -290,15 +293,14 @@
 			files = (
 				1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */,
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
-
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
-
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
+				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
