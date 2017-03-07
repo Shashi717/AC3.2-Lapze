@@ -33,6 +33,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

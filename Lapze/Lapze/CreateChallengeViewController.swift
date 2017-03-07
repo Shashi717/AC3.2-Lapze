@@ -8,6 +8,8 @@
 
 import UIKit
 import SnapKit
+import FirebaseDatabase
+import FirebaseAuth
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -16,6 +18,9 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
+    let databaseRef = FIRDatabase.database().reference()
+    var challengeRef: FIRDatabaseReference!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +52,13 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
+        
+        let dict = ["champion":FIRAuth.auth()!.currentUser!.uid, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField!.text!] as [String : Any]
+        challengeRef = databaseRef.child("Challenge").childByAutoId()
+        challengeRef.updateChildValues(dict)
         //this should add "status bars" to indicate challenge"
+        let eventsVc = EventsViewController()
+        
     }
     
     func showDatePicker() {
@@ -150,9 +161,12 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = doneButton
+        self.view.addSubview(challengeNameContainer)
         self.view.addSubview(activityContainer)
         self.view.addSubview(dateContainer)
         self.view.addSubview(pickerContainer)
+        self.challengeNameContainer.addSubview(challengeNameLabel)
+        self.challengeNameContainer.addSubview(challengeNameTextField)
         self.activityContainer.addSubview(activityLabel)
         self.activityContainer.addSubview(pickedActivityLabel)
         self.dateContainer.addSubview(dateLabel)
@@ -160,8 +174,13 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     func configureConstraints() {
-        activityContainer.snp.makeConstraints { (view) in
+        challengeNameContainer.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(22.0)
+            view.left.right.equalToSuperview()
+            view.height.equalTo(44.0)
+        }
+        activityContainer.snp.makeConstraints { (view) in
+            view.top.equalTo(challengeNameContainer.snp.bottom).offset(22.0)
             view.left.right.equalToSuperview()
             view.height.equalTo(44.0)
         }
@@ -169,6 +188,16 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
             view.top.equalTo(activityContainer.snp.bottom).offset(22.0)
             view.left.right.equalToSuperview()
             view.height.equalTo(44.0)
+        }
+        challengeNameLabel.snp.makeConstraints { (view) in
+            view.top.bottom.equalToSuperview()
+            view.left.equalToSuperview().offset(16.0)
+            view.width.equalTo(135.0)
+        }
+        challengeNameTextField.snp.makeConstraints { (view) in
+            view.top.bottom.equalToSuperview()
+            view.right.equalToSuperview().inset(16.0)
+            view.width.equalTo(175.0)
         }
         activityLabel.snp.makeConstraints { (view) in
             view.top.bottom.equalToSuperview()
@@ -198,6 +227,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     //MARK: - Views
     // Acitivity, Date, Start Time, End, Location, Public
     
+    internal lazy var challengeNameContainer: UIView! = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
     internal lazy var activityContainer: UIView! = {
         let view = UIView()
         view.backgroundColor = .white
@@ -233,6 +267,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         view.backgroundColor = .white
         return view
     }()
+    internal lazy var challengeNameLabel: UILabel! = {
+        let label = UILabel()
+        label.text = "Challenge Name"
+        return label
+    }()
     internal lazy var activityLabel: UILabel! = {
         let label = UILabel()
         label.text = "Activity"
@@ -252,6 +291,12 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         let label = UILabel()
         label.text = "End"
         return label
+    }()
+    internal lazy var challengeNameTextField: UITextField! = {
+        let textField = UITextField()
+        textField.placeholder = "Add a description"
+        textField.textAlignment = .right
+        return textField
     }()
     internal lazy var pickedActivityLabel: UILabel! = {
         let label = UILabel()

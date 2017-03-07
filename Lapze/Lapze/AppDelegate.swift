@@ -73,7 +73,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             self.window?.rootViewController = tabs
         }
         else {
-            
             self.window?.rootViewController = loginVC
         }
         
