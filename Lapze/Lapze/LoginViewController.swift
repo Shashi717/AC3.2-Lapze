@@ -47,7 +47,7 @@ class LoginViewController: UIViewController {
                 }
                 else {
                     let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
-                    
+
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         self.clearTextFields()
                         let tabVC = EventsViewController()
@@ -63,9 +63,10 @@ class LoginViewController: UIViewController {
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
-        
+     
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
+
     }
     
     func setupViewHierarchy() {
@@ -113,7 +114,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    
     func clearTextFields() {
         emailTextField.text = nil
         passwordTextField.text = nil
@@ -151,6 +151,5 @@ class LoginViewController: UIViewController {
         button.addTarget(self, action: #selector(gotoRegisterTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
-    
+
 }
