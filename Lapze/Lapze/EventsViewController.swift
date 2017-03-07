@@ -32,15 +32,21 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     
+    let databaseRef = FIRDatabase.database().reference()
+    var challengeRef: FIRDatabaseReference!
+    var challengeOn = false
+    var path: [[String: CLLocationDegrees]] = [[:]]
+    var challengeLocationLatArray: [CLLocationDegrees] = []
+    var challengeLocationLongArray: [CLLocationDegrees] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Current Events"
-        
+        navigationItem.leftBarButtonItem = addChallengeButton
+        navigationItem.rightBarButtonItem = endChallengeButton
         setupViewHierarchy()
         configureConstraints()
-        //createPopup()
-        //createThumbView(userName: "noo")
         
         
         //initial view of events
@@ -266,8 +272,8 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
         
-        let item2 = UIBarButtonItem(customView: testButton)
-        self.navigationItem.setRightBarButton(item2, animated: true)
+//        let item2 = UIBarButtonItem(customView: testButton)
+//        self.navigationItem.setRightBarButton(item2, animated: true)
         
         locationManager.delegate = self
     }
@@ -303,11 +309,26 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         
     }
     
+    func createChallenge(sender: UIBarButtonItem) {
+     
+        challengeOn = true
+        challengeRef = databaseRef.child("Challenge").childByAutoId()
+        challengeRef.updateChildValues(["champ": "Sam"])
+
+    }
+    
+    func endChallenge(sender: UIBarButtonItem) {
+        
+        challengeOn = false
+        challengeRef.updateChildValues(["Location":path])
+    }
+    
     func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+            
             if error != nil{
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
                 
             }else{
                 print("Success adding location")
@@ -327,6 +348,10 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         
         guard let validLocation: CLLocation = locations.last else { return }
         self.userLocation = validLocation
+        if challengeOn == true {
+            let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+        path.append(locationDict)
+        }
         print("loccation change")
     }
     
@@ -480,6 +505,17 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         return button
     }()
 
+    internal lazy var addChallengeButton: UIBarButtonItem! = {
+        var barButton = UIBarButtonItem()
+        barButton = UIBarButtonItem(title: "Create Challenge", style: .done, target: self, action: #selector(createChallenge(sender:)))
+        return barButton
+    }()
+    
+    internal lazy var endChallengeButton: UIBarButtonItem! = {
+        var barButton = UIBarButtonItem()
+        barButton = UIBarButtonItem(title: "End", style: .done, target: self, action: #selector(endChallenge(sender:)))
+        return barButton
+    }()
     
 }
 
