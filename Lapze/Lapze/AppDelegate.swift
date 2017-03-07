@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMaps
 import Firebase
 import UserNotifications
 
@@ -17,7 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        // Override point for customization after application launch.
+        GMSServices.provideAPIKey("AIzaSyDOiTbYY-vEPH42OMTCp3nlmF4BtoVu7Cc")
+
         FIRApp.configure()
+
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
@@ -35,7 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         navAppearance.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         navAppearance.barTintColor = ColorPalette.greenThemeColor
         
-        
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
         let eventsVC = UINavigationController(rootViewController: EventsViewController())
@@ -43,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let registerVC = UINavigationController(rootViewController: RegisterViewController())
         
         let tabs = UITabBarController()
-        tabs.viewControllers = [eventsVC, profileVC, createEventVC, loginVC, registerVC]
+        tabs.viewControllers = [eventsVC, profileVC, createEventVC, registerVC]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
@@ -64,8 +69,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         tabs.tabBar.tintColor = ColorPalette.greenThemeColor
         
         tabs.selectedIndex = 0
-        self.window?.rootViewController = tabs
-        self.window?.makeKeyAndVisible()
+        
+        if FIRAuth.auth()?.currentUser != nil {
+            self.window?.rootViewController = tabs
+        }
+        else {
+            
+            self.window?.rootViewController = loginVC
+        }
+        
+         self.window?.makeKeyAndVisible()
         return true
     }
     

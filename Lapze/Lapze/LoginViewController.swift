@@ -47,11 +47,14 @@ class LoginViewController: UIViewController {
                 }
                 else {
                     let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
-                    self.present(alertController, animated: true, completion: nil)
-                    
+
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                        //self.present(tbvc, animated: true, completion: nil)
+                        self.clearTextFields()
+                        let tabVC = EventsViewController()
+                        self.navigationController?.pushViewController(tabVC, animated:true)
                     }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
             })
         }
@@ -60,8 +63,10 @@ class LoginViewController: UIViewController {
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
-        
-        self.present(RegisterViewController(), animated: true, completion: nil)
+     
+        let registerVC = RegisterViewController()
+        self.navigationController?.pushViewController(registerVC, animated:true)
+
     }
     
     func setupViewHierarchy() {
@@ -109,6 +114,11 @@ class LoginViewController: UIViewController {
         
     }
     
+    func clearTextFields() {
+        emailTextField.text = nil
+        passwordTextField.text = nil
+    }
+    
     internal lazy var logoImageView: UIImageView! = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
@@ -141,5 +151,5 @@ class LoginViewController: UIViewController {
         button.addTarget(self, action: #selector(gotoRegisterTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
+
 }

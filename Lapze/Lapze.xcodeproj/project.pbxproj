@@ -10,6 +10,8 @@
 		1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9767F61E6789EB00F6B28C /* AppDelegate.swift */; };
 		1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FD1E6789EB00F6B28C /* Assets.xcassets */; };
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
+		1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */; };
+		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */; };
 		9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C231E6A6830003EE1D7 /* ColorPalette.swift */; };
@@ -28,6 +30,8 @@
 		1A9767FD1E6789EB00F6B28C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A9768001E6789EB00F6B28C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A9768021E6789EB00F6B28C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireBaseObserver.swift; sourceTree = "<group>"; };
+		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
 		9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +92,8 @@
 		1A4AA7C41E678BD5006EC158 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */,
+				1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -285,6 +291,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */,
+				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
@@ -407,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1A8970F21F061C3BBAB803B0 /* Pods-Lapze.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -420,6 +429,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
