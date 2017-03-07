@@ -281,7 +281,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
             if error != nil{
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
                 
             }else{
                 print("Success adding location")
