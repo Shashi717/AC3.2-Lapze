@@ -14,7 +14,7 @@ public enum Activity: String {
     case cycling = "Cycling"
     case skateBoarding = "Skate Boarding"
     case rollerSkating = "Roller Skating"
-    case basketBall = "Basket Ball"
+    case basketBall = "Basketball"
     case soccer = "Soccer"
 }
 
