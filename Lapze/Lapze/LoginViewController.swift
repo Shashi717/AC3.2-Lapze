@@ -128,12 +128,15 @@ class LoginViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
         return textField
     }()
     internal lazy var passwordTextField: UITextField! = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
+        textField.isSecureTextEntry = true
         return textField
     }()
     internal lazy var loginButton: UIButton! = {

@@ -10,7 +10,6 @@ import UIKit
 
 class GoogleMapThumbView: UIView {
     private let padding: Int = 5
-    private let tapGuesture: UITapGestureRecognizer = UITapGestureRecognizer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,8 +32,6 @@ class GoogleMapThumbView: UIView {
         
         self.frame.size = CGSize(width: 150, height: 150)
         self.layer.cornerRadius = 10
-        tapGuesture.addTarget(self, action: #selector(showProfile))
-        self.addGestureRecognizer(tapGuesture)
         
         self.profileImageView.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -57,12 +54,6 @@ class GoogleMapThumbView: UIView {
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
         }
-        
-        
-    }
-    
-    func showProfile(){
-        print("show user profile")
     }
     
     let profileImageView: UIImageView = {
