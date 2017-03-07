@@ -19,7 +19,7 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
-class EventsViewController: UIViewController,CLLocationManagerDelegate {
+class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate {
     private var userLocation: CLLocation?{
         didSet{
             findUser()
@@ -48,11 +48,11 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
         view.addGestureRecognizer(tap)
         GoogleMapManager.shared.manage(map: self.googleMapView)
+        googleMapView.delegate = self
         
     }
     override func viewDidDisappear(_ animated: Bool) {
         FirebaseObserver.manager.stopObserving()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -319,6 +319,18 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate {
             locationManager.requestAlwaysAuthorization()
         }
     }
+    
+    //MARK: Googlemaps Delegate methods
+    func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+        let view: GoogleMapThumbView = GoogleMapThumbView()
+        view.profileImageView.image = marker.icon
+        return view
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        print("show delegate profile")
+    }
+    
     
     //MARK: - Views
     private let googleMapView: GMSMapView = {
