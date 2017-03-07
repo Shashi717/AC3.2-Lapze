@@ -32,6 +32,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     var shareLocation = false
     var shareProfile = false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

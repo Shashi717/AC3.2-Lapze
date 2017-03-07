@@ -36,15 +36,13 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     var challengeRef: FIRDatabaseReference!
     var challengeOn = false
     var path: [[String: CLLocationDegrees]] = [[:]]
-    var challengeLocationLatArray: [CLLocationDegrees] = []
-    var challengeLocationLongArray: [CLLocationDegrees] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Current Events"
-        navigationItem.leftBarButtonItem = addChallengeButton
-        navigationItem.rightBarButtonItem = endChallengeButton
+//        navigationItem.leftBarButtonItem = addChallengeButton
+//        navigationItem.rightBarButtonItem = endChallengeButton
         setupViewHierarchy()
         configureConstraints()
         
@@ -311,16 +309,20 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     func createChallenge(sender: UIBarButtonItem) {
      
+        if challengeOn == true {
+            print("Already on a challenge")
+        }
+        else {
         challengeOn = true
-        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        challengeRef.updateChildValues(["champ": "Sam"])
-
+//        challengeRef = databaseRef.child("Challenge").childByAutoId()
+//        challengeRef.updateChildValues(["champ": "Sam"])
+        }
     }
     
     func endChallenge(sender: UIBarButtonItem) {
         
         challengeOn = false
-        challengeRef.updateChildValues(["Location":path])
+        challengeRef.updateChildValues(["location":path])
     }
     
     func addLocationtoFireBase(location: CLLocation){
