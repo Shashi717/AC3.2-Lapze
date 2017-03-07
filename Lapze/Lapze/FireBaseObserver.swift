@@ -11,7 +11,7 @@ import Firebase
 
 class FirebaseObserver{
     static let manager: FirebaseObserver  = FirebaseObserver()
-    private let dataBaseRefence = FIRDatabase.database().reference()
+    let dataBaseRefence = FIRDatabase.database().reference()
     private var childAddedhandler: UInt?
     private var childRemovedhandler: UInt?
     private var childChangedhandler: UInt?
@@ -38,7 +38,7 @@ class FirebaseObserver{
         })
         
         childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-            
+                GoogleMapManager.shared.removeMarker(name: snapshot.key)
         })
         
     }
