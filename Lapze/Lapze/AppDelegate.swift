@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         FIRApp.configure()
 
-        
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
         //User Notifications
