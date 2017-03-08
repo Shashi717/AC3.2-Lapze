@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 
 class PopupViewController: UIViewController {
+    var segment: Int?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,17 @@ class PopupViewController: UIViewController {
         //popup data
         fillMockupData()
         fillPopupForChallenge()
+        
+        //switch
+        if segment == 0 {
+            print("segment: \(segment)")
+            self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
+            self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
+        } else {
+            print("segment: \(segment)")
+            self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
+            self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
+        }
     }
     //MARK: - Utilities
     func fillPopupForChallenge() {
@@ -37,11 +50,14 @@ class PopupViewController: UIViewController {
         challengeStatsLabel.text = "Ran 10 mile in 1 hr"
     }
     
+    
+    
     //MARK: - setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(blurView)
         self.blurView.addSubview(popupContainerView)
+        self.blurView.addSubview(actionButton)
         self.popupContainerView.addSubview(profileImageView)
         self.popupContainerView.addSubview(challengeStatsLabel)
         self.popupContainerView.addSubview(userNameLabel)
@@ -81,13 +97,29 @@ class PopupViewController: UIViewController {
             view.centerX.equalToSuperview()
         }
         
-      
+        actionButton.snp.makeConstraints { (view) in
+            view.bottom.equalToSuperview().inset(50)
+            view.width.equalToSuperview()
+            view.height.equalTo(50)
+        }
         
     }
     
     func dismissPopup() {
-        print("cancel tapped")
+        print("dismiss popup")
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func startActivity() {
+        print("join/start button")
+        let challengeVc = ChallengeViewController()
+        challengeVc.challengeOn = true
+        
+        self.navigationController?.pushViewController(challengeVc, animated: true) //this wont work if previous push is not nav push
+        
+        //self.show(challengeVc, sender: self)
+        //self.navigationController?.dismiss(animated: true, completion: nil)
+        //self.navigationController?.show(challengeVc, sender: self)
     }
     
     //MARK: - Views
@@ -133,6 +165,14 @@ class PopupViewController: UIViewController {
         blurView.frame = self.view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return blurView
+    }()
+    
+    internal lazy var actionButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Join/Start", for: .normal)
+        button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
+        button.backgroundColor = ColorPalette.purpleThemeColor
+        return button
     }()
     
     

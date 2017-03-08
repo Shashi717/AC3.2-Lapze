@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,19 +20,13 @@ class LoginViewController: UIViewController {
         setupViewHierarchy()
         configureConstraints()
         
+        observeKeyboardNotifications()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
     }
+
     
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
     func loginTapped(sender: UIButton) {
         print("Login")
@@ -50,9 +45,9 @@ class LoginViewController: UIViewController {
 
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         self.clearTextFields()
-                        //let tabVC = EventsViewController()
-                        //self.navigationController?.pushViewController(tabVC, animated:true)
-                        self.dismiss(animated: true, completion: nil)
+                        let tabVC = EventsViewController()
+                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        //self.dismiss(animated: true, completion: nil)
                         
                     }))
                     
@@ -60,7 +55,6 @@ class LoginViewController: UIViewController {
                 }
             })
         }
-        
     }
     
     func gotoRegisterTapped(sender: UIButton) {
@@ -68,9 +62,36 @@ class LoginViewController: UIViewController {
      
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
-
     }
     
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    fileprivate func observeKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardDidShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardDidHide, object: nil)
+    }
+    
+    func showKeyboard() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        }, completion: nil)
+    }
+    
+    func hideKeyboard(notification: NSNotification) {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.frame = CGRect(x: 0, y: 60, width: self.view.frame.width, height: self.view.frame.height)
+            }, completion: nil)
+    }
+    
+
+    
+    
+    
+    
+    //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         
@@ -121,6 +142,7 @@ class LoginViewController: UIViewController {
         passwordTextField.text = nil
     }
     
+    //MARK: - View init
     internal lazy var logoImageView: UIImageView! = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
@@ -130,12 +152,15 @@ class LoginViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
         return textField
     }()
     internal lazy var passwordTextField: UITextField! = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
+        textField.isSecureTextEntry = true
         return textField
     }()
     internal lazy var loginButton: UIButton! = {
