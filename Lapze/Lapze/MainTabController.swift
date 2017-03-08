@@ -43,7 +43,7 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         let dummyViewController: UIViewController = UIViewController()
         dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
         self.viewControllers = nil
-        loginVC.modalTransitionStyle = .crossDissolve
+        loginVC.modalTransitionStyle = .coverVertical
         self.viewControllers = [dummyViewController]
         present(loginVC, animated: true, completion: nil)
     }

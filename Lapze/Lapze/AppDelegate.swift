@@ -41,9 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 20.0),
                                                             NSForegroundColorAttributeName : UIColor.white]
+        
 
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
+
         return true
     }
     

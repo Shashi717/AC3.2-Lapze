@@ -30,6 +30,11 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Lapze would like to use your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Lapze would like to track your location during your activity</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
