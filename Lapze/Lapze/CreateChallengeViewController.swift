@@ -11,6 +11,10 @@ import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
 
+protocol ChallengeDelegate {
+    func startChallenge()
+}
+
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
@@ -18,9 +22,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
+    var delegate: ChallengeDelegate?
+
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
-    
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +78,13 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         let dict = ["champion":FIRAuth.auth()!.currentUser!.uid, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField!.text!] as [String : Any]
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(dict)
+
+        //this should add "status bars" to indicate challenge"
+        
+        self.delegate?.startChallenge()
+
+        let eventsVc = EventsViewController()
+
     }
     
     func showDatePicker() {
