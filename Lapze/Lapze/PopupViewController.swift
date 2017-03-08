@@ -24,7 +24,7 @@ class PopupViewController: UIViewController {
         configureConstraints()
         
         //popup data
-        fillMockupData()
+       // fillMockupData()
         fillPopupForChallenge()
         
         //switch
@@ -49,8 +49,6 @@ class PopupViewController: UIViewController {
         challengeDescriptionLabel.text = "Bike Champ"
         challengeStatsLabel.text = "Ran 10 mile in 1 hr"
     }
-    
-    
     
     //MARK: - setup
     func setupViewHierarchy() {

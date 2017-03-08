@@ -303,6 +303,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+
+
     
     //activity view setup
     func setupViewHierarchyForActivity() {
@@ -332,31 +334,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             ].map({$0.isHidden = true})
     }
     
+
     //MARK: Location Utilities
     
     private func addUserToMap(){
         
     }
     
-    
-    
-    func createChallenge(sender: UIBarButtonItem) {
-        
-        //        if challengeOn == true {
-        //            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
-        //               self.present(alertController, animated: true, completion: nil)
-        //
-        //
-        //        }
-        //        else {
-        //
-        //        challengeOn = true
-        //        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        //        challengeRef.updateChildValues(["champ": "Sam"])
-        //
-        //        }
-        
-    }
     
     func endChallenge(sender: UIBarButtonItem) {
         
@@ -443,6 +427,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             previousLocation = currentLocation
             print("Previous Location: \(previousLocation)")
             print("Distance: \(distance)")
+            
         }
         print("location change")
     }
@@ -508,11 +493,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
-    
     //MARK: Event Delegate methods
     func startEvent(name: String) {
-        print(name)
+        let eventPopUp: PopupViewController = PopupViewController()
+        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        eventPopUp.modalTransitionStyle = .crossDissolve
+        eventPopUp.modalPresentationStyle = .overCurrentContext
+        present(eventPopUp, animated: true, completion: nil)
     }
     
     //MARK: Challenge Delegate methods
@@ -521,6 +509,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         challengeOn = true
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(["champ": user])
+        
+        self.locateMeButton.isHidden = true
     }
     
     //MARK: - Views
@@ -635,12 +625,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
-    }()
-    
-    internal lazy var addChallengeButton: UIBarButtonItem! = {
-        var barButton = UIBarButtonItem()
-        barButton = UIBarButtonItem(title: "Create Challenge", style: .done, target: self, action: #selector(createChallenge(sender:)))
-        return barButton
     }()
     
     internal lazy var endChallengeButton: UIBarButtonItem! = {

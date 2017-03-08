@@ -47,7 +47,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         setupViewHierarchy()
         configureConstraints()
-        
     }
     
     //MARK: - Utilities
@@ -69,13 +68,23 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
-        dismissViewcontroller()
-        getEventInfo()
-        self.delegate?.startEvent(name: "test")
+        showAlert(message: "Start this event?")
     }
     
+    func showAlert(message:String){
+        let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
+        let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
+            self.dismissViewcontroller()
+            self.delegate?.startEvent(name: "Bike event")
+        }
+        
+        let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(createEvent)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
     func dismissViewcontroller(){
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func showDatePicker() {
