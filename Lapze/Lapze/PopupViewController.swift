@@ -112,12 +112,13 @@ class PopupViewController: UIViewController {
     
     func startActivity() {
         print("join/start button")
+        
         let challengeVc = ChallengeViewController()
         challengeVc.challengeOn = true
         
-        self.navigationController?.pushViewController(challengeVc, animated: true) //this wont work if previous push is not nav push
+        //self.navigationController?.pushViewController(challengeVc, animated: true) //this wont work if previous push is not nav push
         
-        //self.show(challengeVc, sender: self)
+        self.show(challengeVc, sender: self)
         //self.navigationController?.dismiss(animated: true, completion: nil)
         //self.navigationController?.show(challengeVc, sender: self)
     }
