@@ -54,9 +54,9 @@ class ProfileViewController: UIViewController {
     
     func logoutButtonTapped(sender: UIBarButtonItem) {
         do {
-            try? FIRAuth.auth()?.signOut()
+            try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
-            self.present(alertController, animated: true, completion: nil)
+            //self.present(alertController, animated: true, completion: nil)
         }
         catch
         {
