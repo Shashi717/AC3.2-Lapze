@@ -19,8 +19,6 @@ class ChallengeViewController: EventsViewController {
         self.eventSegmentedControl.isHidden = true
         self.addButton.isHidden = true
         
-        self.actionButton.isHidden = false
-        
         
         setupViewChallenge()
         
@@ -38,21 +36,26 @@ class ChallengeViewController: EventsViewController {
         
         //go back to challenge home page
     }
+    
+    func endActivity() {
+        print("end activity")
+    }
 
     //MARK: - setup
     func setupViewChallenge() {
-        self.view.addSubview(statusBar)
-        self.view.addSubview(actionButton)
-        self.statusBar.addSubview(distanceLabel)
+        self.view.addSubview(titleBar)
+        self.view.addSubview(statusButton)
+        self.titleBar.addSubview(distanceLabel)
         
-        statusBar.snp.makeConstraints { (view) in
+        titleBar.snp.makeConstraints { (view) in
             view.top.equalToSuperview()
             view.width.equalToSuperview()
             view.height.equalTo(50)
         }
         
-        actionButton.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
+        statusButton.snp.makeConstraints { (view) in
+            view.width.equalToSuperview()
+            view.height.equalTo(50)
             view.bottom.equalToSuperview()
         }
         
@@ -61,28 +64,22 @@ class ChallengeViewController: EventsViewController {
             view.width.equalToSuperview()
             view.height.equalTo(40)
         }
+        
+        
     }
     
     //MARK: - View init
-    internal lazy var statusBar: UIView! = {
+    internal lazy var titleBar: UIView! = {
         let view = UIView()
         view.backgroundColor = ColorPalette.orangeThemeColor
         return view
     }()
     
-    internal lazy var actionButton: UIButton! = {
-        let button: UIButton = UIButton()
-        button.setImage(UIImage(named: "add-1"), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFill
-        button.imageView?.snp.makeConstraints({ (view) in
-            view.size.equalTo(CGSize(width: 30, height: 30))
-        })
-        button.layer.shadowOpacity = 0.4
-        button.layer.shadowOffset = CGSize(width: 1, height: 5)
-        button.layer.shadowRadius = 2
-        button.backgroundColor = ColorPalette.purpleThemeColor
-        button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(saveChallenge), for: .touchUpInside)
+    internal lazy var statusButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("End", for: .normal)
+        button.addTarget(self, action: #selector(self.endActivity), for: .touchUpInside)
+        button.backgroundColor = ColorPalette.orangeThemeColor
         return button
     }()
     
