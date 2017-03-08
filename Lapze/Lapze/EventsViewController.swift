@@ -339,25 +339,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     
-    
-    func createChallenge(sender: UIBarButtonItem) {
-        
-        //        if challengeOn == true {
-        //            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
-        //               self.present(alertController, animated: true, completion: nil)
-        //
-        //
-        //        }
-        //        else {
-        //
-        //        challengeOn = true
-        //        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        //        challengeRef.updateChildValues(["champ": "Sam"])
-        //
-        //        }
-        
-    }
-    
     func endChallenge(sender: UIBarButtonItem) {
         
         challengeOn = false
@@ -371,10 +352,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
     }
     
-    
-    
-    
-    
+
     //MARK: - User Auth Utilities
     func checkForUserLogin(){
         if FIRAuth.auth()?.currentUser == nil{
@@ -635,12 +613,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
-    }()
-    
-    internal lazy var addChallengeButton: UIBarButtonItem! = {
-        var barButton = UIBarButtonItem()
-        barButton = UIBarButtonItem(title: "Create Challenge", style: .done, target: self, action: #selector(createChallenge(sender:)))
-        return barButton
     }()
     
     internal lazy var endChallengeButton: UIBarButtonItem! = {
