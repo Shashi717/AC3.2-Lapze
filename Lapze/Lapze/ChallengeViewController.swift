@@ -19,9 +19,14 @@ class ChallengeViewController: EventsViewController {
         self.eventSegmentedControl.isHidden = true
         self.addButton.isHidden = true
         
+        self.actionButton.isHidden = false
+        
         
         setupViewChallenge()
         
+//        while challengeOn {
+//            self.distanceLabel.text = String(distance)
+//        }
         
     }
     //MARK: - Utilities
@@ -38,6 +43,7 @@ class ChallengeViewController: EventsViewController {
     func setupViewChallenge() {
         self.view.addSubview(statusBar)
         self.view.addSubview(actionButton)
+        self.statusBar.addSubview(distanceLabel)
         
         statusBar.snp.makeConstraints { (view) in
             view.top.equalToSuperview()
@@ -48,6 +54,12 @@ class ChallengeViewController: EventsViewController {
         actionButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.bottom.equalToSuperview()
+        }
+        
+        distanceLabel.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalToSuperview()
+            view.height.equalTo(40)
         }
     }
     
@@ -77,6 +89,12 @@ class ChallengeViewController: EventsViewController {
     internal lazy var timeLabel: UILabel! = {
         let label = UILabel()
         label.text = "time here"
+        return label
+    }()
+    
+    internal lazy var distanceLabel: UILabel! = {
+        let label = UILabel()
+        label.text = "distance here"
         return label
     }()
 

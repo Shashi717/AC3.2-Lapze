@@ -298,35 +298,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
-    //activity view setup
-    func setupViewHierarchyForActivity() {
-        self.edgesForExtendedLayout = []
-        self.view.addSubview(googleMapView)
-        self.googleMapView.addSubview(topStatusView)
-    }
-    
-    func configureConstraintsForActivityViews () {
-        topStatusView.snp.makeConstraints { (view) in
-            view.center.equalToSuperview()
-            view.width.equalToSuperview()
-            view.height.equalTo(50)
-        }
-    }
-    
-    func setupActivityView() {
-        hideViews()
-        setupViewHierarchyForActivity()
-        configureConstraintsForActivityViews()
-    }
-    
-    func hideViews() {
-        _ = [
-            self.eventSegmentedControl,
-            self.addButton
-            ].map({$0.isHidden = true})
-    }
-    
     //MARK: Location Utilities
 
     private func addUserToMap(){
@@ -349,6 +320,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(["champ": "Sam"])
 
+        }
     }
     
     func endChallenge(sender: UIBarButtonItem) {
@@ -436,6 +408,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             previousLocation = currentLocation
             print("Previous Location: \(previousLocation)")
             print("Distance: \(distance)")
+            
         }
         print("location change")
     }
