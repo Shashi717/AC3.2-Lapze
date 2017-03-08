@@ -49,7 +49,6 @@ class PopupViewController: UIViewController {
     }
     
     func configureConstraints() {
-        
         popupContainerView.snp.makeConstraints { (view) in
             view.center.equalToSuperview()
             view.height.equalToSuperview().multipliedBy(0.35)
@@ -57,9 +56,9 @@ class PopupViewController: UIViewController {
         }
         
         profileImageView.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(4.0)
+            //view.top.equalToSuperview().offset(4.0)
             view.height.width.equalTo(100.0)
-            view.centerX.equalToSuperview()
+            view.centerY.equalTo(popupContainerView.snp.top)
         }
         
         userNameLabel.snp.makeConstraints { (view) in
@@ -102,9 +101,10 @@ class PopupViewController: UIViewController {
     
     internal lazy var profileImageView: UIImageView! = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 20.0
+        imageView.layer.cornerRadius = 40.0
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderWidth = 2
+        imageView.image = UIImage(named: "004-boy")
+        //imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
         return imageView
     }()

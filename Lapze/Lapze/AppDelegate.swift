@@ -73,10 +73,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             self.window?.rootViewController = tabs
         }
         else {
-            
             self.window?.rootViewController = loginVC
+            //print("blah")
         }
-        
+                
          self.window?.makeKeyAndVisible()
         return true
     }

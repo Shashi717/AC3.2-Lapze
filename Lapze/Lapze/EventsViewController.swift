@@ -20,7 +20,6 @@ public enum Event: String {
 }
 
 
-
 class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate {
     private var userLocation: CLLocation?{
 
@@ -31,6 +30,8 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     }
     
     let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
+    
+    var time = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +54,12 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
         
+        //timer
+        
+//        if FIRAuth.auth()?.currentUser != nil {
+//            let loginVc = LoginViewController()
+//            self.present(loginVc, animated: true, completion: nil)
+//        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         FirebaseObserver.manager.stopObserving()
@@ -60,9 +67,14 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     override func viewWillAppear(_ animated: Bool) {
         FirebaseObserver.manager.startObserving(node: .location)
+        
     }
     
     //MARK: - Utilities
+    func startTimer() {
+        print("started timer")
+    }
+    
     func segementedControlValueChanged(sender: UISegmentedControl) {
         let segment = eventSegmentedControl.selectedSegmentIndex
         switch segment {
@@ -109,6 +121,10 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
     }
     
+    func challengeView() {
+        self.googleMapView.addSubview(timerButton)
+    }
+    
     //MARK: - Setup
     func createThumbView(userName: String) {
         self.view.addSubview(thumbStatContainerView)
@@ -153,6 +169,7 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
             view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
         }
     }
+    
     
     
 //    func createPopup() {
@@ -232,16 +249,6 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    func testButtonTapped(sender: UIButton) {
-        print("test button tapped")
-       //eventPopup()
-        let popVc = PopupViewController()
-        popVc.modalTransitionStyle = .crossDissolve
-        popVc.modalPresentationStyle = .overCurrentContext
-        self.present(popVc, animated: true, completion: nil)
-        
-    }
-    
     func eventPopup() {
         print("want to join this event?")
         //popup box
@@ -265,9 +272,6 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
-        
-        let item2 = UIBarButtonItem(customView: testButton)
-        self.navigationItem.setRightBarButton(item2, animated: true)
         
         locationManager.delegate = self
     }
@@ -356,6 +360,11 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         print("show delegate profile")
+        
+        let popVc = PopupViewController()
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
+        self.present(popVc, animated: true, completion: nil)
     }
     
     
@@ -472,14 +481,12 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         return button
     }()
     
-    internal lazy var testButton: UIButton! = {
-        let button = UIButton()
-        button.setTitle("test", for: .normal)
-        button.addTarget(self, action: #selector(testButtonTapped(sender:)), for: .touchUpInside)
-        button.frame = CGRect(x:0, y:0, width: 30, height: 30)
+    internal lazy var timerButton: UIButton! = {
+        let button: UIButton = UIButton()
+        button.setTitle("timer", for: .normal)
+        button.addTarget(self, action: #selector(startTimer), for: .touchUpInside)
         return button
     }()
-
     
 }
 

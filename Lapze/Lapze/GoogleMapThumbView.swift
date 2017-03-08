@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class GoogleMapThumbView: UIView {
     private let padding: Int = 5
@@ -63,6 +64,7 @@ class GoogleMapThumbView: UIView {
     
     func showProfile(){
         print("show user profile")
+        
     }
     
     let profileImageView: UIImageView = {
