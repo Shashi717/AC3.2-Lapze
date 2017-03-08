@@ -20,19 +20,7 @@ class LoginViewController: UIViewController {
         configureConstraints()
         
     }
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+ 
     func loginTapped(sender: UIButton) {
         print("Login")
         
@@ -50,8 +38,7 @@ class LoginViewController: UIViewController {
 
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         self.clearTextFields()
-                        let tabVC = EventsViewController()
-                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        self.dismiss(animated: true, completion: nil)
                     }))
                     
                     self.present(alertController, animated: true, completion: nil)

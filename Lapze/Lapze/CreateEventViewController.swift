@@ -24,14 +24,20 @@ enum DatePickerType {
     case endTime
 }
 
+protocol EventDelegate{
+    func startEvent()
+}
+
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
     let noTimeLimitActivities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
     var currentPickerType: DatePickerType = .date
+    var delegate: EventDelegate?
     var shareLocation = false
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +64,18 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func cancelButtonTapped(sender: UIBarButtonItem) {
         print("cancel tapped")
-        _ = navigationController?.popViewController(animated: true)
+        dismissViewcontroller()
     }
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
+        dismissViewcontroller()
         getEventInfo()
+        self.delegate?.startEvent()
+    }
+    
+    func dismissViewcontroller(){
+        self.navigationController?.popViewController(animated: true)
     }
     
     func showDatePicker() {

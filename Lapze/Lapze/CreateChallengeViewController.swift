@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+protocol ChallengeDelegate {
+    func startChallenge()
+}
+
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
@@ -16,6 +20,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
+    var delegate: ChallengeDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +53,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
         //this should add "status bars" to indicate challenge"
+        self.delegate?.startChallenge()
     }
     
     func showDatePicker() {
