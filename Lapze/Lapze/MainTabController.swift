@@ -23,7 +23,6 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         //       locman.delegate = self
     }
     func checkForUserStatus(){
-        
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)

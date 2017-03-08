@@ -41,8 +41,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         super.viewDidLoad()
         
         self.navigationItem.title = "Current Events"
-        navigationItem.leftBarButtonItem = addChallengeButton
-        navigationItem.rightBarButtonItem = endChallengeButton
+//        navigationItem.leftBarButtonItem = addChallengeButton
+//        navigationItem.rightBarButtonItem = endChallengeButton
         setupViewHierarchy()
         configureConstraints()
         
@@ -278,13 +278,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         challengeOn = true
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(["champ": "Sam"])
-        
+
     }
     
     func endChallenge(sender: UIBarButtonItem) {
         
         challengeOn = false
-        challengeRef.updateChildValues(["Location":path])
+        challengeRef.updateChildValues(["location":path])
     }
     
     //MARK: - User Auth Utilities
