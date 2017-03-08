@@ -58,10 +58,27 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
+        //createChallenge()
+        let popVc = PopupViewController()
+        //let popVc = EventsViewController()
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
         
+        
+        //self.show(popVc, sender: self)
+        
+        //self.present(popVc, animated: true) {print("yay")}
+        self.navigationController?.pushViewController(popVc, animated: true)
+        //self.navigationController?.present(popVc, animated: true, completion: nil)
+        
+        
+    }
+    
+    func createChallenge() {
         let dict = ["champion":FIRAuth.auth()!.currentUser!.uid, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField!.text!] as [String : Any]
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(dict)
+
         //this should add "status bars" to indicate challenge"
         
         self.delegate?.startChallenge()
