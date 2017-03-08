@@ -303,6 +303,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+
+
     
     //activity view setup
     func setupViewHierarchyForActivity() {
@@ -332,6 +334,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             ].map({$0.isHidden = true})
     }
     
+
     //MARK: Location Utilities
     
     private func addUserToMap(){
@@ -421,6 +424,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             previousLocation = currentLocation
             print("Previous Location: \(previousLocation)")
             print("Distance: \(distance)")
+            
         }
         print("location change")
     }
@@ -499,6 +503,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         challengeOn = true
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(["champ": user])
+        
+        self.locateMeButton.isHidden = true
     }
     
     //MARK: - Views
