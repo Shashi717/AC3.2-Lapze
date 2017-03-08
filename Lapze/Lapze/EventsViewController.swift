@@ -279,12 +279,15 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
     func createChallenge(sender: UIBarButtonItem) {
      
         if challengeOn == true {
-            print("Already on a challenge")
+            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
+               self.present(alertController, animated: true, completion: nil)
+            
+            
         }
         else {
         challengeOn = true
-//        challengeRef = databaseRef.child("Challenge").childByAutoId()
-//        challengeRef.updateChildValues(["champ": "Sam"])
+        challengeRef = databaseRef.child("Challenge").childByAutoId()
+        challengeRef.updateChildValues(["champ": "Sam"])
         }
     }
     
@@ -292,6 +295,13 @@ class EventsViewController: UIViewController,CLLocationManagerDelegate,GMSMapVie
         
         challengeOn = false
         challengeRef.updateChildValues(["location":path])
+        
+        let pathObject = Path()
+        let polyline = pathObject.getPolyline(path)
+        polyline.strokeColor = .green
+        polyline.strokeWidth = 3.0
+        polyline.map = googleMapView
+        
     }
     
     func addLocationtoFireBase(location: CLLocation){
