@@ -138,10 +138,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         thumbChallengeDescriptionLabel.text = "Bike Champ"
         thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
     }
-    
-    func challengeView() {
-        self.googleMapView.addSubview(timerButton)
-    }
 
     //MARK: - Setup Utilities
 
@@ -493,13 +489,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
 
 
     //MARK: Event Delegate methods
-    func startEvent() {
-        print("Event started")
+    func startEvent(name: String) {
+        print(name)
     }
     
     //MARK: Challenge Delegate methods
-    func startChallenge() {
-        print("Challenge started")
+    func startChallenge(user: String) {
+        print("Challenge started \(user)")
     }
     
     //MARK: - Views
@@ -615,14 +611,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
-    internal lazy var timerButton: UIButton! = {
-        let button: UIButton = UIButton()
-        button.setTitle("timer", for: .normal)
-        //button.addTarget(self, action: #selector(), for: .touchUpInside)
-        return button
-    }()
-
 
     internal lazy var addChallengeButton: UIBarButtonItem! = {
         var barButton = UIBarButtonItem()
