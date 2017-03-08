@@ -25,7 +25,7 @@ enum DatePickerType {
 }
 
 protocol EventDelegate{
-    func startEvent()
+    func startEvent(name: String)
 }
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -71,7 +71,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         print("done tapped")
         dismissViewcontroller()
         getEventInfo()
-        self.delegate?.startEvent()
+        self.delegate?.startEvent(name: "test")
     }
     
     func dismissViewcontroller(){
