@@ -11,6 +11,10 @@ import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
 
+protocol ChallengeDelegate {
+    func startChallenge()
+}
+
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
@@ -18,9 +22,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
+    var delegate: ChallengeDelegate?
+
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
-    
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,13 +58,33 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
+        //createChallenge()
+        let popVc = PopupViewController()
+        //let popVc = EventsViewController()
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
         
+        
+        //self.show(popVc, sender: self)
+        
+        //self.present(popVc, animated: true) {print("yay")}
+        self.navigationController?.pushViewController(popVc, animated: true)
+        //self.navigationController?.present(popVc, animated: true, completion: nil)
+        
+        
+    }
+    
+    func createChallenge() {
         let dict = ["champion":FIRAuth.auth()!.currentUser!.uid, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField!.text!] as [String : Any]
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(dict)
+
         //this should add "status bars" to indicate challenge"
-        let eventsVc = EventsViewController()
         
+        self.delegate?.startChallenge()
+
+        let eventsVc = EventsViewController()
+
     }
     
     func showDatePicker() {
