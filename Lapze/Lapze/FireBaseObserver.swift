@@ -28,7 +28,6 @@ class FirebaseObserver{
             if let dict = self.getSnapshotValue(snapshot: snapshot){
                 GoogleMapManager.shared.addMarkerToDic(name: snapshot.key, with: dict)
             }
-            
         })
         
         childChangedhandler = childRef.observe(.childChanged, with: { (snapshot) in
@@ -50,7 +49,5 @@ class FirebaseObserver{
     private func getSnapshotValue(snapshot: FIRDataSnapshot)->[String:Double]?{
         return snapshot.value as? [String:Double]
     }
-    
-    
-    
+
 }

@@ -31,6 +31,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     var currentPickerType: DatePickerType = .date
     var shareLocation = false
     var shareProfile = false
+    private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
     
     
     override func viewDidLoad() {
@@ -63,6 +64,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
+        getEventInfo()
     }
     
     func showDatePicker() {
@@ -116,15 +118,22 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
             datePicker.datePickerMode = UIDatePickerMode.date
             dateFormatter.dateFormat = "MMM dd, yyyy"
             pickedDateLabel.text = dateFormatter.string(from: datePicker.date)
+            userEventInfo["date"] = dateFormatter.string(from: datePicker.date)
         case DatePickerType.startTime:
             datePicker.datePickerMode = UIDatePickerMode.time
             dateFormatter.dateFormat = "hh:mm a"
             pickedStartTimeLabel.text = dateFormatter.string(from: datePicker.date)
+            userEventInfo["start"] = dateFormatter.string(from: datePicker.date)
         case DatePickerType.endTime:
             datePicker.datePickerMode = UIDatePickerMode.time
             dateFormatter.dateFormat = "hh:mm a"
             pickedEndTimeLabel.text = dateFormatter.string(from: datePicker.date)
+            userEventInfo["end"] = dateFormatter.string(from: datePicker.date)
         }
+    }
+    
+    private func getEventInfo(){
+        print(userEventInfo)
     }
     
     //MARK: - Delegates and data sources
@@ -148,6 +157,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         let pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
+        userEventInfo["type"] = pickedActivity.rawValue
         
         //end time can only be configured for certain activities
         if noTimeLimitActivities.contains(pickedActivity) {
