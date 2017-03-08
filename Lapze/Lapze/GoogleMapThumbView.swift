@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class GoogleMapThumbView: UIView {
     private let padding: Int = 5
@@ -15,6 +16,7 @@ class GoogleMapThumbView: UIView {
         super.init(frame: frame)
         
         setUpView()
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,7 +56,16 @@ class GoogleMapThumbView: UIView {
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
         }
+        
+        
+        
     }
+    
+    func showProfile(){
+        print("show user profile")
+    }
+    
+    
     
     let profileImageView: UIImageView = {
         let imageview: UIImageView = UIImageView()

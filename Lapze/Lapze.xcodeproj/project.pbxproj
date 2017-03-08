@@ -12,6 +12,7 @@
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
 		1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */; };
 		1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */; };
+		1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */; };
 		1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
@@ -28,6 +29,7 @@
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
 		E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */; };
 		E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */; };
+		E363F3061E707459005BE3B8 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3051E707459005BE3B8 /* ChallengeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,7 @@
 		1A9768021E6789EB00F6B28C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkBlueStyle.json; sourceTree = "<group>"; };
 		1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapThumbView.swift; sourceTree = "<group>"; };
+		1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 		1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireBaseObserver.swift; sourceTree = "<group>"; };
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +59,7 @@
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
 		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
+		E363F3051E707459005BE3B8 /* ChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,7 @@
 				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
 				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
+				1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */,
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
 				9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */,
 			);
@@ -105,6 +110,7 @@
 			children = (
 				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
 				1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */,
+				E363F3051E707459005BE3B8 /* ChallengeViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -224,7 +230,7 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -322,12 +328,14 @@
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
+				1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */,
 				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
 				9B1684961E70911B00377543 /* Path.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
+				E363F3061E707459005BE3B8 /* ChallengeViewController.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,6 +453,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -460,6 +469,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
