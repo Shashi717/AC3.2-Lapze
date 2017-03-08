@@ -20,7 +20,7 @@ public enum Event: String {
 }
 
 
-class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate{
+class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
@@ -43,8 +43,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         super.viewDidLoad()
         
         self.navigationItem.title = "Current Events"
-        //        navigationItem.leftBarButtonItem = addChallengeButton
-        //        navigationItem.rightBarButtonItem = endChallengeButton
         setupViewHierarchy()
         configureConstraints()
         
@@ -342,18 +340,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     
-    func endChallenge(sender: UIBarButtonItem) {
-        
-        challengeOn = false
-        challengeRef.updateChildValues(["location":path])
-        
-        let pathObject = Path()
-        let polyline = pathObject.getPolyline(path)
-        polyline.strokeColor = .green
-        polyline.strokeWidth = 3.0
-        polyline.map = googleMapView
-        
-    }
+
     
 
     //MARK: - User Auth Utilities
@@ -507,6 +494,23 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.locateMeButton.isHidden = true
     }
     
+    //MARK: EndActivity Delegate methods
+    func endChallenge(ended: Bool) {
+        print("End Challenge")
+        
+        if ended == true {
+        challengeOn = false
+        challengeRef.updateChildValues(["location":path])
+        
+        let pathObject = Path()
+        let polyline = pathObject.getPolyline(path)
+        polyline.strokeColor = .green
+        polyline.strokeWidth = 3.0
+        polyline.map = googleMapView
+        
+        }
+    }
+    
     //MARK: - Views
     private let googleMapView: GMSMapView = {
         let mapview: GMSMapView = GMSMapView()
@@ -620,13 +624,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
-    internal lazy var endChallengeButton: UIBarButtonItem! = {
-        var barButton = UIBarButtonItem()
-        barButton = UIBarButtonItem(title: "End", style: .done, target: self, action: #selector(endChallenge(sender:)))
-        return barButton
-    }()
-    
     
     //hosting, joined activity, or challenge view
     internal lazy var topStatusView: UIView! = {
