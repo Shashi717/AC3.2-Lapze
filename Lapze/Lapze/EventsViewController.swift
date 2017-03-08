@@ -340,6 +340,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
 
 
     func createChallenge(sender: UIBarButtonItem) {
+     
+        if challengeOn == true {
+            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
+               self.present(alertController, animated: true, completion: nil)
+            
+            
+        }
+        else {
         
         challengeOn = true
         challengeRef = databaseRef.child("Challenge").childByAutoId()
@@ -351,6 +359,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         challengeOn = false
         challengeRef.updateChildValues(["location":path])
+        
+        let pathObject = Path()
+        let polyline = pathObject.getPolyline(path)
+        polyline.strokeColor = .green
+        polyline.strokeWidth = 3.0
+        polyline.map = googleMapView
+        
     }
     
 

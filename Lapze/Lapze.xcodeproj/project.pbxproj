@@ -16,6 +16,7 @@
 		1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
+		9B1684961E70911B00377543 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1684951E70911B00377543 /* Path.swift */; };
 		9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */; };
 		9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B170C231E6A6830003EE1D7 /* ColorPalette.swift */; };
 		9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */; };
@@ -45,6 +46,7 @@
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
+		9B1684951E70911B00377543 /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		9B170C231E6A6830003EE1D7 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 		1A4AA7C61E678BFC006EC158 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9B1684951E70911B00377543 /* Path.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
+				9B1684961E70911B00377543 /* Path.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
 				E363F3061E707459005BE3B8 /* ChallengeViewController.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
