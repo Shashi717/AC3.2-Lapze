@@ -21,7 +21,7 @@ public enum Event: String {
 
 
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate{
-
+    
     private var userLocation: CLLocation?{
         didSet{
             findUser()
@@ -30,7 +30,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
-
+    
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
     var challengeOn = false
@@ -43,8 +43,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         super.viewDidLoad()
         
         self.navigationItem.title = "Current Events"
-//        navigationItem.leftBarButtonItem = addChallengeButton
-//        navigationItem.rightBarButtonItem = endChallengeButton
+        //        navigationItem.leftBarButtonItem = addChallengeButton
+        //        navigationItem.rightBarButtonItem = endChallengeButton
         setupViewHierarchy()
         configureConstraints()
         
@@ -56,9 +56,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         view.addGestureRecognizer(tap)
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
-
+        
         FirebaseObserver.manager.startObserving(node: .location)
-
+        
         //Change Map view to reflect part session/challenge
         if challengeOn {
             print("you're in a challenge")
@@ -73,14 +73,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     override func viewDidAppear(_ animated: Bool) {
         locationManager.requestAlwaysAuthorization()
-
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         FirebaseObserver.manager.stopObserving()
     }
     
-
-
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         FirebaseObserver.manager.startObserving(node: .location)
         if challengeOn {
@@ -88,7 +88,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
+    
     //MARK: - Utilities
     deinit {
         print("View died")
@@ -138,9 +138,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         thumbChallengeDescriptionLabel.text = "Bike Champ"
         thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
     }
-
+    
     //MARK: - Setup Utilities
-
+    
     func createThumbView(userName: String) {
         self.view.addSubview(thumbStatContainerView)
         self.thumbStatContainerView.addSubview(thumbButton)
@@ -184,7 +184,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
         }
     }
-
+    
     func thumbButtonTapped(sender: UIButton) {
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -211,10 +211,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.show(createEventVc, sender: self)
             
         case 1:
-            let createEventVc = CreateChallengeViewController()
-            createEventVc.delegate = self
-            self.show(createEventVc, sender: self)
-            
+            if challengeOn == true {
+                let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
+                self.present(alertController, animated: true, completion: nil)
+            }
+            else {
+                let createEventVc = CreateChallengeViewController()
+                createEventVc.delegate = self
+                self.show(createEventVc, sender: self)
+            }
         default:
             break
         }
@@ -235,7 +240,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
-
+    
     func eventPopup() {
         print("want to join this event?")
         //popup box
@@ -252,24 +257,24 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //self.blurView.removeFromSuperview()
     }
     
-
+    
     
     //MARK: - Setup views
     //original view setup
-
-
+    
+    
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(googleMapView)
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
-
-
-//        let item2 = UIBarButtonItem(customView: testButton)
-//        self.navigationItem.setRightBarButton(item2, animated: true)
         
-
+        
+        //        let item2 = UIBarButtonItem(customView: testButton)
+        //        self.navigationItem.setRightBarButton(item2, animated: true)
+        
+        
         locationManager.delegate = self
     }
     
@@ -298,7 +303,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
+    
     //activity view setup
     func setupViewHierarchyForActivity() {
         self.edgesForExtendedLayout = []
@@ -328,28 +333,28 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     //MARK: Location Utilities
-
+    
     private func addUserToMap(){
         
     }
     
-
-
+    
+    
     func createChallenge(sender: UIBarButtonItem) {
-
-        if challengeOn == true {
-            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
-               self.present(alertController, animated: true, completion: nil)
-            
-            
-        }
-        else {
         
-        challengeOn = true
-        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        challengeRef.updateChildValues(["champ": "Sam"])
-
-        }
+        //        if challengeOn == true {
+        //            let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
+        //               self.present(alertController, animated: true, completion: nil)
+        //
+        //
+        //        }
+        //        else {
+        //
+        //        challengeOn = true
+        //        challengeRef = databaseRef.child("Challenge").childByAutoId()
+        //        challengeRef.updateChildValues(["champ": "Sam"])
+        //
+        //        }
         
     }
     
@@ -366,10 +371,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
     }
     
-
     
     
-
+    
+    
     //MARK: - User Auth Utilities
     func checkForUserLogin(){
         if FIRAuth.auth()?.currentUser == nil{
@@ -384,7 +389,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     //MARK: Location Utilities
-
+    
     func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
@@ -405,23 +410,23 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             googleMapView.animate(toZoom: 15)
         }
     }
-
+    
     //MARK: Location manager Delegate
     var previousLocation: CLLocation?
     var distance: Double = 0.0
     
-
+    
     
     //MARK: Location manager Delegate methods
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let validLocation: CLLocation = locations.last else { return }
         self.userLocation = validLocation
         if challengeOn == true {
             let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-
-        path.append(locationDict)
+            
+            path.append(locationDict)
             
             //calculating distance
             let currentLocation = manager.location!
@@ -503,8 +508,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
-
+    
+    
     //MARK: Event Delegate methods
     func startEvent(name: String) {
         print(name)
@@ -513,6 +518,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     //MARK: Challenge Delegate methods
     func startChallenge(user: String) {
         print("Challenge started \(user)")
+        challengeOn = true
+        challengeRef = databaseRef.child("Challenge").childByAutoId()
+        challengeRef.updateChildValues(["champ": user])
     }
     
     //MARK: - Views
@@ -521,7 +529,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         mapview.translatesAutoresizingMaskIntoConstraints = false
         mapview.mapType = .normal
         mapview.isBuildingsEnabled = false
-       // mapview.isMyLocationEnabled = true
+        // mapview.isMyLocationEnabled = true
         
         do {
             if let styleURL = Bundle.main.url(forResource: "darkBlueStyle", withExtension: "json") {
@@ -628,7 +636,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
-
+    
     internal lazy var addChallengeButton: UIBarButtonItem! = {
         var barButton = UIBarButtonItem()
         barButton = UIBarButtonItem(title: "Create Challenge", style: .done, target: self, action: #selector(createChallenge(sender:)))
@@ -640,7 +648,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         barButton = UIBarButtonItem(title: "End", style: .done, target: self, action: #selector(endChallenge(sender:)))
         return barButton
     }()
-
+    
     
     //hosting, joined activity, or challenge view
     internal lazy var topStatusView: UIView! = {
@@ -654,6 +662,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.text = "Activity joined/challenged"
         return label
     }()
-
+    
 }
 
