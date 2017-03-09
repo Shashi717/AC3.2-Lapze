@@ -118,8 +118,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                     let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
                     let location = snap.childSnapshot(forPath: "location").value,
                     let type = snap.childSnapshot(forPath: "type").value,
-                    let lat = snap.childSnapshot(forPath: "lat").value,
-                    let long = snap.childSnapshot(forPath: "long").value {
+                    let lat = snap.childSnapshot(forPath: "lat").value ?? nil,
+                    let long = snap.childSnapshot(forPath: "long").value ?? nil{
                     
                     let dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location, "lat":lat, "long":long ]
                     challengeArray.append(dict)
@@ -136,11 +136,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         if let challengeArray = allChallenges {
             for challenge in challengeArray {
-        
-                let coordinates = CLLocationCoordinate2D(latitude: challenge["lat"] as! CLLocationDegrees, longitude: challenge["long"] as! CLLocationDegrees)
+                if let lat = challenge["lat"] as? CLLocationDegrees, let long = challenge["long"] as? CLLocationDegrees {
+                let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long )
                 let userLocationMarker = GMSMarker(position: coordinates)
                 userLocationMarker.map = googleMapView
-
+                }
             }
         }
     }
