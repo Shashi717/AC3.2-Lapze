@@ -31,8 +31,6 @@ class ProfileViewController: UIViewController {
         userRankLabel.text = "Rank: 321"
         activitiesLabel.text = "Activities: Biking, Running"
         challengesLabel.text = "Challenges: Running"
-        
-        
     }
     
     func segementedControlValueChanged(sender: UISegmentedControl) {

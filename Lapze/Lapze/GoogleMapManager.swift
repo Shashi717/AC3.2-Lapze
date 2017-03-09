@@ -20,7 +20,7 @@ class GoogleMapManager{
        self.map = map
     }
     
-    func addMarkerToDic(id: String, with locationDict:[String:Double]){
+    func addMarker(id: String, with locationDict:[String:Double]){
         if let lat = locationDict["lat"], let long = locationDict["long"] {
             let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let marker = GMSMarker(position: cllocation)
@@ -30,7 +30,10 @@ class GoogleMapManager{
             marker.title = id
         }
     }
-    
+    func addMarker(id: String, marker:GMSMarker){
+        self.dict[id] = marker
+        marker.map = map
+    }
     func getMarker(id:String)->GMSMarker?{
         return dict[id]
     }

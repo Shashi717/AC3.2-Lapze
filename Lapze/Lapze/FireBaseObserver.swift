@@ -26,7 +26,7 @@ class FirebaseObserver{
         
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
             if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.addMarkerToDic(id: snapshot.key, with: dict)
+                GoogleMapManager.shared.addMarker(id: snapshot.key, with: dict)
             }
         })
         
