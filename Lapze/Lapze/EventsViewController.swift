@@ -27,14 +27,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             //addLocationtoFireBase(location: userLocation!)
         }
     }
-    
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     private let databaseRef = FIRDatabase.database().reference()
-    private var challengeRef: FIRDatabaseReference!
-    var challengeOn = false
+    private var challengeFirebaseRef: FIRDatabaseReference?
+    private var challengeOn = false
     private var path: [[String: CLLocationDegrees]] = [[:]]
-    private var challengeLocationLatArray: [CLLocationDegrees] = []
-    private var challengeLocationLongArray: [CLLocationDegrees] = []
     private var userCreatedEvent: Bool = false
     
     override func viewDidLoad() {
@@ -107,17 +104,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     func fillPopupForCreateEvent() {
-        //popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
-        //profileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
-        
         thumbStatContainerView.backgroundColor = ColorPalette.purpleThemeColor
         thumbProfileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
     }
     
     func fillPopupForChallenge() {
-        //popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        //profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
-        
         thumbStatContainerView.backgroundColor = ColorPalette.orangeThemeColor
         thumbProfileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
     }
@@ -258,6 +249,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
+        self.googleMapView.addSubview(testButton)
         
         
         //        let item2 = UIBarButtonItem(customView: testButton)
@@ -290,6 +282,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
         }
+        
+        testButton.snp.makeConstraints { (view) in
+            view.leading.equalToSuperview()
+            view.width.height.equalTo(50)
+            view.bottom.equalToSuperview().inset(10)
+        }
     }
     
     //activity view setup
@@ -319,7 +317,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.addButton
             ].map({$0.isHidden = true})
     }
- 
+
     //MARK: Location Utilities
     fileprivate func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
@@ -350,15 +348,18 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let validLocation: CLLocation = locations.last else { return }
+        
         self.userLocation = validLocation
         if challengeOn == true {
             let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-            
+            GoogleMapManager.shared.removeMarker(id: (FIRAuth.auth()?.currentUser?.uid)!)
+             GoogleMapManager.shared.addMarkerToDic(id: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
             path.append(locationDict)
             
             //calculating distance
             let currentLocation = manager.location!
             print("Current Location: \(currentLocation)")
+            
             
             if previousLocation != nil {
                 let lastDistance = currentLocation.distance(from: previousLocation as CLLocation!)
@@ -442,34 +443,52 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         print(name)
     }
     
+    
     //MARK: Challenge Delegate methods
-    func startChallenge(user: String) {
+    func startChallenge(user: String, linkRef: FIRDatabaseReference) {
         print("Challenge started \(user)")
-        challengeOn = true
-        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        challengeRef.updateChildValues(["champ": user])
-        
+        self.challengeOn = true
+        self.challengeFirebaseRef = linkRef
+        linkRef.updateChildValues(["champion": user])
         self.locateMeButton.isHidden = true
     }
     
     //MARK: EndActivity Delegate methods
-    func endChallenge(ended: Bool) {
+    
+    func endChallenge() {
         print("End Challenge")
+
+        self.challengeOn = false
+        let dict = ["location":path]
+        self.challengeFirebaseRef!.updateChildValues(dict)
         
-        if ended == true {
-            challengeOn = false
-            challengeRef.updateChildValues(["location":path])
-            
-            let pathObject = Path()
-            let polyline = pathObject.getPolyline(path)
-            polyline.strokeColor = .green
-            polyline.strokeWidth = 3.0
-            polyline.map = googleMapView
-            
-        }
+        let pathObject = Path()
+        let polyline = pathObject.getPolyline(path)
+        polyline.strokeColor = .green
+        polyline.strokeWidth = 3.0
+        polyline.map = googleMapView
     }
     
     //MARK: - Views
+    
+    private let testButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "locate"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ (view) in
+            view.size.equalTo(CGSize(width: 30, height: 30))
+        })
+        button.layer.shadowOpacity = 0.4
+        button.layer.shadowOffset = CGSize(width: 1, height: 5)
+        button.layer.shadowRadius = 2
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = 25
+        button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+        return button
+    }()
+    //Delete^^
+    
+    
     private let googleMapView: GMSMapView = {
         let mapview: GMSMapView = GMSMapView()
         mapview.translatesAutoresizingMaskIntoConstraints = false
