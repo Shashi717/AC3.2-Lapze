@@ -649,7 +649,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.challengeOn = false
         self.activeViewOn = false
         
-        let firstCoordinate = path[1]
+        let firstCoordinate = path[0]
         if let firstLat = firstCoordinate["lat"],
             let firstLong = firstCoordinate["long"] {
         let dict = ["location": path, "lat": firstLat,"long": firstLong] as [String : Any]
