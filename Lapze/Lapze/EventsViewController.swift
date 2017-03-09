@@ -19,7 +19,6 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
-
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
@@ -29,14 +28,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
-    
-    let databaseRef = FIRDatabase.database().reference()
-    var challengeRef: FIRDatabaseReference!
+    private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
+    private let databaseRef = FIRDatabase.database().reference()
+    private var challengeRef: FIRDatabaseReference!
     var challengeOn = false
-    var path: [[String: CLLocationDegrees]] = [[:]]
-    var challengeLocationLatArray: [CLLocationDegrees] = []
-    var challengeLocationLongArray: [CLLocationDegrees] = []
+    private var path: [[String: CLLocationDegrees]] = [[:]]
+    private var challengeLocationLatArray: [CLLocationDegrees] = []
+    private var challengeLocationLongArray: [CLLocationDegrees] = []
     private var userCreatedEvent: Bool = false
     
     override func viewDidLoad() {
@@ -63,10 +61,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         } else {
             print("not in a challenge")
         }
-        
-        locationManager.delegate = self
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -77,15 +71,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         FirebaseObserver.manager.stopObserving()
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         FirebaseObserver.manager.startObserving(node: .location)
         if challengeOn {
             print("you're in a challenge")
         }
     }
-    
     
     //MARK: - Utilities
     deinit {
@@ -301,9 +292,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
-
-    
     //activity view setup
     func setupViewHierarchyForActivity() {
         self.edgesForExtendedLayout = []
@@ -331,34 +319,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.addButton
             ].map({$0.isHidden = true})
     }
-    
-
+ 
     //MARK: Location Utilities
-    
-    private func addUserToMap(){
-        
-    }
-    
-    
-
-    
-
-    //MARK: - User Auth Utilities
-    func checkForUserLogin(){
-        if FIRAuth.auth()?.currentUser == nil{
-            perform(#selector(handleLogout), with: nil, afterDelay: 0)
-        }else{
-            FirebaseObserver.manager.startObserving(node: .location)
-        }
-    }
-    
-    func handleLogout(){
-        present(LoginViewController(), animated: true, completion: nil)
-    }
-    
-    //MARK: Location Utilities
-    
-    func addLocationtoFireBase(location: CLLocation){
+    fileprivate func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
             
@@ -371,7 +334,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    func findUser(){
+     func findUser(){
         if let location = userLocation{
             let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
             googleMapView.animate(toLocation: clocation)
@@ -383,10 +346,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     var previousLocation: CLLocation?
     var distance: Double = 0.0
     
-    
-    
     //MARK: Location manager Delegate methods
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let validLocation: CLLocation = locations.last else { return }
@@ -477,8 +437,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
-    
     //MARK: Event Delegate methods
     func startEvent(name: String) {
         print(name)
@@ -499,15 +457,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         print("End Challenge")
         
         if ended == true {
-        challengeOn = false
-        challengeRef.updateChildValues(["location":path])
-        
-        let pathObject = Path()
-        let polyline = pathObject.getPolyline(path)
-        polyline.strokeColor = .green
-        polyline.strokeWidth = 3.0
-        polyline.map = googleMapView
-        
+            challengeOn = false
+            challengeRef.updateChildValues(["location":path])
+            
+            let pathObject = Path()
+            let polyline = pathObject.getPolyline(path)
+            polyline.strokeColor = .green
+            polyline.strokeWidth = 3.0
+            polyline.map = googleMapView
+            
         }
     }
     
@@ -554,7 +512,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return button
     }()
     
-    internal lazy var eventSegmentedControl: UISegmentedControl! = {
+    internal lazy var eventSegmentedControl: UISegmentedControl = {
         var segmentedControl = UISegmentedControl()
         segmentedControl = UISegmentedControl(items: self.events)
         let font = UIFont.systemFont(ofSize: 14)
@@ -565,13 +523,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return segmentedControl
     }()
     
-    internal lazy var thumbStatContainerView: UIView! = {
+    internal lazy var thumbStatContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 5.0
         view.layer.masksToBounds = false
         return view
     }()
-    internal lazy var thumbProfileImageView: UIImageView! = {
+    internal lazy var thumbProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25.0
         imageView.contentMode = .scaleAspectFill
@@ -579,27 +537,27 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         imageView.layer.masksToBounds = false
         return imageView
     }()
-    internal lazy var thumbUserNameLabel: UILabel! = {
+    internal lazy var thumbUserNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
-    internal lazy var thumbChallengeDescriptionLabel: UILabel! = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbChallengeStatsLabel: UILabel! = {
+    internal lazy var thumbChallengeDescriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
     
-    internal lazy var thumbButton: UIButton! = {
+    internal lazy var thumbChallengeStatsLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    internal lazy var thumbButton: UIButton = {
         let button = UIButton()
         // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
         // button.backgroundColor = ColorPalette.logoGreenColor
@@ -609,7 +567,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return button
     }()
     
-    internal lazy var addButton: UIButton! = {
+    internal lazy var addButton: UIButton = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "add-1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
@@ -626,13 +584,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }()
     
     //hosting, joined activity, or challenge view
-    internal lazy var topStatusView: UIView! = {
+    internal lazy var topStatusView: UIView = {
         var view = UIView()
         view.layer.masksToBounds = true
         return view
     }()
     
-    internal lazy var topStatusLabel: UILabel! = {
+    internal lazy var topStatusLabel: UILabel = {
         var label = UILabel()
         label.text = "Activity joined/challenged"
         return label

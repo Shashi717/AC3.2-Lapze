@@ -16,15 +16,13 @@ class GoogleMapThumbView: UIView {
         super.init(frame: frame)
         
         setUpView()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    func setUpView(){
+    private func setUpView(){
         self.addSubview(profileImageView)
         self.addSubview(nameLabel)
         self.addSubview(titleLabel)
@@ -56,16 +54,7 @@ class GoogleMapThumbView: UIView {
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
         }
-        
-        
-        
     }
-    
-    func showProfile(){
-        print("show user profile")
-    }
-    
-    
     
     let profileImageView: UIImageView = {
         let imageview: UIImageView = UIImageView()

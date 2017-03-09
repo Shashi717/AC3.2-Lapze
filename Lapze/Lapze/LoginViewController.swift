@@ -25,8 +25,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         view.addGestureRecognizer(tap)
         
     }
-
-
+    
     func loginTapped(sender: UIButton) {
         print("Login")
         
@@ -45,9 +44,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         self.clearTextFields()
                         self.dismiss(animated: true, completion: nil)
-                        let tabVC = EventsViewController()
-                        self.navigationController?.pushViewController(tabVC, animated:true)
-
                     }))
                     
                     self.present(alertController, animated: true, completion: nil)
