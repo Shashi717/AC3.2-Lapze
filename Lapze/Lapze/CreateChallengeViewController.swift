@@ -10,12 +10,14 @@ import UIKit
 import SnapKit
 import FirebaseDatabase
 import FirebaseAuth
+import CoreLocation
 
 protocol ChallengeDelegate {
-    func startChallenge(user: String)
+    func startChallenge(user: String, linkRef: FIRDatabaseReference)
+   // var challengeRef: FIRDatabaseReference? { get set }
 }
 
-class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
     let noTimeLimitActivities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
@@ -26,7 +28,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
 
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
- 
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,11 +38,9 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
         setupViewHierarchy()
         configureConstraints()
-        
     }
     
     //MARK: - Utilities
-    
     func locationSwitchValueChanged(sender: UISwitch) {
         print("Before status: \(shareLocation)")
         shareLocation = !shareLocation
@@ -57,28 +57,22 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     func doneButtonTapped(sender: UIBarButtonItem) {
+        
         print("done tapped")
         createChallenge()
-        let popVc = PopupViewController()
-        //let popVc = EventsViewController()
-        popVc.modalTransitionStyle = .crossDissolve
-        popVc.modalPresentationStyle = .overCurrentContext
-        
 
-        //self.navigationController?.present(popVc, animated: true, completion: nil)
-        self.navigationController?.pushViewController(popVc, animated: true)
+       _ = self.navigationController?.popViewController(animated: true)
     }
     
     func createChallenge() {
         let user = FIRAuth.auth()!.currentUser!.uid
-        let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!] as [String : Any]
-        challengeRef = databaseRef.child("Challenge").childByAutoId()
-        challengeRef.updateChildValues(dict)
-
+        let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
-        self.delegate?.startChallenge(user: user)
-
-
+        let linkRef = self.databaseRef.childByAutoId()
+        challengeRef = databaseRef.child("Challenge").child(linkRef.key)
+        challengeRef.updateChildValues(dict)
+  
+        self.delegate?.startChallenge(user: user, linkRef: challengeRef)
     }
     
     func showDatePicker() {

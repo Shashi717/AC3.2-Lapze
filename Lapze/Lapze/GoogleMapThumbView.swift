@@ -16,7 +16,6 @@ class GoogleMapThumbView: UIView {
         super.init(frame: frame)
         
         setUpView()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -56,8 +55,6 @@ class GoogleMapThumbView: UIView {
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
         }
-        
-        
         
     }
     
