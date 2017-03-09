@@ -38,6 +38,7 @@ class PopupViewController: UIViewController {
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
         }
     }
+    
     //MARK: - Utilities
     func fillPopupForChallenge() {
         popupContainerView.backgroundColor = ColorPalette.orangeThemeColor

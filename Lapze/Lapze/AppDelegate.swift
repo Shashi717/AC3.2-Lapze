@@ -16,15 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-
+        //Google Maps API Key
         GMSServices.provideAPIKey("AIzaSyDOiTbYY-vEPH42OMTCp3nlmF4BtoVu7Cc")
-        
+        //FireBase Init
         FIRApp.configure()
         
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
         //User Notifications
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (allowd, error) in
@@ -33,17 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
         
-        
-        //Tab Init
+        //Application appearance
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+     
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let navAppearance = UINavigationBar.appearance()
         navAppearance.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         navAppearance.barTintColor = ColorPalette.greenThemeColor
+        navAppearance.tintColor = .white
         
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 20.0),
                                                             NSForegroundColorAttributeName : UIColor.white]
-        
-
+        //Root View
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
 
