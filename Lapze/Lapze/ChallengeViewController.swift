@@ -47,7 +47,7 @@ class ChallengeViewController: EventsViewController {
     
     func endTheChallenge() {
           // self.delegate?.endChallenge(ended: true)
-        super.endChallenge(ended: true)
+        endChallenge(ended: true)
     }
     
     //MARK: - setup

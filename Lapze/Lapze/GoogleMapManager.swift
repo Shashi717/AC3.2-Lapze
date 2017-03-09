@@ -20,34 +20,38 @@ class GoogleMapManager{
        self.map = map
     }
     
-    func addMarkerToDic(name: String, with dict:[String:Double]){
-        if let lat = dict["lat"], let long = dict["long"] {
+    func addMarkerToDic(id: String, with locationDict:[String:Double]){
+        if let lat = locationDict["lat"], let long = locationDict["long"] {
             let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let marker = GMSMarker(position: cllocation)
-            self.dict[name] = marker
+            self.dict[id] = marker
             marker.map = map
             marker.icon = UIImage(named: "010-man")
-            marker.title = name
+            marker.title = id
         }
     }
     
-    func getMarker(name:String)->GMSMarker?{
-        return dict[name]
+    func getMarker(id:String)->GMSMarker?{
+        return dict[id]
     }
     
-    func removeMarker(name:String){
-        dict[name]?.map = nil
-        dict[name] = nil
+    func removeMarker(id:String){
+        dict[id]?.map = nil
+        dict[id] = nil
     }
     
-    func updateMarker(name:String,value:[String:Double]){
-        if let marker = dict[name]{
-            marker.position.latitude = value["lat"]!
-            marker.position.longitude = value["long"]!
+    func updateMarker(id:String,locationDict:[String:Double]){
+        if let marker = dict[id]{
+            marker.position.latitude = locationDict["lat"]!
+            marker.position.longitude = locationDict["long"]!
         }
     }
     
     func allMarkers()->[String:GMSMarker]{
         return dict
+    }
+    
+    func hideAllMarlers(){
+        
     }
 }

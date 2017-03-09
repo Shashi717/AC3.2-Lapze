@@ -19,7 +19,6 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
-
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
@@ -28,9 +27,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             //addLocationtoFireBase(location: userLocation!)
         }
     }
-    
-    let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
-    
+    private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     private let databaseRef = FIRDatabase.database().reference()
     private var challengeFirebaseRef: FIRDatabaseReference?
     private var challengeOn = false
@@ -61,10 +58,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         } else {
             print("not in a challenge")
         }
-        
-        locationManager.delegate = self
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,15 +68,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         FirebaseObserver.manager.stopObserving()
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         FirebaseObserver.manager.startObserving(node: .location)
         if challengeOn {
             print("you're in a challenge")
         }
     }
-    
     
     //MARK: - Utilities
     deinit {
@@ -300,9 +290,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
-    
-    
     //activity view setup
     func setupViewHierarchyForActivity() {
         self.edgesForExtendedLayout = []
@@ -330,34 +317,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.addButton
             ].map({$0.isHidden = true})
     }
-    
-    
+
     //MARK: Location Utilities
-    
-    private func addUserToMap(){
-        
-    }
-    
-    
-    
-    
-    
-    //MARK: - User Auth Utilities
-    func checkForUserLogin(){
-        if FIRAuth.auth()?.currentUser == nil{
-            perform(#selector(handleLogout), with: nil, afterDelay: 0)
-        }else{
-            FirebaseObserver.manager.startObserving(node: .location)
-        }
-    }
-    
-    func handleLogout(){
-        present(LoginViewController(), animated: true, completion: nil)
-    }
-    
-    //MARK: Location Utilities
-    
-    func addLocationtoFireBase(location: CLLocation){
+    fileprivate func addLocationtoFireBase(location: CLLocation){
         let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
             
@@ -370,7 +332,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    func findUser(){
+     func findUser(){
         if let location = userLocation{
             let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
             googleMapView.animate(toLocation: clocation)
@@ -382,10 +344,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     var previousLocation: CLLocation?
     var distance: Double = 0.0
     
-    
-    
     //MARK: Location manager Delegate methods
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let validLocation: CLLocation = locations.last else { return }
@@ -393,8 +352,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.userLocation = validLocation
         if challengeOn == true {
             let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-            GoogleMapManager.shared.removeMarker(name: (FIRAuth.auth()?.currentUser?.uid)!)
-             GoogleMapManager.shared.addMarkerToDic(name: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
+            GoogleMapManager.shared.removeMarker(id: (FIRAuth.auth()?.currentUser?.uid)!)
+             GoogleMapManager.shared.addMarkerToDic(id: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
             path.append(locationDict)
             
             //calculating distance
@@ -479,11 +438,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
-    
     //MARK: Event Delegate methods
     func startEvent(name: String) {
-        print(name)
+        let eventPopUp: PopupViewController = PopupViewController()
+        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        eventPopUp.modalTransitionStyle = .crossDissolve
+        eventPopUp.modalPresentationStyle = .overCurrentContext
+        present(eventPopUp, animated: true, completion: nil)
     }
     
     
@@ -500,6 +462,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     func endChallenge() {
         print("End Challenge")
+
         self.challengeOn = false
         let dict = ["location":path]
         self.challengeFirebaseRef!.updateChildValues(dict)
@@ -509,8 +472,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         polyline.strokeColor = .green
         polyline.strokeWidth = 3.0
         polyline.map = googleMapView
-        
-        
     }
     
     //MARK: - Views
