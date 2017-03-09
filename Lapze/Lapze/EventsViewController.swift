@@ -29,6 +29,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+    
+    
     let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     
     private let databaseRef = FIRDatabase.database().reference()
@@ -36,6 +38,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var challengeOn = false
     private var path: [[String: CLLocationDegrees]] = [[:]]
     private var userCreatedEvent: Bool = false
+    
+    private var allChallenges: [[String: Any]]? {
+        didSet {
+            print(allChallenges)
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +72,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
         
         locationManager.delegate = self
-        
+        getAllChallenges()
+        //        print(allChallenges)
         
     }
     
@@ -84,6 +94,42 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+    func getAllChallenges() {
+        
+        var challengeArray: [[String:Any]] = [[:]]
+        
+        self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
+            print("Snapshot children count \(snapshot.childrenCount)")
+            
+            let enumerator = snapshot.children
+            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
+                
+                let challengeId = snap.key
+                var dict: [String: Any] = [:]
+                if let challengeName = snap.childSnapshot(forPath: "name").value,
+                    let champion = snap.childSnapshot(forPath: "champion").value,
+                    let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
+                    let location = snap.childSnapshot(forPath: "location").value,
+                    let type = snap.childSnapshot(forPath: "type").value {
+                    
+                    dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location ]
+                    challengeArray.append(dict)
+                }
+            }
+            self.allChallenges = challengeArray
+            
+        })
+        
+    }
+    
+    func markChallenges() {
+        
+        if let challengeArray = allChallenges {
+            for challenge in challengeArray {
+                
+            }
+        }
+    }
     
     //MARK: - Utilities
     deinit {
@@ -391,12 +437,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         guard let validLocation: CLLocation = locations.last else { return }
         
         self.userLocation = validLocation
+        let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+        GoogleMapManager.shared.removeMarker(name: (FIRAuth.auth()?.currentUser?.uid)!)
+        GoogleMapManager.shared.addMarkerToDic(name: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
+        
+        
         if challengeOn == true {
-            let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-            GoogleMapManager.shared.removeMarker(name: (FIRAuth.auth()?.currentUser?.uid)!)
-             GoogleMapManager.shared.addMarkerToDic(name: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
-            path.append(locationDict)
             
+            path.append(locationDict)
             //calculating distance
             let currentLocation = manager.location!
             print("Current Location: \(currentLocation)")
@@ -405,7 +453,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if previousLocation != nil {
                 let lastDistance = currentLocation.distance(from: previousLocation as CLLocation!)
                 //distance in meters
-                
                 
                 distance += lastDistance
             }
