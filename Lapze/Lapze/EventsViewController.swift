@@ -529,7 +529,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             print("Distance: \(distance)")
             
             //challenge view
-            self.bottomStatus1Label.text = "\((distance/1609.34)) miles"
+            self.bottomStatus1Label.text = "Distance: \((distance/1609.34).roundTo(places: 2)) miles"
             
         }
         print("location change")
@@ -838,9 +838,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-    
-    
-    
-    
+ 
+}
+
+extension Double {
+    /// Rounds the double to decimal places value
+    func roundTo(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
 }
 
