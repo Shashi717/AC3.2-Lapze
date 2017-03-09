@@ -28,15 +28,25 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             updateUserLocationMarker(location: userLocation!)
         }
     }
+    
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
+
+    private let databaseRef = FIRDatabase.database().reference()
+
     private var challengeFirebaseRef: FIRDatabaseReference?
     private var challengeOn = false
-    private var path: [[String: CLLocationDegrees]] = [[:]]
+    private var path: [[String: CLLocationDegrees]] = []
     private var userCreatedEvent: Bool = false
     private var userLocationMarker: GMSMarker?
     private var previousLocation: CLLocation?
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
+    
+    private var allChallenges: [[String: Any]]? {
+        didSet {
+            markChallenges()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +72,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         } else {
             print("not in a challenge")
         }
+        
+        locationManager.delegate = self
+        getAllChallenges()
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -79,6 +93,51 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+
+    func getAllChallenges() {
+        
+        var challengeArray: [[String:Any]] = []
+        
+        self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
+            print("Snapshot children count \(snapshot.childrenCount)")
+            
+            let enumerator = snapshot.children
+            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
+                
+                let challengeId = snap.key
+                if let challengeName = snap.childSnapshot(forPath: "name").value,
+                    let champion = snap.childSnapshot(forPath: "champion").value,
+                    let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
+                    let location = snap.childSnapshot(forPath: "location").value,
+                    let type = snap.childSnapshot(forPath: "type").value,
+                    let lat = snap.childSnapshot(forPath: "lat").value,
+                    let long = snap.childSnapshot(forPath: "long").value {
+                    
+                    let dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location, "lat":lat, "long":long ]
+                    challengeArray.append(dict)
+                }
+            }
+            self.allChallenges = challengeArray
+            
+        })
+        
+    }
+    
+    func markChallenges() {
+        
+        
+        if let challengeArray = allChallenges {
+            for challenge in challengeArray {
+        
+                let coordinates = CLLocationCoordinate2D(latitude: challenge["lat"] as! CLLocationDegrees, longitude: challenge["long"] as! CLLocationDegrees)
+                let userLocationMarker = GMSMarker(position: coordinates)
+                userLocationMarker.map = googleMapView
+
+            }
+        }
+    }
+    
+
     //MARK: - Utilities
     deinit {
         print("View died")
@@ -368,10 +427,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         guard let validLocation: CLLocation = locations.last else { return }
         
         self.userLocation = validLocation
+        let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+        
         if challengeOn == true {
-            let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+
             path.append(locationDict)
-            
             //calculating distance
             let currentLocation = manager.location!
             print("Current Location: \(currentLocation)")
@@ -380,7 +440,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if previousLocation != nil {
                 let lastDistance = currentLocation.distance(from: previousLocation as CLLocation!)
                 //distance in meters
-                
                 
                 distance += lastDistance
             }
@@ -480,9 +539,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         print("End Challenge")
         
         self.challengeOn = false
-        let dict = ["location":path]
+        let firstCoordinate = path[1]
+        if let firstLat = firstCoordinate["lat"],
+            let firstLong = firstCoordinate["long"] {
+        let dict = ["location": path, "lat": firstLat,"long": firstLong] as [String : Any]
         self.challengeFirebaseRef!.updateChildValues(dict)
-        
+        }
         let pathObject = Path()
         let polyline = pathObject.getPolyline(path)
         polyline.strokeColor = .green
