@@ -554,7 +554,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return button
     }()
     
-    internal lazy var eventSegmentedControl: UISegmentedControl! = {
+    internal lazy var eventSegmentedControl: UISegmentedControl = {
         var segmentedControl = UISegmentedControl()
         segmentedControl = UISegmentedControl(items: self.events)
         let font = UIFont.systemFont(ofSize: 14)
@@ -565,13 +565,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return segmentedControl
     }()
     
-    internal lazy var thumbStatContainerView: UIView! = {
+    internal lazy var thumbStatContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 5.0
         view.layer.masksToBounds = false
         return view
     }()
-    internal lazy var thumbProfileImageView: UIImageView! = {
+    internal lazy var thumbProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25.0
         imageView.contentMode = .scaleAspectFill
@@ -579,27 +579,27 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         imageView.layer.masksToBounds = false
         return imageView
     }()
-    internal lazy var thumbUserNameLabel: UILabel! = {
+    internal lazy var thumbUserNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
-    internal lazy var thumbChallengeDescriptionLabel: UILabel! = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbChallengeStatsLabel: UILabel! = {
+    internal lazy var thumbChallengeDescriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
     
-    internal lazy var thumbButton: UIButton! = {
+    internal lazy var thumbChallengeStatsLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    internal lazy var thumbButton: UIButton = {
         let button = UIButton()
         // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
         // button.backgroundColor = ColorPalette.logoGreenColor
@@ -609,7 +609,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return button
     }()
     
-    internal lazy var addButton: UIButton! = {
+    internal lazy var addButton: UIButton = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "add-1"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
@@ -626,13 +626,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }()
     
     //hosting, joined activity, or challenge view
-    internal lazy var topStatusView: UIView! = {
+    internal lazy var topStatusView: UIView = {
         var view = UIView()
         view.layer.masksToBounds = true
         return view
     }()
     
-    internal lazy var topStatusLabel: UILabel! = {
+    internal lazy var topStatusLabel: UILabel = {
         var label = UILabel()
         label.text = "Activity joined/challenged"
         return label

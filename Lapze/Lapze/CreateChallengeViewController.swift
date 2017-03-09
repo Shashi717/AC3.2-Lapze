@@ -71,7 +71,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func createChallenge() {
         let user = FIRAuth.auth()!.currentUser!.uid
-        let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField!.text!] as [String : Any]
+        let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!] as [String : Any]
         challengeRef = databaseRef.child("Challenge").childByAutoId()
         challengeRef.updateChildValues(dict)
 
@@ -247,27 +247,27 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     //MARK: - Views
     // Acitivity, Date, Start Time, End, Location, Public
     
-    internal lazy var challengeNameContainer: UIView! = {
+    internal lazy var challengeNameContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var activityContainer: UIView! = {
+    internal lazy var activityContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var dateContainer: UIView! = {
+    internal lazy var dateContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var startTimeContainer: UIView! = {
+    internal lazy var startTimeContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var endTimeContainer: UIView! = {
+    internal lazy var endTimeContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
@@ -277,48 +277,48 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var privacyContainer: UIView! = {
+    internal lazy var privacyContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var pickerContainer: UIView! = {
+    internal lazy var pickerContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    internal lazy var challengeNameLabel: UILabel! = {
+    internal lazy var challengeNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Challenge Name"
         return label
     }()
-    internal lazy var activityLabel: UILabel! = {
+    internal lazy var activityLabel: UILabel = {
         let label = UILabel()
         label.text = "Activity"
         return label
     }()
-    internal lazy var dateLabel: UILabel! = {
+    internal lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.text = "Date"
         return label
     }()
-    internal lazy var startTimeLabel: UILabel! = {
+    internal lazy var startTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "Start"
         return label
     }()
-    internal lazy var endTimeLabel: UILabel! = {
+    internal lazy var endTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "End"
         return label
     }()
-    internal lazy var challengeNameTextField: UITextField! = {
+    internal lazy var challengeNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Add a description"
         textField.textAlignment = .right
         return textField
     }()
-    internal lazy var pickedActivityLabel: UILabel! = {
+    internal lazy var pickedActivityLabel: UILabel = {
         let label = UILabel()
         label.text = "..."
         label.textColor = .lightGray
@@ -329,7 +329,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         return label
     }()
     
-    internal lazy var pickedDateLabel: UILabel! = {
+    internal lazy var pickedDateLabel: UILabel = {
         let label = UILabel()
         label.text = "..."
         label.textColor = .lightGray
@@ -339,7 +339,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         label.addGestureRecognizer(tap)
         return label
     }()
-    internal lazy var pickedStartTimeLabel: UILabel! = {
+    internal lazy var pickedStartTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "..."
         label.textColor = .lightGray
@@ -349,7 +349,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         label.addGestureRecognizer(tap)
         return label
     }()
-    internal lazy var pickedEndTimeLabel: UILabel! = {
+    internal lazy var pickedEndTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "..."
         label.textColor = .lightGray
@@ -359,7 +359,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         label.addGestureRecognizer(tap)
         return label
     }()
-    internal lazy var privacyLabel: UILabel! = {
+    internal lazy var privacyLabel: UILabel = {
         let label = UILabel()
         label.text = "PRIVACY"
         label.textColor = .gray
@@ -367,41 +367,41 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         label.textAlignment = .left
         return label
     }()
-    internal lazy var locationLabel: UILabel! = {
+    internal lazy var locationLabel: UILabel = {
         let label = UILabel()
         label.text = "Location"
         return label
     }()
-    internal lazy var sharingStatusLabel: UILabel! = {
+    internal lazy var sharingStatusLabel: UILabel = {
         let label = UILabel()
         label.text = "Public Mode"
         return label
     }()
-    internal lazy var locationSwitch: UISwitch! = {
+    internal lazy var locationSwitch: UISwitch = {
         let theSwitch = UISwitch()
         theSwitch.addTarget(self, action: #selector(locationSwitchValueChanged(sender:)), for: .valueChanged)
         return theSwitch
     }()
-    internal lazy var privacySwitch: UISwitch! = {
+    internal lazy var privacySwitch: UISwitch = {
         let theSwitch = UISwitch()
         theSwitch.addTarget(self, action: #selector(privacySwitchValueChanged(sender:)), for: .valueChanged)
         return theSwitch
     }()
-    internal lazy var datePicker: UIDatePicker! = {
+    internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.addTarget(self, action: #selector(datePicked(sender:)), for: .valueChanged)
         return datePicker
     }()
-    internal lazy var activityPickerView: UIPickerView! = {
+    internal lazy var activityPickerView: UIPickerView = {
         let pickerView = UIPickerView()
         return pickerView
     }()
-    internal lazy var doneButton: UIBarButtonItem! = {
+    internal lazy var doneButton: UIBarButtonItem = {
         var barButton = UIBarButtonItem()
         barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped(sender:)))
         return barButton
     }()
-    internal lazy var cancelButton: UIBarButtonItem! = {
+    internal lazy var cancelButton: UIBarButtonItem = {
         var barButton = UIBarButtonItem()
         barButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelButtonTapped(sender:)))
         return barButton
