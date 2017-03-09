@@ -12,9 +12,9 @@ import CoreLocation
 
 class MainTabController: UITabBarController,CLLocationManagerDelegate {
     
-    let profileVC = UINavigationController(rootViewController: ProfileViewController())
-    let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
-    let eventsVC = UINavigationController(rootViewController: EventsViewController())
+    private let profileVC = UINavigationController(rootViewController: ProfileViewController())
+    private let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
+    private let eventsVC = UINavigationController(rootViewController: EventsViewController())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,11 +23,6 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
         self.viewControllers = [dummyViewController]
         checkForUserStatus()
-    }
-
-    
-    override func viewWillAppear(_ animated: Bool) {
-    
     }
     
     private func checkForUserStatus(){
@@ -41,13 +36,19 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
                 }
             }
         })
+        
+//        if FIRAuth.auth()?.currentUser != nil{
+//            self.setUpTabBar()
+//        }else{
+//            self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)
+//        }
     }
     
     func checkLocationRequest(){
         
     }
     
-    func showLogin(){
+    @objc private func showLogin(){
         let loginVC = UINavigationController(rootViewController: LoginViewController())
         let dummyViewController: UIViewController = UIViewController()
         dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
