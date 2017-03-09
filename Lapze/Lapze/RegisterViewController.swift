@@ -143,32 +143,32 @@ class RegisterViewController: UIViewController {
     }
     
 
-    internal lazy var logoImageView: UIImageView! = {
+    internal lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
         return imageView
     }()
-    internal lazy var usernameTextField: UITextField! = {
+    internal lazy var usernameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Username"
         textField.borderStyle = .roundedRect
         return textField
     }()
-    internal lazy var emailTextField: UITextField! = {
+    internal lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
         return textField
     }()
-    internal lazy var passwordTextField: UITextField! = {
+    internal lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
         return textField
     }()
-    internal lazy var registerButton: UIButton! = {
+    internal lazy var registerButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = ColorPalette.orangeThemeColor
         button.layer.cornerRadius = 8.0
