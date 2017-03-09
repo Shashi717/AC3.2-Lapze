@@ -19,26 +19,31 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
-
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
             findUser()
             //addLocationtoFireBase(location: userLocation!)
+            updateUserLocationMarker(location: userLocation!)
         }
     }
-    
-    let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
-    
-    private let databaseRef = FIRDatabase.database().reference()
+    private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     private var challengeFirebaseRef: FIRDatabaseReference?
+    private let databaseRef = FIRDatabase.database().reference()
     private var challengeOn = false
+    private var activeViewOn = false
     private var path: [[String: CLLocationDegrees]] = [[:]]
     private var userCreatedEvent: Bool = false
     private var currentUser = FIRAuth.auth()?.currentUser
     private var timer = Timer()
     private var counter = 0
+
+    private var userLocationMarker: GMSMarker?
+    private var previousLocation: CLLocation?
+    private var showUserLocation: Bool = true
+    private var distance: Double = 0.0
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +69,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         } else {
             print("not in a challenge")
         }
-        
-        locationManager.delegate = self
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -78,15 +79,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         FirebaseObserver.manager.stopObserving()
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         FirebaseObserver.manager.startObserving(node: .location)
         if challengeOn {
             print("you're in a challenge")
         }
     }
-    
     
     //MARK: - Utilities
     deinit {
@@ -262,7 +260,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
-        self.googleMapView.addSubview(testButton)
+        self.googleMapView.addSubview(endButton)
         
         //challenge view setup
         self.googleMapView.addSubview(topStatusView)
@@ -270,20 +268,24 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.topStatusView.addSubview(topStatusLabel)
         self.bottomStatusView.addSubview(bottomStatus1Label)
         self.bottomStatusView.addSubview(bottomStatus2Label)
-        //self.bottomStatusView.addSubview(testButton)
         
-        if !challengeOn {
+        
+        if !activeViewOn {
             //when in challenge view
-            topStatusView.isHidden = true
-            topStatusLabel.isHidden = true
-            bottomStatusView.isHidden = true
-            bottomStatus1Label.isHidden = true
-            bottomStatus2Label.isHidden = true
+            _ = [topStatusView,
+                 topStatusLabel,
+                 bottomStatusView,
+                 bottomStatus1Label,
+                 bottomStatus2Label
+                ].map({$0.isHidden = true})
+            
             
             //when in original view
-            eventSegmentedControl.isHidden = false
-            locateMeButton.isHidden = false
-            addButton.isHidden = false
+            _ = [
+                eventSegmentedControl,
+                locateMeButton,
+                addButton
+                ].map({$0.isHidden = false})
         }
     }
     
@@ -312,11 +314,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.bottom.equalToSuperview().inset(10)
         }
         
-        testButton.snp.makeConstraints { (view) in
+        endButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
             view.bottom.equalTo(bottomStatusView.snp.top)
         }
+
 
         //challenge view configs
         topStatusView.snp.makeConstraints({ (view) in
@@ -330,6 +333,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.width.equalToSuperview().multipliedBy(0.5)
             view.height.equalToSuperview().multipliedBy(0.5)
         }
+        
         
         bottomStatusView.snp.makeConstraints { (view) in
             view.height.equalTo(60)
@@ -347,11 +351,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         bottomStatus2Label.snp.makeConstraints { (view) in
             view.width.equalToSuperview().multipliedBy(0.5)
             view.height.equalTo(50)
-            view.leading.equalTo(testButton.snp.trailing)
+            view.leading.equalTo(endButton.snp.trailing)
             view.bottom.equalToSuperview()
         }
-        
-        
     }
     
     //activity view setup
@@ -368,9 +370,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.bottomStatusView,
             self.bottomStatus1Label,
             self.bottomStatus2Label,
-            self.testButton
+            self.endButton
             ].map({$0.isHidden = false})
     }
+
 
     
     //MARK: Location Utilities
@@ -392,11 +395,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func handleLogout(){
         present(LoginViewController(), animated: true, completion: nil)
     }
+
+
     
     //MARK: Location Utilities
-    
-    func addLocationtoFireBase(location: CLLocation){
-        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
+    fileprivate func addLocationtoFireBase(location: CLLocation){
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Events").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
             
             if error != nil{
@@ -408,6 +412,24 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+    private func updateUserLocationMarker(location:CLLocation){
+        let locationCordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        switch showUserLocation{
+            
+        case true:
+            if userLocationMarker == nil{
+                userLocationMarker = GMSMarker(position: locationCordinate)
+                userLocationMarker?.iconView = UserLocationMarker()
+                userLocationMarker?.map = googleMapView
+            }else{
+                userLocationMarker?.position = locationCordinate
+            }
+        case false:
+            self.userLocationMarker?.map = nil
+        }
+       
+    }
+    
     func findUser(){
         if let location = userLocation{
             let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
@@ -416,27 +438,20 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    //MARK: Location manager Delegate
-    var previousLocation: CLLocation?
-    var distance: Double = 0.0
-    
-    
-    
     //MARK: Location manager Delegate methods
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let validLocation: CLLocation = locations.last else { return }
         
         self.userLocation = validLocation
         
-        let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-        
-        GoogleMapManager.shared.removeMarker(name: (FIRAuth.auth()?.currentUser?.uid)!)
-        GoogleMapManager.shared.addMarkerToDic(name: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
-        
+
         if challengeOn == true {
+
             
+
+
+            let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
 
             path.append(locationDict)
             
@@ -529,11 +544,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
-    
     //MARK: Event Delegate methods
     func startEvent(name: String) {
-        print(name)
+        let eventPopUp: PopupViewController = PopupViewController()
+        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        eventPopUp.modalTransitionStyle = .crossDissolve
+        eventPopUp.modalPresentationStyle = .overCurrentContext
+        present(eventPopUp, animated: true, completion: nil)
     }
     
     
@@ -541,6 +559,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func startChallenge(user: String, linkRef: FIRDatabaseReference) {
         print("Challenge started \(user)")
         self.challengeOn = true
+        self.activeViewOn = true
         self.challengeFirebaseRef = linkRef
         linkRef.updateChildValues(["champion": user])
         
@@ -567,11 +586,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     func endChallenge() {
         print("End Challenge")
+
         let alertController = showAlert(title: "Challenge ended", message: "Champion mastah", useDefaultAction: true)
         self.present(alertController, animated: true, completion: nil)
         //self.locateMeButton.isHidden = true
+
+
         
         self.challengeOn = false
+        self.activeViewOn = false
         let dict = ["location":path]
         self.challengeFirebaseRef!.updateChildValues(dict)
         
@@ -580,16 +603,19 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         polyline.strokeColor = .green
         polyline.strokeWidth = 3.0
         polyline.map = googleMapView
+
         
         timer.invalidate()
         //get back to original view
         setupViewHierarchy()
         configureConstraints()
+
+
     }
     
     //MARK: - Views
     
-    private let testButton: UIButton = {
+    private let endButton: UIButton = {
         let button: UIButton = UIButton()
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
