@@ -119,7 +119,7 @@ class ProfileViewController: UIViewController {
     }
     
     //MARK: - Views
-    internal lazy var profileImageView: UIImageView! = {
+    internal lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 75.0
         imageView.contentMode = .scaleAspectFill
@@ -129,7 +129,7 @@ class ProfileViewController: UIViewController {
         imageView.clipsToBounds = true
         return imageView
     }()
-    internal lazy var eventSegmentedControl: UISegmentedControl! = {
+    internal lazy var eventSegmentedControl: UISegmentedControl = {
         var segmentedControl = UISegmentedControl()
         segmentedControl = UISegmentedControl(items: self.segments)
         let font = UIFont.systemFont(ofSize: 20)
@@ -139,25 +139,25 @@ class ProfileViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(segementedControlValueChanged(sender:)), for: .valueChanged)
         return segmentedControl
     }()
-    internal lazy var usernameLabel: UILabel! = {
+    internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         return label
     }()
-    internal lazy var userRankLabel: UILabel! = {
+    internal lazy var userRankLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         return label
     }()
-    internal lazy var activitiesLabel: UILabel! = {
+    internal lazy var activitiesLabel: UILabel = {
         let label = UILabel()
         return label
     }()
-    internal lazy var challengesLabel: UILabel! = {
+    internal lazy var challengesLabel: UILabel = {
         let label = UILabel()
         return label
     }()
-    internal lazy var logoutButton: UIBarButtonItem! = {
+    internal lazy var logoutButton: UIBarButtonItem = {
         var barButton = UIBarButtonItem()
         barButton = UIBarButtonItem(title: "Logout", style: .done, target: self, action: #selector(logoutButtonTapped(sender:)))
         return barButton
