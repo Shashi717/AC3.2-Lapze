@@ -391,10 +391,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         guard let validLocation: CLLocation = locations.last else { return }
         
         self.userLocation = validLocation
+        
+        
         if challengeOn == true {
             let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+           
             
-           // GoogleMapManager.shared.addMarkerToDic(name: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
             path.append(locationDict)
             
             //calculating distance
