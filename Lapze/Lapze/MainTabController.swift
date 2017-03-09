@@ -24,13 +24,14 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         self.viewControllers = [dummyViewController]
         checkForUserStatus()
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
     
     }
     
     private func checkForUserStatus(){
-        
+
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)
@@ -55,11 +56,7 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         present(loginVC, animated: true, completion: nil)
     }
     
-    func handleUserSignIn(){
-        
-    }
-    
-    func setUpTabBar(){
+    private func setUpTabBar(){
         self.viewControllers = [eventsVC, profileVC, createEventVC]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))

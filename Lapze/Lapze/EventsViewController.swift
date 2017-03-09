@@ -25,21 +25,26 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         didSet{
             findUser()
             //addLocationtoFireBase(location: userLocation!)
+            updateUserLocationMarker(location: userLocation!)
         }
     }
     
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
 
     private let databaseRef = FIRDatabase.database().reference()
+
     private var challengeFirebaseRef: FIRDatabaseReference?
     private var challengeOn = false
-    private var path: [[String: CLLocationDegrees]] = [[:]]
+    private var path: [[String: CLLocationDegrees]] = []
     private var userCreatedEvent: Bool = false
+    private var userLocationMarker: GMSMarker?
+    private var previousLocation: CLLocation?
+    private var showUserLocation: Bool = true
+    private var distance: Double = 0.0
     
     private var allChallenges: [[String: Any]]? {
         didSet {
-            print(allChallenges)
-            
+            markChallenges()
         }
     }
     
@@ -91,7 +96,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
 
     func getAllChallenges() {
         
-        var challengeArray: [[String:Any]] = [[:]]
+        var challengeArray: [[String:Any]] = []
         
         self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
             print("Snapshot children count \(snapshot.childrenCount)")
@@ -100,14 +105,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
                 
                 let challengeId = snap.key
-                var dict: [String: Any] = [:]
                 if let challengeName = snap.childSnapshot(forPath: "name").value,
                     let champion = snap.childSnapshot(forPath: "champion").value,
                     let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
                     let location = snap.childSnapshot(forPath: "location").value,
-                    let type = snap.childSnapshot(forPath: "type").value {
+                    let type = snap.childSnapshot(forPath: "type").value,
+                    let lat = snap.childSnapshot(forPath: "lat").value,
+                    let long = snap.childSnapshot(forPath: "long").value {
                     
-                    dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location ]
+                    let dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location, "lat":lat, "long":long ]
                     challengeArray.append(dict)
                 }
             }
@@ -119,9 +125,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     func markChallenges() {
         
+        
         if let challengeArray = allChallenges {
             for challenge in challengeArray {
-                
+        
+                let coordinates = CLLocationCoordinate2D(latitude: challenge["lat"] as! CLLocationDegrees, longitude: challenge["long"] as! CLLocationDegrees)
+                let userLocationMarker = GMSMarker(position: coordinates)
+                userLocationMarker.map = googleMapView
+
             }
         }
     }
@@ -369,10 +380,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.addButton
             ].map({$0.isHidden = true})
     }
-
+    
     //MARK: Location Utilities
     fileprivate func addLocationtoFireBase(location: CLLocation){
-        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Location").child((FIRAuth.auth()?.currentUser?.uid)!)
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Events").child((FIRAuth.auth()?.currentUser?.uid)!)
         childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
             
             if error != nil{
@@ -384,17 +395,31 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-     func findUser(){
+    private func updateUserLocationMarker(location:CLLocation){
+        let locationCordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        switch showUserLocation{
+            
+        case true:
+            if userLocationMarker == nil{
+                userLocationMarker = GMSMarker(position: locationCordinate)
+                userLocationMarker?.iconView = UserLocationMarker()
+                userLocationMarker?.map = googleMapView
+            }else{
+                userLocationMarker?.position = locationCordinate
+            }
+        case false:
+            self.userLocationMarker?.map = nil
+        }
+       
+    }
+    
+    func findUser(){
         if let location = userLocation{
             let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
             googleMapView.animate(toLocation: clocation)
             googleMapView.animate(toZoom: 15)
         }
     }
-    
-    //MARK: Location manager Delegate
-    var previousLocation: CLLocation?
-    var distance: Double = 0.0
     
     //MARK: Location manager Delegate methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -403,18 +428,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         self.userLocation = validLocation
         let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-        GoogleMapManager.shared.removeMarker(id: (FIRAuth.auth()?.currentUser?.uid)!)
-        GoogleMapManager.shared.addMarkerToDic(id: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
-        
         
         if challengeOn == true {
 
-            let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
-            GoogleMapManager.shared.removeMarker(id: (FIRAuth.auth()?.currentUser?.uid)!)
-             GoogleMapManager.shared.addMarkerToDic(id: (FIRAuth.auth()?.currentUser?.uid)!, with: locationDict)
-            path.append(locationDict)
-
-            
             path.append(locationDict)
             //calculating distance
             let currentLocation = manager.location!
@@ -499,7 +515,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     //MARK: Event Delegate methods
     func startEvent(name: String) {
-        print(name)
+        let eventPopUp: PopupViewController = PopupViewController()
+        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        eventPopUp.modalTransitionStyle = .crossDissolve
+        eventPopUp.modalPresentationStyle = .overCurrentContext
+        present(eventPopUp, animated: true, completion: nil)
     }
     
     
@@ -516,11 +537,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     func endChallenge() {
         print("End Challenge")
-
-        self.challengeOn = false
-        let dict = ["location":path]
-        self.challengeFirebaseRef!.updateChildValues(dict)
         
+        self.challengeOn = false
+        let firstCoordinate = path[1]
+        if let firstLat = firstCoordinate["lat"],
+            let firstLong = firstCoordinate["long"] {
+        let dict = ["location": path, "lat": firstLat,"long": firstLong] as [String : Any]
+        self.challengeFirebaseRef!.updateChildValues(dict)
+        }
         let pathObject = Path()
         let polyline = pathObject.getPolyline(path)
         polyline.strokeColor = .green
