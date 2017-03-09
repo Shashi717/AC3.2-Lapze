@@ -24,8 +24,6 @@ class ProfileViewController: UIViewController {
         fillMockData()
     }
     
-    
-    
     func fillMockData() {
         
         profileImageView.image = UIImage(named: "mock_profile_pic")
