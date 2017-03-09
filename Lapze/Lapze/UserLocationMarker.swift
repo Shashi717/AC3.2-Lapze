@@ -21,13 +21,13 @@ class UserLocationMarker: UIView {
     
     private func setUpView(){
         
-        self.backgroundColor = ColorPalette.purpleThemeColor
-        self.layer.cornerRadius = 7.5
+        self.backgroundColor = ColorPalette.orangeThemeColor
+        self.layer.cornerRadius = 10
         self.layer.shadowOffset = CGSize(width: 1, height: 5)
         self.layer.shadowRadius = 2
         
         self.snp.makeConstraints { (view) in
-            view.height.width.equalTo(15)
+            view.height.width.equalTo(20)
         }
         
         self.layer.add(fadeAnimation(), forKey: nil)
@@ -40,6 +40,7 @@ class UserLocationMarker: UIView {
         animation.fromValue = 0.3
         animation.toValue = 0.9
         animation.repeatCount = CFloat.infinity
+        animation.isRemovedOnCompletion = false
         return animation
     }
 }
