@@ -25,7 +25,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         view.addGestureRecognizer(tap)
         
     }
-
+    
     func loginTapped(sender: UIButton) {
         print("Login")
         
@@ -138,19 +138,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: - View init
-    internal lazy var logoImageView: UIImageView! = {
+    internal lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
         return imageView
     }()
-    internal lazy var emailTextField: UITextField! = {
+    internal lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
         return textField
     }()
-    internal lazy var passwordTextField: UITextField! = {
+    internal lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
@@ -158,7 +158,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         textField.isSecureTextEntry = true
         return textField
     }()
-    internal lazy var loginButton: UIButton! = {
+    internal lazy var loginButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = ColorPalette.orangeThemeColor
         button.layer.cornerRadius = 8.0
@@ -167,7 +167,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         button.addTarget(self, action: #selector(loginTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    internal lazy var gotoRegisterButton: UIButton! = {
+    internal lazy var gotoRegisterButton: UIButton = {
         let button = UIButton()
         button.setTitle("Don't have an account?", for: .normal)
         button.addTarget(self, action: #selector(gotoRegisterTapped(sender:)), for: .touchUpInside)

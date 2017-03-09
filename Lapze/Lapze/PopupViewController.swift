@@ -38,6 +38,7 @@ class PopupViewController: UIViewController {
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
         }
     }
+    
     //MARK: - Utilities
     func fillPopupForChallenge() {
         popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
@@ -70,14 +71,12 @@ class PopupViewController: UIViewController {
         }
         
         profileImageView.snp.makeConstraints { (view) in
-            //view.top.equalToSuperview().offset(4.0)
             view.height.width.equalTo(100.0)
             view.centerY.equalTo(popupContainerView.snp.top)
         }
         
         userNameLabel.snp.makeConstraints { (view) in
             view.top.equalTo(profileImageView.snp.bottom).offset(4.0)
-            //view.left.right.equalToSuperview()
             view.height.equalTo(15.0)
             view.centerX.equalToSuperview()
         }
@@ -89,7 +88,6 @@ class PopupViewController: UIViewController {
         }
         
         challengeStatsLabel.snp.makeConstraints { (view) in
-            //view.left.right.equalToSuperview()
             view.bottom.equalToSuperview().inset(2.0)
             view.height.equalTo(15.0)
             view.centerX.equalToSuperview()
@@ -111,14 +109,6 @@ class PopupViewController: UIViewController {
     func startActivity() {
         print("join/start button")
         
-        let challengeVc = ChallengeViewController()
-        challengeVc.challengeOn = true
-        
-        //self.navigationController?.pushViewController(challengeVc, animated: true) //this wont work if previous push is not nav push
-        
-        self.show(challengeVc, sender: self)
-        //self.navigationController?.dismiss(animated: true, completion: nil)
-        //self.navigationController?.show(challengeVc, sender: self)
     }
     
     //MARK: - Views

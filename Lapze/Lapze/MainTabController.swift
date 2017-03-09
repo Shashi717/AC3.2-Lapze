@@ -19,9 +19,19 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let dummyViewController: UIViewController = UIViewController()
+        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
+        self.viewControllers = [dummyViewController]
         checkForUserStatus()
     }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+    
+    }
+    
     private func checkForUserStatus(){
+
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)
@@ -41,8 +51,7 @@ class MainTabController: UITabBarController,CLLocationManagerDelegate {
         let loginVC = UINavigationController(rootViewController: LoginViewController())
         let dummyViewController: UIViewController = UIViewController()
         dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
-        self.viewControllers = nil
-        loginVC.modalTransitionStyle = .coverVertical
+        loginVC.modalTransitionStyle = .crossDissolve
         self.viewControllers = [dummyViewController]
         present(loginVC, animated: true, completion: nil)
     }

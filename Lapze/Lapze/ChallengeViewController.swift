@@ -7,24 +7,26 @@
 //
 
 import UIKit
+import FirebaseAuth
+import Firebase
 
+protocol EndActivityDelegate {
+    func endChallenge(ended: Bool)
+}
 
 class ChallengeViewController: EventsViewController {
 
+    var delegate: EndActivityDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         self.navigationItem.hidesBackButton = true
         self.eventSegmentedControl.isHidden = true
         self.addButton.isHidden = true
         
-        
         setupViewChallenge()
-        
-//        while challengeOn {
-//            self.distanceLabel.text = String(distance)
-//        }
+
         
     }
     //MARK: - Utilities
@@ -37,23 +39,30 @@ class ChallengeViewController: EventsViewController {
         //go back to challenge home page
     }
     
-    func endActivity() {
+    func endActivityTapped() {
         print("end activity")
+        endTheChallenge()
+     
     }
-
+    
+    func endTheChallenge() {
+          // self.delegate?.endChallenge(ended: true)
+        endChallenge(ended: true)
+    }
+    
     //MARK: - setup
     func setupViewChallenge() {
-        self.view.addSubview(titleBar)
-        self.view.addSubview(statusButton)
-        self.titleBar.addSubview(distanceLabel)
+        self.view.addSubview(statusBar)
+        self.view.addSubview(endButton)
+        self.statusBar.addSubview(distanceLabel)
         
-        titleBar.snp.makeConstraints { (view) in
+        statusBar.snp.makeConstraints { (view) in
             view.top.equalToSuperview()
             view.width.equalToSuperview()
             view.height.equalTo(50)
         }
         
-        statusButton.snp.makeConstraints { (view) in
+        endButton.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
             view.height.equalTo(50)
             view.bottom.equalToSuperview()
@@ -69,16 +78,16 @@ class ChallengeViewController: EventsViewController {
     }
     
     //MARK: - View init
-    internal lazy var titleBar: UIView! = {
+    internal lazy var statusBar: UIView! = {
         let view = UIView()
         view.backgroundColor = ColorPalette.orangeThemeColor
         return view
     }()
     
-    internal lazy var statusButton: UIButton = {
+    internal lazy var endButton: UIButton = {
         let button = UIButton()
         button.setTitle("End", for: .normal)
-        button.addTarget(self, action: #selector(self.endActivity), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.endActivityTapped), for: .touchUpInside)
         button.backgroundColor = ColorPalette.orangeThemeColor
         return button
     }()

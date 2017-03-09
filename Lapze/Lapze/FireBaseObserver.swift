@@ -26,20 +26,19 @@ class FirebaseObserver{
         
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
             if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.addMarkerToDic(name: snapshot.key, with: dict)
+                GoogleMapManager.shared.addMarkerToDic(id: snapshot.key, with: dict)
             }
         })
         
         childChangedhandler = childRef.observe(.childChanged, with: { (snapshot) in
             if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.updateMarker(name: snapshot.key, value: dict)
+                GoogleMapManager.shared.updateMarker(id: snapshot.key, locationDict: dict)
             }
         })
         
         childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-                GoogleMapManager.shared.removeMarker(name: snapshot.key)
+                GoogleMapManager.shared.removeMarker(id: snapshot.key)
         })
-        
     }
     
     func stopObserving(){
