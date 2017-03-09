@@ -31,16 +31,24 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
 
-    private let databaseRef = FIRDatabase.database().reference()
-
     private var challengeFirebaseRef: FIRDatabaseReference?
+    private let databaseRef = FIRDatabase.database().reference()
     private var challengeOn = false
+
+    private var activeViewOn = false // added this
+
     private var path: [[String: CLLocationDegrees]] = []
+
     private var userCreatedEvent: Bool = false
+    private var currentUser = FIRAuth.auth()?.currentUser
+    private var timer = Timer()
+    private var counter = 0
+
     private var userLocationMarker: GMSMarker?
     private var previousLocation: CLLocation?
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
+
     
     private var allChallenges: [[String: Any]]? {
         didSet {
@@ -303,26 +311,46 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     
     //MARK: - Setup views
-    //original view setup
-    
-    
     func setupViewHierarchy() {
+        locationManager.delegate = self
         self.edgesForExtendedLayout = []
+        
+        //original view setup
         self.view.addSubview(googleMapView)
         self.view.addSubview(eventSegmentedControl)
         self.googleMapView.addSubview(locateMeButton)
         self.googleMapView.addSubview(addButton)
-        self.googleMapView.addSubview(testButton)
+        self.googleMapView.addSubview(endButton)
+        
+        //challenge view setup
+        self.googleMapView.addSubview(topStatusView)
+        self.googleMapView.addSubview(bottomStatusView)
+        self.topStatusView.addSubview(topStatusLabel)
+        self.bottomStatusView.addSubview(bottomStatus1Label)
+        self.bottomStatusView.addSubview(bottomStatus2Label)
         
         
-        //        let item2 = UIBarButtonItem(customView: testButton)
-        //        self.navigationItem.setRightBarButton(item2, animated: true)
-        
-        
-        locationManager.delegate = self
+        if !activeViewOn {
+            //when in challenge view
+            _ = [topStatusView,
+                 topStatusLabel,
+                 bottomStatusView,
+                 bottomStatus1Label,
+                 bottomStatus2Label
+                ].map({$0.isHidden = true})
+            
+            
+            //when in original view
+            _ = [
+                eventSegmentedControl,
+                locateMeButton,
+                addButton
+                ].map({$0.isHidden = false})
+        }
     }
     
     func configureConstraints() {
+        
         eventSegmentedControl.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(25.0)
             view.width.equalToSuperview().multipliedBy(0.85)
@@ -346,40 +374,89 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.bottom.equalToSuperview().inset(10)
         }
         
-        testButton.snp.makeConstraints { (view) in
-            view.leading.equalToSuperview()
+        endButton.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
-            view.bottom.equalToSuperview().inset(10)
+            view.bottom.equalTo(bottomStatusView.snp.top)
+        }
+
+
+        //challenge view configs
+        topStatusView.snp.makeConstraints({ (view) in
+            view.height.equalTo(60)
+            view.width.equalToSuperview()
+            view.top.equalToSuperview()
+        })
+        
+        topStatusLabel.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalToSuperview().multipliedBy(0.5)
+            view.height.equalToSuperview().multipliedBy(0.5)
+        }
+        
+        
+        bottomStatusView.snp.makeConstraints { (view) in
+            view.height.equalTo(60)
+            view.width.equalToSuperview()
+            view.bottom.equalToSuperview()
+        }
+        
+        bottomStatus1Label.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalToSuperview().multipliedBy(0.5)
+            view.height.equalToSuperview().multipliedBy(0.5)
+            view.top.equalToSuperview()
+        }
+        
+        bottomStatus2Label.snp.makeConstraints { (view) in
+            view.width.equalToSuperview().multipliedBy(0.5)
+            view.height.equalTo(50)
+            view.leading.equalTo(endButton.snp.trailing)
+            view.bottom.equalToSuperview()
         }
     }
     
     //activity view setup
-    func setupViewHierarchyForActivity() {
-        self.edgesForExtendedLayout = []
-        self.view.addSubview(googleMapView)
-        self.googleMapView.addSubview(topStatusView)
+    func setupChallengeView() {
+        _ = [
+            self.eventSegmentedControl,
+            self.addButton,
+            self.locateMeButton
+            ].map({$0.isHidden = true})
+        
+        _ = [
+            self.topStatusView,
+            self.topStatusLabel,
+            self.bottomStatusView,
+            self.bottomStatus1Label,
+            self.bottomStatus2Label,
+            self.endButton
+            ].map({$0.isHidden = false})
+    }
+
+
+    
+    //MARK: Location Utilities
+    
+    private func addUserToMap(){
+        
     }
     
-    func configureConstraintsForActivityViews () {
-        topStatusView.snp.makeConstraints { (view) in
-            view.center.equalToSuperview()
-            view.width.equalToSuperview()
-            view.height.equalTo(50)
+
+    //MARK: - User Auth Utilities
+    func checkForUserLogin(){
+        if FIRAuth.auth()?.currentUser == nil{
+            perform(#selector(handleLogout), with: nil, afterDelay: 0)
+        }else{
+            FirebaseObserver.manager.startObserving(node: .location)
         }
     }
     
-    func setupActivityView() {
-        hideViews()
-        setupViewHierarchyForActivity()
-        configureConstraintsForActivityViews()
+    func handleLogout(){
+        present(LoginViewController(), animated: true, completion: nil)
     }
-    
-    func hideViews() {
-        _ = [
-            self.eventSegmentedControl,
-            self.addButton
-            ].map({$0.isHidden = true})
-    }
+
+
     
     //MARK: Location Utilities
     fileprivate func addLocationtoFireBase(location: CLLocation){
@@ -427,9 +504,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         guard let validLocation: CLLocation = locations.last else { return }
         
         self.userLocation = validLocation
+
         let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
         
         if challengeOn == true {
+
 
             path.append(locationDict)
             //calculating distance
@@ -445,8 +524,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             }
             
             previousLocation = currentLocation
+            
             print("Previous Location: \(previousLocation)")
             print("Distance: \(distance)")
+            
+            //challenge view
+            self.bottomStatus1Label.text = "\((distance/1609.34)) miles"
             
         }
         print("location change")
@@ -483,9 +566,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         switch selectedSegmentIndex {
         case 0:
+            //event
             view.backgroundColor = ColorPalette.purpleThemeColor
         case 1:
+            //challenge
             view.backgroundColor = ColorPalette.orangeThemeColor
+            
         default:
             break
         }
@@ -528,21 +614,46 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func startChallenge(user: String, linkRef: FIRDatabaseReference) {
         print("Challenge started \(user)")
         self.challengeOn = true
+        self.activeViewOn = true
         self.challengeFirebaseRef = linkRef
         linkRef.updateChildValues(["champion": user])
-        self.locateMeButton.isHidden = true
+        
+        setupChallengeView()
+        
+        self.databaseRef.child("users").child(user).child("name").observe(.value, with: { (snapshot) in
+            let name = snapshot.value as! String
+            
+            self.topStatusLabel.text = "\(name)'s Something Challenge"
+            print("name: \(name)")
+        })
+        
+        //timer
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     }
+    
+    func timerAction() {
+        counter += 1
+        bottomStatus2Label.text = "Time: \(counter)"
+    }
+    
     
     //MARK: EndActivity Delegate methods
     
     func endChallenge() {
         print("End Challenge")
-        
+
+        let alertController = showAlert(title: "Challenge ended", message: "Champion mastah", useDefaultAction: true)
+        self.present(alertController, animated: true, completion: nil)
+        //self.locateMeButton.isHidden = true
+  
         self.challengeOn = false
+        self.activeViewOn = false
+        
         let firstCoordinate = path[1]
         if let firstLat = firstCoordinate["lat"],
             let firstLong = firstCoordinate["long"] {
         let dict = ["location": path, "lat": firstLat,"long": firstLong] as [String : Any]
+
         self.challengeFirebaseRef!.updateChildValues(dict)
         }
         let pathObject = Path()
@@ -550,13 +661,20 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         polyline.strokeColor = .green
         polyline.strokeWidth = 3.0
         polyline.map = googleMapView
+
+        
+        timer.invalidate()
+        //get back to original view
+        setupViewHierarchy()
+        configureConstraints()
+
+
     }
     
     //MARK: - Views
     
-    private let testButton: UIButton = {
+    private let endButton: UIButton = {
         let button: UIButton = UIButton()
-        button.setImage(UIImage(named: "locate"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
             view.size.equalTo(CGSize(width: 30, height: 30))
@@ -689,14 +807,40 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     internal lazy var topStatusView: UIView = {
         var view = UIView()
         view.layer.masksToBounds = true
+        view.backgroundColor = .red
         return view
     }()
     
     internal lazy var topStatusLabel: UILabel = {
         var label = UILabel()
-        label.text = "Activity joined/challenged"
+        label.text = "title of activity here"
+        label.textAlignment = .center
         return label
     }()
+    
+    internal lazy var bottomStatusView: UIView = {
+        var view = UIView()
+        view.layer.masksToBounds = true
+        view.backgroundColor = .red
+        return view
+    }()
+    
+    internal lazy var bottomStatus1Label: UILabel = {
+        var label = UILabel()
+        label.text = "distance"
+        label.textAlignment = .center
+        return label
+    }()
+    
+    internal lazy var bottomStatus2Label: UILabel = {
+        var label = UILabel()
+        label.text = "time"
+        label.textAlignment = .center
+        return label
+    }()
+    
+    
+    
     
 }
 
