@@ -32,18 +32,6 @@ class GoogleMapManager{
         }
     }
     
-    func addMarker(id: String, title: String, lat: Double, long: Double, champion: String){
-        
-        let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        let marker = GMSMarker(position: cllocation)
-        self.dict[id] = marker
-        marker.map = map
-        marker.icon = UIImage(named: "marker")
-        marker.title = title
-        marker.accessibilityHint = champion
-        
-    }
-    
     func addMarker(id: String, lat: Double, long: Double){
         
         let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -52,7 +40,6 @@ class GoogleMapManager{
         marker.map = map
         marker.icon = UIImage(named: "marker")
         marker.title = id
-       // marker.accessibilityHint = champion
         
     }
     
