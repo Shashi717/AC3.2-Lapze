@@ -49,12 +49,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
 
-    
-    private var allChallenges: [[String: Any]]? {
-        didSet {
-            markChallenges()
-        }
-    }
+    private let challengeStore = ChallengeStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +77,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
         
         locationManager.delegate = self
-        getAllChallenges()
+        challengeStore.getAllChallenges { (challenges) in
+            self.markChallenges(challenges)
+        }
 
     }
     
@@ -101,48 +98,16 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
-    func getAllChallenges() {
+    func markChallenges(_ challenges: [Challenge]) {
         
-        var challengeArray: [[String:Any]] = []
-        
-        self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
-            print("Snapshot children count \(snapshot.childrenCount)")
-            
-            let enumerator = snapshot.children
-            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
-                
-                let challengeId = snap.key
-                if let challengeName = snap.childSnapshot(forPath: "name").value,
-                    let champion = snap.childSnapshot(forPath: "champion").value,
-                    let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
-                    let location = snap.childSnapshot(forPath: "location").value,
-                    let type = snap.childSnapshot(forPath: "type").value,
-                    let lat = snap.childSnapshot(forPath: "lat").value ?? nil,
-                    let long = snap.childSnapshot(forPath: "long").value ?? nil{
-                    
-                    let dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location, "lat":lat, "long":long ]
-                    challengeArray.append(dict)
-                }
-            }
-            self.allChallenges = challengeArray
-            
-        })
-        
-    }
+        for challenge in challenges {
     
-    func markChallenges() {
-        
-        
-        if let challengeArray = allChallenges {
-            for challenge in challengeArray {
-                if let lat = challenge["lat"] as? CLLocationDegrees, let long = challenge["long"] as? CLLocationDegrees {
-                let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long )
-                let userLocationMarker = GMSMarker(position: coordinates)
-                userLocationMarker.map = googleMapView
-                }
-            }
+            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
+            let userLocationMarker = GMSMarker(position: coordinates)
+            userLocationMarker.map = googleMapView
+            
         }
+        
     }
     
 
