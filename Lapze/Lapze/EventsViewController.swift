@@ -113,7 +113,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         for challenge in challenges {
             
-//            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
+            //            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
             
             var name = ""
             let user = userStore.getUser(id: challenge.champion, completion: { (user) in
@@ -125,9 +125,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             
             GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat, long: challenge.long)
             
-//            GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: challenge.champion)
-//            let userLocationMarker = GMSMarker(position: coordinates)
-//            userLocationMarker.map = googleMapView
+            //            GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: challenge.champion)
+            //            let userLocationMarker = GMSMarker(position: coordinates)
+            //            userLocationMarker.map = googleMapView
             //locationManager.map = googleMapView
         }
         
@@ -444,9 +444,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let view: GoogleMapThumbView = GoogleMapThumbView()
         view.profileImageView.image = marker.icon
         
-  
-//        view.nameLabel.text = marker.title
-//        view.descriptionLabel.text = marker.accessibilityValue
+        
+        //        view.nameLabel.text = marker.title
+        //        view.descriptionLabel.text = marker.accessibilityValue
         
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -459,12 +459,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.backgroundColor = ColorPalette.orangeThemeColor
             
             if let id = marker.title {
-            
-            challengeStore.getChallenge(id: id) { (challenge) in
-                dump(challenge)
-                view.nameLabel.text = challenge.name
-                view.descriptionLabel.text = ("\(challenge.type), \(challenge.champion), \(challenge.lastUpdated) ")
-            }
+                
+                challengeStore.getChallenge(id: id) { (challenge) in
+                    dump(challenge)
+                    view.nameLabel.text = challenge.name
+                    view.titleLabel.text = "Champion: \(challenge.champion)"
+                    view.descriptionLabel.text = ("\(challenge.type), \(challenge.lastUpdated) ")
+                }
             }
             
         default:
@@ -870,7 +871,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-
+    
     
 }
 
