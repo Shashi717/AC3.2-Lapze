@@ -19,6 +19,13 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
+private enum State {
+    case Static
+    case Event
+    case Challenge
+}
+
+
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
@@ -29,13 +36,19 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
+    private var allChallenges: [[String: Any]]? {
+        didSet {
+            markChallenges()
+        }
+    }
+
+    private var state: State = .Static
+
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
 
     private var challengeFirebaseRef: FIRDatabaseReference?
     private let databaseRef = FIRDatabase.database().reference()
     private var challengeOn = false
-
-    private var activeViewOn = false // added this
 
     private var path: [[String: CLLocationDegrees]] = []
 
@@ -50,6 +63,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var distance: Double = 0.0
 
     private let challengeStore = ChallengeStore()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,16 +84,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         FirebaseObserver.manager.startObserving(node: .location)
         
         //Change Map view to reflect part session/challenge
-        if challengeOn {
-            print("you're in a challenge")
-        } else {
-            print("not in a challenge")
-        }
-        
         locationManager.delegate = self
-        challengeStore.getAllChallenges { (challenges) in
-            self.markChallenges(challenges)
-        }
+        getAllChallenges()
 
     }
     
@@ -98,16 +104,46 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    func markChallenges(_ challenges: [Challenge]) {
+    func getAllChallenges() {
         
-        for challenge in challenges {
-    
-            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
-            let userLocationMarker = GMSMarker(position: coordinates)
-            userLocationMarker.map = googleMapView
+        var challengeArray: [[String:Any]] = []
+        
+        self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
+            print("Snapshot children count \(snapshot.childrenCount)")
             
-        }
+            let enumerator = snapshot.children
+            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
+                
+                let challengeId = snap.key
+                if let challengeName = snap.childSnapshot(forPath: "name").value,
+                    let champion = snap.childSnapshot(forPath: "champion").value,
+                    let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value,
+                    let location = snap.childSnapshot(forPath: "location").value,
+                    let type = snap.childSnapshot(forPath: "type").value,
+                    let lat = snap.childSnapshot(forPath: "lat").value ?? nil,
+                    let long = snap.childSnapshot(forPath: "long").value ?? nil{
+                    
+                    let dict = ["challengeId": challengeId, "challengeName": challengeName, "type": type, "champion": champion, "lastUpdated": lastUpdated, "location": location, "lat":lat, "long":long ]
+                    challengeArray.append(dict)
+                }
+            }
+            self.allChallenges = challengeArray
+            
+        })
         
+    }
+    
+    
+    func markChallenges() {
+        if let challengeArray = allChallenges {
+            for challenge in challengeArray {
+                if let lat = challenge["lat"] as? CLLocationDegrees, let long = challenge["long"] as? CLLocationDegrees {
+                    let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long )
+                    let userLocationMarker = GMSMarker(position: coordinates)
+                    userLocationMarker.map = googleMapView
+                }
+            }
+        }
     }
     
 
@@ -294,24 +330,17 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.bottomStatusView.addSubview(bottomStatus1Label)
         self.bottomStatusView.addSubview(bottomStatus2Label)
         
+        //initially hidden
+        _ = [
+            self.topStatusView,
+            self.topStatusLabel,
+            self.bottomStatusView,
+            self.bottomStatus1Label,
+            self.bottomStatus2Label,
+            self.endButton
+            ]
+            .map({$0.isHidden = true})
         
-        if !activeViewOn {
-            //when in challenge view
-            _ = [topStatusView,
-                 topStatusLabel,
-                 bottomStatusView,
-                 bottomStatus1Label,
-                 bottomStatus2Label
-                ].map({$0.isHidden = true})
-            
-            
-            //when in original view
-            _ = [
-                eventSegmentedControl,
-                locateMeButton,
-                addButton
-                ].map({$0.isHidden = false})
-        }
     }
     
     func configureConstraints() {
@@ -381,25 +410,36 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    //activity view setup
-    func setupChallengeView() {
-        _ = [
-            self.eventSegmentedControl,
-            self.addButton,
-            self.locateMeButton
-            ].map({$0.isHidden = true})
-        
-        _ = [
+    private func updateViews(_ state: State) {
+        let activeViews = [
             self.topStatusView,
             self.topStatusLabel,
             self.bottomStatusView,
             self.bottomStatus1Label,
-            self.bottomStatus2Label,
             self.endButton
-            ].map({$0.isHidden = false})
+        ]
+        
+        DispatchQueue.main.async {
+            switch state {
+            case .Static:
+                self.setupViewHierarchy()
+                self.eventSegmentedControl.isHidden = false
+                
+            case .Challenge:
+                self.eventSegmentedControl.isHidden = true
+                _ = activeViews.map({$0.isHidden = false})
+                self.topStatusView.backgroundColor = ColorPalette.orangeThemeColor
+                self.bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
+                
+            case .Event:
+                self.eventSegmentedControl.isHidden = true
+                _ = activeViews.map({$0.isHidden = false})
+                self.topStatusView.backgroundColor = ColorPalette.purpleThemeColor
+                self.bottomStatusView.backgroundColor = ColorPalette.purpleThemeColor
+    
+            }
+        }
     }
-
-
     
     //MARK: Location Utilities
     
@@ -494,7 +534,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             print("Distance: \(distance)")
             
             //challenge view
-            self.bottomStatus1Label.text = "\((distance/1609.34)) miles"
+            self.bottomStatus1Label.text = "Distance: \((distance/1609.34).roundTo(places: 2)) miles"
             
         }
         print("location change")
@@ -579,11 +619,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func startChallenge(user: String, linkRef: FIRDatabaseReference) {
         print("Challenge started \(user)")
         self.challengeOn = true
-        self.activeViewOn = true
+        
         self.challengeFirebaseRef = linkRef
         linkRef.updateChildValues(["champion": user])
         
-        setupChallengeView()
+        updateViews(.Challenge)
+        //setupChallengeView()
         
         self.databaseRef.child("users").child(user).child("name").observe(.value, with: { (snapshot) in
             let name = snapshot.value as! String
@@ -612,7 +653,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //self.locateMeButton.isHidden = true
   
         self.challengeOn = false
-        self.activeViewOn = false
+        updateViews(.Static)
         
         let firstCoordinate = path[0]
         if let firstLat = firstCoordinate["lat"],
@@ -803,9 +844,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-    
-    
-    
-    
+ 
+}
+
+extension Double {
+    /// Rounds the double to decimal places value
+    func roundTo(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
 }
 
