@@ -68,6 +68,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         let user = FIRAuth.auth()!.currentUser!.uid
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
+        
         let linkRef = self.databaseRef.childByAutoId()
         challengeRef = databaseRef.child("Challenge").child(linkRef.key)
         challengeRef.updateChildValues(dict)
