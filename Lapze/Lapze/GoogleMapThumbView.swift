@@ -72,7 +72,7 @@ class GoogleMapThumbView: UIView {
         let label: UILabel = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textColor = .white
-        label.text = "Thunder Cat"
+        //label.text = "Thunder Cat"
         return label
     }()
     
@@ -85,9 +85,9 @@ class GoogleMapThumbView: UIView {
     
     var descriptionLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textColor = .white
-        label.text = "Some random data"
+        //label.text = "Some random data"
         label.numberOfLines = 2
         label.textAlignment = .center
         return label

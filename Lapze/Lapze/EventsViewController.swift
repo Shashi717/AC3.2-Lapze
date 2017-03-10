@@ -19,6 +19,12 @@ public enum Event: String {
     case challenges = "Challenges"
 }
 
+private enum State {
+    case Static
+    case Event
+    case Challenge
+}
+
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
@@ -51,6 +57,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var allChallenges: [Challenge] = []
     
     private let challengeStore = ChallengeStore()
+    private let userStore = UserStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,9 +113,22 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         for challenge in challenges {
             
-            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
-            let userLocationMarker = GMSMarker(position: coordinates)
-            userLocationMarker.map = googleMapView
+//            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
+            
+            var name = ""
+            let user = userStore.getUser(id: challenge.champion, completion: { (user) in
+                name = user.name
+            })
+            
+            
+            // GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: name)
+            
+            GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat, long: challenge.long)
+            
+//            GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: challenge.champion)
+//            let userLocationMarker = GMSMarker(position: coordinates)
+//            userLocationMarker.map = googleMapView
+            //locationManager.map = googleMapView
         }
         
         
@@ -423,7 +443,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         let view: GoogleMapThumbView = GoogleMapThumbView()
         view.profileImageView.image = marker.icon
-        view.nameLabel.text = marker.title
+        
+  
+//        view.nameLabel.text = marker.title
+//        view.descriptionLabel.text = marker.accessibilityValue
         
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
@@ -434,6 +457,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         case 1:
             //challenge
             view.backgroundColor = ColorPalette.orangeThemeColor
+            
+            if let id = marker.title {
+            
+            challengeStore.getChallenge(id: id) { (challenge) in
+                dump(challenge)
+                view.nameLabel.text = challenge.name
+                view.descriptionLabel.text = ("\(challenge.type), \(challenge.champion), \(challenge.lastUpdated) ")
+            }
+            }
             
         default:
             break
@@ -531,6 +563,37 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         setupViewHierarchy()
         configureConstraints()
         
+    }
+    
+    private func updateViews(_ state: State) {
+        let activeViews = [
+            self.topStatusView,
+            self.topStatusLabel,
+            self.bottomStatusView,
+            self.bottomStatus1Label,
+            self.endButton
+        ]
+        
+        DispatchQueue.main.async {
+            switch state {
+            case .Static:
+                self.setupViewHierarchy()
+                self.eventSegmentedControl.isHidden = false
+                
+            case .Challenge:
+                self.eventSegmentedControl.isHidden = true
+                _ = activeViews.map({$0.isHidden = false})
+                self.topStatusView.backgroundColor = ColorPalette.orangeThemeColor
+                self.bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
+                
+            case .Event:
+                self.eventSegmentedControl.isHidden = true
+                _ = activeViews.map({$0.isHidden = false})
+                self.topStatusView.backgroundColor = ColorPalette.purpleThemeColor
+                self.bottomStatusView.backgroundColor = ColorPalette.purpleThemeColor
+                
+            }
+        }
     }
     
     //MARK: - Setup views
@@ -807,9 +870,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-    
-    
-    
+
     
 }
 
