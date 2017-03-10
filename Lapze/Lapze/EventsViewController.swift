@@ -821,6 +821,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         var label = UILabel()
         label.text = "title of activity here"
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     

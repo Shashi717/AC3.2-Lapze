@@ -48,7 +48,7 @@ class ChallengeStore {
             
             completion(challengeArray)
         })
+        dump("challenge array >> \(challengeArray)")
     }
-    
     
 }

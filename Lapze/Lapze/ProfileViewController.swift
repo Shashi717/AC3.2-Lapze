@@ -26,9 +26,9 @@ class ProfileViewController: UIViewController {
     
     func fillMockData() {
         
-        profileImageView.image = UIImage(named: "mock_profile_pic")
-        usernameLabel.text = "CoolGuy123"
-        userRankLabel.text = "Rank: 321"
+        profileImageView.image = UIImage(named: "bob")
+        usernameLabel.text = "TotesAwesome"
+        userRankLabel.text = "Rank: Master Rider"
         activitiesLabel.text = "Activities: Biking, Running"
         challengesLabel.text = "Challenges: Running"
     }

@@ -47,7 +47,10 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         setupViewHierarchy()
         configureConstraints()
+        
+
     }
+
     
     //MARK: - Utilities
     
@@ -464,5 +467,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         barButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelButtonTapped(sender:)))
         return barButton
     }()
+    
     
 }

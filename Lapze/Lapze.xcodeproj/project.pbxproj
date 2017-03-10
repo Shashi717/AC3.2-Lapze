@@ -33,6 +33,7 @@
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
 		E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */; };
 		E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */; };
+		E363F30E1E7283DF005BE3B8 /* ProfilePicsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F30D1E7283DF005BE3B8 /* ProfilePicsCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
 		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
+		E363F30D1E7283DF005BE3B8 /* ProfilePicsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePicsCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
 				1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */,
 				1A9552871E71E70C00E37E50 /* UserLocationMarker.swift */,
+				E363F30D1E7283DF005BE3B8 /* ProfilePicsCollectionView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				1A95528A1E71FD1200E37E50 /* UserLocation.swift in Sources */,
 				9B1531551E72276A00853B2E /* ChallengeStore.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
+				E363F30E1E7283DF005BE3B8 /* ProfilePicsCollectionView.swift in Sources */,
 				1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */,
 				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
