@@ -463,8 +463,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                 challengeStore.getChallenge(id: id) { (challenge) in
                     dump(challenge)
                     view.nameLabel.text = challenge.name
-                    view.titleLabel.text = "Champion: \(challenge.champion)"
-                    view.descriptionLabel.text = ("\(challenge.type), \(challenge.lastUpdated) ")
+                    view.descriptionLabel.text = ("\(challenge.type), \(challenge.champion), \(challenge.lastUpdated) ")
                 }
             }
             
@@ -871,7 +870,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-    
-    
+
+}
+
+extension Double {
+    /// Rounds the double to decimal places value
+    func roundTo(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+
 }
 

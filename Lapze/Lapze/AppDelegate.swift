@@ -26,10 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         //User Notifications
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (allowd, error) in
-            
         }
         
         UNUserNotificationCenter.current().delegate = self
+        
+        //Styling
+        UILabel.appearance().font = UIFont(name: "Avenir Next", size: 11.0)
         
         //Application appearance
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
