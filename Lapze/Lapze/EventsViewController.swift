@@ -62,6 +62,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
 
+    private let challengeStore = ChallengeStore()
 
     
     override func viewDidLoad() {
@@ -103,7 +104,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-
     func getAllChallenges() {
         
         var challengeArray: [[String:Any]] = []
@@ -133,16 +133,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
     }
     
+    
     func markChallenges() {
-        let segment = eventSegmentedControl.selectedSegmentIndex
-        
-        //switch segment
         if let challengeArray = allChallenges {
             for challenge in challengeArray {
                 if let lat = challenge["lat"] as? CLLocationDegrees, let long = challenge["long"] as? CLLocationDegrees {
-                let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long )
-                let userLocationMarker = GMSMarker(position: coordinates)
-                userLocationMarker.map = googleMapView
+                    let coordinates = CLLocationCoordinate2D(latitude: lat, longitude: long )
+                    let userLocationMarker = GMSMarker(position: coordinates)
+                    userLocationMarker.map = googleMapView
                 }
             }
         }
