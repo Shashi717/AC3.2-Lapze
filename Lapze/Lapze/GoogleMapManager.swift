@@ -54,7 +54,7 @@ class GoogleMapManager{
         return dict
     }
     
-    func hideAllMarlers(){
+    func hideAllMarkers(){
         
     }
 }

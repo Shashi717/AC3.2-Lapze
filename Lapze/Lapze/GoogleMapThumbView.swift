@@ -56,6 +56,10 @@ class GoogleMapThumbView: UIView {
         }
     }
     
+    func fillData(name: String) {
+        titleLabel.text = name
+    }
+    
     let profileImageView: UIImageView = {
         let imageview: UIImageView = UIImageView()
         imageview.image = UIImage(named: "010-man")
@@ -76,7 +80,6 @@ class GoogleMapThumbView: UIView {
         let label: UILabel = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textColor = .white
-        label.text = "Speed Champ"
         return label
     }()
     
