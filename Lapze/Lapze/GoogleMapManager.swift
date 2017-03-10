@@ -33,13 +33,18 @@ class GoogleMapManager{
     }
     
     func addMarker(id: String, lat: Double, long: Double){
-        
-        let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        let marker = GMSMarker(position: cllocation)
-        self.dict[id] = marker
-        marker.map = map
-        marker.icon = UIImage(named: "marker")
-        marker.title = id
+        if dict[id] == nil{
+            let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let marker = GMSMarker(position: cllocation)
+            self.dict[id] = marker
+            marker.map = map
+            marker.icon = UIImage(named: "marker")
+            marker.title = id
+        }else{
+            let markerTest = getMarker(id: id)
+            markerTest?.position.latitude = lat
+            markerTest?.position.longitude = long
+        }
         
     }
     
@@ -68,6 +73,9 @@ class GoogleMapManager{
     }
     
     func hideAllMarkers(){
-        
+        for marker in self.dict{
+            marker.value.map = nil
+        }
+        self.dict = [:]
     }
 }
