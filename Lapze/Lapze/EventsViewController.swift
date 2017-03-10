@@ -55,9 +55,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
     private var allChallenges: [Challenge] = []
+     private var eventOn = false
     
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +77,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
         
-        FirebaseObserver.manager.startObserving(node: .location)
+       // FirebaseObserver.manager.startObserving(node: .location)
         
         //Change Map view to reflect part session/challenge
         if challengeOn {
@@ -103,7 +105,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        FirebaseObserver.manager.startObserving(node: .location)
+        FirebaseObserver.manager.startObserving(node: .event)
         if challengeOn {
             print("you're in a challenge")
         }
@@ -113,24 +115,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         for challenge in challenges {
             
-            //            let coordinates = CLLocationCoordinate2D(latitude: challenge.lat, longitude: challenge.long )
-            
-            var name = ""
-            let user = userStore.getUser(id: challenge.champion, completion: { (user) in
-                name = user.name
-            })
-            
-            
-            // GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: name)
-            
+            //            var name = ""
+            //            let user = userStore.getUser(id: challenge.champion, completion: { (user) in
+            //                name = user.name
+            //            })
+            //
             GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat, long: challenge.long)
-            
-            //            GoogleMapManager.shared.addMarker(id: challenge.id, title: challenge.name, lat: challenge.lat, long: challenge.long, champion: challenge.champion)
-            //            let userLocationMarker = GMSMarker(position: coordinates)
-            //            userLocationMarker.map = googleMapView
-            //locationManager.map = googleMapView
         }
-        
         
     }
     
@@ -145,6 +136,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let popVc = PopupViewController()
         switch segment {
         case 0:
+            
             print("\(events[0])")
             //thumbButton.setTitle("Join", for: .normal)
             self.navigationItem.title = "Current Events"
@@ -153,6 +145,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             
         case 1:
             print("\(events[1])")
+            GoogleMapManager.shared.hideAllMarkers()
             //thumbButton.setTitle("Challenge", for: .normal)
             self.navigationItem.title = "Challenge"
             self.addButton.backgroundColor = ColorPalette.orangeThemeColor
@@ -368,10 +361,17 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                 userLocationMarker?.position = locationCordinate
             }
         case false:
-            self.userLocationMarker?.map = nil
+            removeUserMarker()
         }
-        
     }
+    private func showUserMarker(){
+        self.userLocationMarker?.map = googleMapView
+    }
+    
+    private func removeUserMarker(){
+        self.userLocationMarker?.map = nil
+    }
+    
     
     func findUser(){
         if let location = userLocation{
@@ -379,6 +379,54 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             googleMapView.animate(toLocation: clocation)
             googleMapView.animate(toZoom: 15)
         }
+    }
+    
+    
+    //MARK: Event Utilities
+    func startEvent(name: String) {
+        let eventPopUp: PopupViewController = PopupViewController()
+        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        eventPopUp.modalTransitionStyle = .crossDissolve
+        eventPopUp.modalPresentationStyle = .overCurrentContext
+        self.eventOn = true
+        present(eventPopUp, animated: true, completion: nil)
+        removeUserMarker()
+        addEventToFireBase(type:name,location: userLocation!)
+        self.endButton.addTarget(self, action: #selector(endEvent), for: .touchUpInside)
+    }
+    
+    fileprivate func addEventToFireBase(type: String,location: CLLocation){
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+            
+            if error != nil{
+                print(error!.localizedDescription)
+                
+            }else{
+                print("Success adding location")
+            }
+        }
+    }
+    
+    private func updateEventLocation(location: CLLocation){
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+            
+            if error != nil{
+                print(error!.localizedDescription)
+                
+            }else{
+                print("Success adding location")
+            }
+        }
+    }
+    
+    @objc private func endEvent(){
+        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+        childRef.removeValue()
+        self.eventOn = false
+        self.showUserMarker()
     }
     
     //MARK: Location manager Delegate methods
@@ -415,6 +463,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.bottomStatus1Label.text = "\((distance/1609.34)) miles"
             
         }
+        if eventOn{
+            self.updateEventLocation(location: validLocation)
+        }
         print("location change")
     }
     
@@ -446,13 +497,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         
         //        view.nameLabel.text = marker.title
-        //        view.descriptionLabel.text = marker.accessibilityValue
+     
         
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
         switch selectedSegmentIndex {
         case 0:
             //event
+            
             view.backgroundColor = ColorPalette.purpleThemeColor
         case 1:
             //challenge
@@ -461,7 +513,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if let id = marker.title {
                 
                 challengeStore.getChallenge(id: id) { (challenge) in
-                    dump(challenge)
                     view.nameLabel.text = challenge.name
                     view.descriptionLabel.text = ("\(challenge.type), \(challenge.champion), \(challenge.lastUpdated) ")
                 }
@@ -495,14 +546,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     //MARK: Event Delegate methods
-    func startEvent(name: String) {
-        let eventPopUp: PopupViewController = PopupViewController()
-        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
-        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        eventPopUp.modalTransitionStyle = .crossDissolve
-        eventPopUp.modalPresentationStyle = .overCurrentContext
-        present(eventPopUp, animated: true, completion: nil)
-    }
+//    func startEvent(name: String) {
+//        let eventPopUp: PopupViewController = PopupViewController()
+//        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
+//        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+//        eventPopUp.modalTransitionStyle = .crossDissolve
+//        eventPopUp.modalPresentationStyle = .overCurrentContext
+//        present(eventPopUp, animated: true, completion: nil)
+//    }
     
     
     //MARK: Challenge Delegate methods
@@ -522,6 +573,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             print("name: \(name)")
         })
         
+        self.endButton.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
         //timer
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     }
@@ -716,7 +768,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.layer.shadowRadius = 2
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+       // button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
         return button
     }()
     //Delete^^
@@ -870,7 +922,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-
+    
 }
 
 extension Double {
@@ -879,6 +931,6 @@ extension Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
     }
-
+    
 }
 
