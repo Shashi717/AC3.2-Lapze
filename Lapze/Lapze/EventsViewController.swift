@@ -74,9 +74,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //initial view of events
         self.eventSegmentedControl.selectedSegmentIndex = 0
         
-        //tap gesture
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
-        view.addGestureRecognizer(tap)
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
         
@@ -200,23 +197,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
-    
-    func eventPopup() {
-        print("want to join this event?")
-        //popup box
-        thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
-        fillPopupForCreateEvent()
-        fillMockupDataForThumbView()
-        self.thumbStatContainerView.isHidden = false
-        //self.view.addSubview(blurView)
-    }
-    
-    func dismissPopup() {
-        print("tap gesture")
-        self.thumbStatContainerView.isHidden = true
-        //self.blurView.removeFromSuperview()
-    }
-    
     
     
 
