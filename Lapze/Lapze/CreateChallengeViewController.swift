@@ -84,6 +84,8 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
         
+        
+ 
         self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
       
     }

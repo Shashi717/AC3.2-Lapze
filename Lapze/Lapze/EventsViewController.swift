@@ -47,6 +47,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var userCreatedEvent: Bool = false
     private var currentUser = FIRAuth.auth()?.currentUser
     private var timer = Timer()
+    private var challengeTime: Double = 0.0
+    private let timeInterval:TimeInterval = 1
+    private let timerEnd:TimeInterval = 0.0
     private var counter = 0
     
     private var userLocationMarker: GMSMarker?
@@ -154,84 +157,9 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             print("none")
         }
     }
-    
-    func fillPopupForCreateEvent() {
-        thumbStatContainerView.backgroundColor = ColorPalette.purpleThemeColor
-        thumbProfileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
-    }
-    
-    func fillPopupForChallenge() {
-        thumbStatContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        thumbProfileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
-    }
-    
-    func fillMockupDataForThumbView() {
-        thumbUserNameLabel.text = "CoolGuy123"
-        thumbChallengeDescriptionLabel.text = "Bike Champ"
-        thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
-    }
+
     
     //MARK: - Setup Utilities
-    
-    func createThumbView(userName: String) {
-        self.view.addSubview(thumbStatContainerView)
-        self.thumbStatContainerView.addSubview(thumbButton)
-        self.thumbStatContainerView.addSubview(thumbProfileImageView)
-        self.thumbStatContainerView.addSubview(thumbUserNameLabel)
-        self.thumbStatContainerView.addSubview(thumbChallengeDescriptionLabel)
-        self.thumbStatContainerView.addSubview(thumbChallengeStatsLabel)
-        
-        
-        thumbStatContainerView.snp.makeConstraints { (view) in
-            view.height.equalTo(130.0)
-            view.width.equalTo(180.0)
-            
-            //should be changed to the location of the pin
-            view.centerX.centerY.equalToSuperview()
-        }
-        
-        thumbButton.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(4.0)
-            view.right.equalToSuperview().inset(4.0)
-            view.width.height.equalTo(40.0)
-        }
-        thumbProfileImageView.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(4.0)
-            view.height.width.equalTo(50.0)
-            view.centerX.equalToSuperview()
-        }
-        thumbUserNameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(thumbProfileImageView.snp.bottom).offset(4.0)
-            view.left.right.equalToSuperview()
-            view.height.equalTo(15.0)
-        }
-        thumbChallengeStatsLabel.snp.makeConstraints { (view) in
-            view.left.right.equalToSuperview()
-            view.bottom.equalToSuperview().inset(2.0)
-            view.height.equalTo(15.0)
-        }
-        thumbChallengeDescriptionLabel.snp.makeConstraints { (view) in
-            view.left.right.equalToSuperview()
-            view.top.equalTo(thumbUserNameLabel.snp.bottom)
-            view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
-        }
-    }
-    
-    func thumbButtonTapped(sender: UIButton) {
-        let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
-        
-        switch selectedSegmentIndex {
-        case 0:
-            notificationEvent()
-            joinedCurrentEvent()
-            
-        case 1:
-            print("Challenge Event")
-        default:
-            break
-        }
-    }
-    
     func addButtonTapped(sender: UIButton) {
         print("add button tapped")
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
@@ -542,7 +470,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.challengeOn = true
         
         self.challengeFirebaseRef = linkRef
-        
+        self.challengeTime = 0
         self.state = .challenge
         updateViews(.challenge)
 
@@ -551,21 +479,27 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.endButton.addTarget(self, action: #selector(self.endChallenge), for: .touchUpInside)
 
         //timer
-        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
 
         print("challenge id: \(id)")
         let chalStore = ChallengeStore()
             chalStore.getChallenge(id: id) { (challenge) in
                 print("challenge id: \(id), name: \(challenge.name)")
                 self.topStatusLabel.text = challenge.name
-                
             }
-        
     }
     
     func timerAction() {
         counter += 1
-        bottomStatus2Label.text = "Time: \(counter)"
+        bottomStatus2Label.text = "Time: \(timeString(TimeInterval(counter)))"
+    }
+    
+    
+    func timeString(_ time: TimeInterval) -> String {
+        let hours = Int(time) / 3600
+        let minutes = Int(time) / 60 % 60
+        let seconds = Int(time) % 60
+        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
     
     
@@ -578,7 +512,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let firstLong = firstCoordinate.long
         let locationStore = LocationStore()
         let pathArray = locationStore.createPathArray(self.path)
-        let dict = ["location": pathArray, "lat": firstLat,"long": firstLong] as [String : Any]
+        let challengeTime = Double(counter)
+        let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime] as [String : Any]
         
         let polyline = self.pathObject.getPolyline(self.path)
         polyline.strokeColor = .green
@@ -608,9 +543,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //self.locateMeButton.isHidden = true
         
         timer.invalidate()
-        //get back to original view
-        setupViewHierarchy()
-        configureConstraints()
         
     }
     
@@ -815,50 +747,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         segmentedControl.backgroundColor = ColorPalette.greenThemeColor
         segmentedControl.addTarget(self, action: #selector(segementedControlValueChanged(sender:)), for: .valueChanged)
         return segmentedControl
-    }()
-    
-    internal lazy var thumbStatContainerView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 5.0
-        view.layer.masksToBounds = false
-        return view
-    }()
-    internal lazy var thumbProfileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 25.0
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderWidth = 2
-        imageView.layer.masksToBounds = false
-        return imageView
-    }()
-    internal lazy var thumbUserNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    internal lazy var thumbChallengeDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbChallengeStatsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbButton: UIButton = {
-        let button = UIButton()
-        // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
-        // button.backgroundColor = ColorPalette.logoGreenColor
-        //        button.layer.cornerRadius = 10.0
-        //        button.layer.masksToBounds = false
-        button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
-        return button
     }()
     
     internal lazy var addButton: UIButton = {
