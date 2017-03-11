@@ -34,13 +34,14 @@ class GoogleMapManager{
         }
     }
     
-    func addMarker(id: String, lat: Double, long: Double){
+    func addMarker(id: String, lat: Double, long: Double, imageName: String){
         if dict[id] == nil{
             let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let marker = GMSMarker(position: cllocation)
             self.dict[id] = marker
             marker.map = map
-            marker.icon = UIImage(named: "marker")
+            let image = UIImage(named: ("\(imageName)Thumb"))
+            marker.icon = image
             marker.title = id
         }else{
             let markerTest = getMarker(id: id)

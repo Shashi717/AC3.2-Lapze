@@ -28,12 +28,10 @@ class PopupViewController: UIViewController {
         
         //switch
         if segment == 0 {
-            print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
             actionButton.setTitle("Join", for: .normal)
         } else {
-            print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
             actionButton.setTitle("Start", for: .normal)
@@ -46,11 +44,6 @@ class PopupViewController: UIViewController {
         profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
     }
     
-    func fillMockupData() {
-        userNameLabel.text = "CoolGuy123"
-        challengeDescriptionLabel.text = "Bike Champ"
-        challengeStatsLabel.text = "Ran 10 mile in 1 hr"
-    }
     
     //MARK: - setup
     func setupViewHierarchy() {
@@ -59,9 +52,9 @@ class PopupViewController: UIViewController {
         self.blurView.addSubview(popupContainerView)
         self.blurView.addSubview(actionButton)
         self.popupContainerView.addSubview(profileImageView)
-        self.popupContainerView.addSubview(challengeStatsLabel)
-        self.popupContainerView.addSubview(userNameLabel)
+        self.popupContainerView.addSubview(challengeNameLabel)
         self.popupContainerView.addSubview(challengeDescriptionLabel)
+        self.popupContainerView.addSubview(challengeStatsLabel)
     }
     
     func configureConstraints() {
@@ -76,22 +69,23 @@ class PopupViewController: UIViewController {
             view.centerY.equalTo(popupContainerView.snp.top)
         }
         
-        userNameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(profileImageView.snp.bottom).offset(4.0)
-            view.height.equalTo(15.0)
-            view.centerX.equalToSuperview()
+        challengeNameLabel.snp.makeConstraints { (view) in
+            view.top.equalToSuperview().offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
         }
         
         challengeDescriptionLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(userNameLabel.snp.bottom)
-            view.bottom.equalTo(challengeStatsLabel.snp.top)
-            view.centerX.equalToSuperview()
+            view.top.equalTo(challengeNameLabel.snp.bottom).offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
         }
         
         challengeStatsLabel.snp.makeConstraints { (view) in
-            view.bottom.equalToSuperview().inset(2.0)
-            view.height.equalTo(15.0)
-            view.centerX.equalToSuperview()
+            view.top.equalTo(challengeDescriptionLabel.snp.bottom).offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
+            view.bottom.equalToSuperview().inset(25.0)
         }
         
         actionButton.snp.makeConstraints { (view) in
@@ -131,21 +125,26 @@ class PopupViewController: UIViewController {
         return imageView
     }()
     
-    internal lazy var userNameLabel: UILabel! = {
+    internal lazy var challengeNameLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
     internal lazy var challengeDescriptionLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping // or NSLineBreakMode.ByWordWrapping
+        label.numberOfLines = 0
         return label
     }()
     
     internal lazy var challengeStatsLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     

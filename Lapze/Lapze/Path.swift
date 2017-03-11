@@ -13,6 +13,7 @@ import GoogleMaps
 class Path {
     
     let path = GMSMutablePath()
+    var polyline = GMSPolyline()
     
     func getPolyline(_ coordinatesArr: [Location] ) -> GMSPolyline {
         for location in coordinatesArr {
@@ -21,10 +22,11 @@ class Path {
             let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
             path.add(coordinates)
         }
-        return GMSPolyline(path: path)
+        polyline.path = path
+        return polyline
     }
     
     func removePolyline() {
-        path.removeAllCoordinates()
+        polyline.map = nil
     }
 }
