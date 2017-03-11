@@ -21,6 +21,7 @@ class GoogleMapManager{
     }
     
     func addMarker(id: String, with locationDict:[String:Double]){
+        guard getMarker(id: id) == nil else { return }
         if let lat = locationDict["lat"], let long = locationDict["long"] {
             let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let marker = GMSMarker(position: cllocation)
@@ -28,31 +29,22 @@ class GoogleMapManager{
             marker.map = map
             marker.icon = UIImage(named: "010-man")
             marker.title = id
-            
         }
     }
     
-    func addMarker(id: String, title: String, lat: Double, long: Double, champion: String){
-        
-        let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        let marker = GMSMarker(position: cllocation)
-        self.dict[id] = marker
-        marker.map = map
-        marker.icon = UIImage(named: "marker")
-        marker.title = title
-        marker.accessibilityHint = champion
-        
-    }
-    
     func addMarker(id: String, lat: Double, long: Double){
-        
-        let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        let marker = GMSMarker(position: cllocation)
-        self.dict[id] = marker
-        marker.map = map
-        marker.icon = UIImage(named: "marker")
-        marker.title = id
-       // marker.accessibilityHint = champion
+        if dict[id] == nil{
+            let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let marker = GMSMarker(position: cllocation)
+            self.dict[id] = marker
+            marker.map = map
+            marker.icon = UIImage(named: "marker")
+            marker.title = id
+        }else{
+            let markerTest = getMarker(id: id)
+            markerTest?.position.latitude = lat
+            markerTest?.position.longitude = long
+        }
         
     }
     
@@ -81,6 +73,9 @@ class GoogleMapManager{
     }
     
     func hideAllMarkers(){
-        
+        for marker in self.dict{
+            marker.value.map = nil
+        }
+        self.dict = [:]
     }
 }

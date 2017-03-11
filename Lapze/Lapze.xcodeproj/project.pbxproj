@@ -248,7 +248,7 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = ZSE2A75FGT;
+						DevelopmentTeam = 9QMWUGNK5F;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -479,10 +479,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = 9QMWUGNK5F;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.Mira;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -495,10 +495,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = 9QMWUGNK5F;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.Mira;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
