@@ -91,6 +91,7 @@ class ChallengeStore {
                 completion(challenge)
             }
         })
+    
     }
 
 }

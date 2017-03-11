@@ -553,13 +553,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //timer
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
 
-         print("challenge id: \(id)")
+        print("challenge id: \(id)")
         let chalStore = ChallengeStore()
-        chalStore.getChallenge(id: id) { (challenge) in
-            print("challenge id: \(id), name: \(challenge.name)")
-             self.topStatusLabel.text = challenge.name
-
-        }
+            chalStore.getChallenge(id: id) { (challenge) in
+                print("challenge id: \(id), name: \(challenge.name)")
+                self.topStatusLabel.text = challenge.name
+                
+            }
         
     }
     
@@ -628,7 +628,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         DispatchQueue.main.async {
             switch state {
             case .home:
-                //_ = activeViews.map({$0.isHidden = true})
                 self.setupViewHierarchy()
                 self.eventSegmentedControl.isHidden = false
                 
@@ -887,6 +886,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     internal lazy var topStatusLabel: UILabel = {
         var label = UILabel()
+        label.text = "Your challenge/event"
         label.textAlignment = .center
         label.numberOfLines = 2
         label.textColor = .white

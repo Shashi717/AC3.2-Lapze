@@ -85,7 +85,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         challengeRef.updateChildValues(dict)
         
         self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
-        
+      
     }
     
     func isLocationOn() -> Bool {
