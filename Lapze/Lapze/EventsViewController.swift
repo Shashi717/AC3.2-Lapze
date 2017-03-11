@@ -623,7 +623,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         //challenge view configs
         topStatusView.snp.makeConstraints({ (view) in
-            view.height.equalTo(60)
+            view.height.equalTo(50)
             view.width.equalToSuperview()
             view.top.equalToSuperview()
         })
@@ -651,7 +651,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         bottomStatus2Label.snp.makeConstraints { (view) in
             view.width.equalToSuperview().multipliedBy(0.5)
             view.height.equalTo(50)
-            view.leading.equalTo(endButton.snp.trailing)
+            view.leading.equalTo(bottomStatus1Label.snp.leading)
             view.bottom.equalToSuperview()
         }
     }
