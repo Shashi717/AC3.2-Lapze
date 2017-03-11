@@ -21,7 +21,9 @@ class GoogleMapManager{
     }
     
     func addMarker(id: String, with locationDict:[String:Double]){
-        guard getMarker(id: id) == nil else { return }
+
+        guard getMarker(id: id) == nil else {return}
+
         if let lat = locationDict["lat"], let long = locationDict["long"] {
             let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let marker = GMSMarker(position: cllocation)

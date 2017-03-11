@@ -17,9 +17,7 @@ struct Challenge {
     let type: String
     let lat: Double
     let long: Double
-    let location: [[String:Double]]
-    
+    let path: [Location]
+        
 
-    
-    
 }

@@ -14,14 +14,17 @@ class Path {
     
     let path = GMSMutablePath()
     
-    func getPolyline(_ coordinatesArr: [[String:CLLocationDegrees]] ) -> GMSPolyline {
-        for dict in coordinatesArr {
-            if let lat = dict["lat"], let long = dict["long"] {
-                let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
-                path.add(coordinates)
-            }
+    func getPolyline(_ coordinatesArr: [Location] ) -> GMSPolyline {
+        for location in coordinatesArr {
+            let lat = location.lat
+            let long = location.long
+            let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
+            path.add(coordinates)
         }
         return GMSPolyline(path: path)
     }
     
+    func removePolyline() {
+        path.removeAllCoordinates()
+    }
 }
