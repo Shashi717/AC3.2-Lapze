@@ -213,14 +213,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    func eventPopup() {
-        print("want to join this event?")
-        //popup box
-        thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
-        self.thumbStatContainerView.isHidden = false
-        //self.view.addSubview(blurView)
-    }
-    
     func dismissPopup() {
         print("tap gesture")
         self.thumbStatContainerView.isHidden = true
@@ -302,7 +294,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private func removeUserMarker(){
         self.userLocationMarker?.map = nil
     }
-    
     
     func findUser(){
         if let location = userLocation{
@@ -660,7 +651,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.bottom.equalTo(bottomStatusView.snp.top)
         }
         
-        
         //challenge view configs
         topStatusView.snp.makeConstraints({ (view) in
             view.height.equalTo(60)
@@ -696,7 +686,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
     //MARK: - Views
     
     private let endButton: UIButton = {
@@ -714,7 +703,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return button
     }()
     //Delete^^
-    
     
     private let googleMapView: GMSMapView = {
         let mapview: GMSMapView = GMSMapView()
