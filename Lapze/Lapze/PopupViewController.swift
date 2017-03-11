@@ -12,7 +12,6 @@ import SnapKit
 class PopupViewController: UIViewController {
     var segment: Int?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,7 +23,7 @@ class PopupViewController: UIViewController {
         configureConstraints()
         
         //popup data
-       // fillMockupData()
+        // fillMockupData()
         fillPopupForChallenge()
         
         //switch
@@ -32,10 +31,12 @@ class PopupViewController: UIViewController {
             print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
+            actionButton.setTitle("Join", for: .normal)
         } else {
             print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
+            actionButton.setTitle("Start", for: .normal)
         }
     }
     
@@ -158,7 +159,6 @@ class PopupViewController: UIViewController {
     
     internal lazy var actionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Join/Start", for: .normal)
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
         button.backgroundColor = ColorPalette.purpleThemeColor
         return button

@@ -13,7 +13,7 @@ import FirebaseAuth
 import CoreLocation
 
 protocol ChallengeDelegate {
-    func startChallenge(user: String, linkRef: FIRDatabaseReference)
+    func startChallenge(id: String, linkRef: FIRDatabaseReference)
    // var challengeRef: FIRDatabaseReference? { get set }
 }
 
@@ -69,11 +69,12 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
         let linkRef = self.databaseRef.childByAutoId()
-        challengeRef = databaseRef.child("Challenge").child(linkRef.key)
+        let challengeId = linkRef.key
+        challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
         
   
-        self.delegate?.startChallenge(user: user, linkRef: challengeRef)
+        self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
     }
     
     func showDatePicker() {
