@@ -14,7 +14,7 @@ import CoreLocation
 
 protocol ChallengeDelegate {
     func startChallenge(id: String, linkRef: FIRDatabaseReference)
-   // var challengeRef: FIRDatabaseReference? { get set }
+    // var challengeRef: FIRDatabaseReference? { get set }
 }
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
@@ -25,10 +25,10 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var shareLocation = false
     var shareProfile = false
     var delegate: ChallengeDelegate?
-
+    
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,12 +59,22 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     func doneButtonTapped(sender: UIBarButtonItem) {
         
         print("done tapped")
-        createChallenge()
-        showAlert(message: "Start this challenge?")
-       //_ = self.navigationController?.popViewController(animated: true)
+       
+        
+        if isLocationOn() == true {
+            createChallenge()
+        }
+        else {
+            let alertController = showAlert(title: "Unsuccessful", message: "Seems like your location is off, please check your settings!", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+        }
+        
+        _ = self.navigationController?.popViewController(animated: true)
+
     }
     
     func createChallenge() {
+        
         let user = FIRAuth.auth()!.currentUser!.uid
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
@@ -74,22 +84,18 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
         
-  
         self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
+        
     }
     
-    func showAlert(message:String){
-        let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
-        let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
-            self.dismissViewcontroller()
-            
+    func isLocationOn() -> Bool {
+        let locationManager = CLLocationManager()
+        if locationManager.location != nil {
+            return true
         }
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(createEvent)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
+        return false
     }
+
     
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)
