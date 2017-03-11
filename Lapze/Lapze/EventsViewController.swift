@@ -20,9 +20,9 @@ public enum Event: String {
 }
 
 private enum State {
-    case Static
-    case Event
-    case Challenge
+    case home
+    case event
+    case challenge
 }
 
 class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
@@ -40,8 +40,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var challengeFirebaseRef: FIRDatabaseReference?
     private let databaseRef = FIRDatabase.database().reference()
     private var challengeOn = false
-    
-    private var activeViewOn = false // added this
+    private var state: State = .home
     
     private var path: [[String: CLLocationDegrees]] = []
     
@@ -554,14 +553,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func startChallenge(user: String, linkRef: FIRDatabaseReference) {
         print("Challenge started \(user)")
         self.challengeOn = true
-        self.activeViewOn = true
+        
         self.challengeFirebaseRef = linkRef
         linkRef.updateChildValues(["champion": user])
         
+        self.state = .challenge
+        updateViews(.challenge)
 
-        updateViews(.Challenge)
-
-        //setupChallengeView()
+        //delete setupChallenge
 
         
         self.databaseRef.child("users").child(user).child("name").observe(.value, with: { (snapshot) in
@@ -589,10 +588,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         let alertController = showAlert(title: "Challenge ended", message: "Champion mastah", useDefaultAction: true)
         self.present(alertController, animated: true, completion: nil)
-        //self.locateMeButton.isHidden = true
+        
         
         self.challengeOn = false
-        self.activeViewOn = false
+        updateViews(.home)
         
         let firstCoordinate = path[0]
         if let firstLat = firstCoordinate["lat"],
@@ -615,6 +614,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
     }
     
+    
+    //MARK: - Setup views
     private func updateViews(_ state: State) {
         let activeViews = [
             self.topStatusView,
@@ -626,17 +627,19 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         DispatchQueue.main.async {
             switch state {
-            case .Static:
+            case .home:
+                //_ = activeViews.map({$0.isHidden = true})
                 self.setupViewHierarchy()
                 self.eventSegmentedControl.isHidden = false
                 
-            case .Challenge:
+            case .challenge:
                 self.eventSegmentedControl.isHidden = true
                 _ = activeViews.map({$0.isHidden = false})
                 self.topStatusView.backgroundColor = ColorPalette.orangeThemeColor
                 self.bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
                 
-            case .Event:
+                
+            case .event:
                 self.eventSegmentedControl.isHidden = true
                 _ = activeViews.map({$0.isHidden = false})
                 self.topStatusView.backgroundColor = ColorPalette.purpleThemeColor
@@ -646,7 +649,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    //MARK: - Setup views
     func setupViewHierarchy() {
         locationManager.delegate = self
         self.edgesForExtendedLayout = []
@@ -665,25 +667,17 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.bottomStatusView.addSubview(bottomStatus1Label)
         self.bottomStatusView.addSubview(bottomStatus2Label)
         
-        
-        if !activeViewOn {
-            //when in challenge view
-            _ = [topStatusView,
-                 topStatusLabel,
-                 bottomStatusView,
-                 bottomStatus1Label,
-                 bottomStatus2Label
-                ].map({$0.isHidden = true})
-            
-            
-            //when in original view
-            _ = [
-                eventSegmentedControl,
-                locateMeButton,
-                addButton
-                ].map({$0.isHidden = false})
-        }
+        let activeViews = [
+            self.topStatusView,
+            self.topStatusLabel,
+            self.bottomStatusView,
+            self.bottomStatus1Label,
+            self.endButton
+        ]
+        _ = activeViews.map({$0.isHidden = true})
     }
+    
+
     
     func configureConstraints() {
         
@@ -715,7 +709,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.width.height.equalTo(50)
             view.bottom.equalTo(bottomStatusView.snp.top)
         }
-        
         
         //challenge view configs
         topStatusView.snp.makeConstraints({ (view) in
@@ -769,7 +762,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
        // button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
         return button
     }()
-    //Delete^^
+    
     
     
     private let googleMapView: GMSMapView = {

@@ -60,8 +60,8 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
         print("done tapped")
         createChallenge()
-
-       _ = self.navigationController?.popViewController(animated: true)
+        showAlert(message: "Start this challenge?")
+       //_ = self.navigationController?.popViewController(animated: true)
     }
     
     func createChallenge() {
@@ -75,6 +75,23 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
   
         self.delegate?.startChallenge(user: user, linkRef: challengeRef)
+    }
+    
+    func showAlert(message:String){
+        let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
+        let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
+            self.dismissViewcontroller()
+            
+        }
+        
+        let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(createEvent)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func dismissViewcontroller(){
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func showDatePicker() {
