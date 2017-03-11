@@ -53,8 +53,10 @@ class ChallengeStore {
             
             completion(challengeArray)
         })
+        dump("challenge array >> \(challengeArray)")
     }
     
+
     func getChallenge(id: String, completion: @escaping (Challenge) -> Void) {
         
         var challenge: Challenge?
@@ -89,6 +91,7 @@ class ChallengeStore {
                 completion(challenge)
             }
         })
-    }
     
+    }
+
 }

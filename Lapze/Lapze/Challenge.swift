@@ -19,4 +19,5 @@ struct Challenge {
     let long: Double
     let path: [Location]
         
+
 }

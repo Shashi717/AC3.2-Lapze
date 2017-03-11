@@ -59,6 +59,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     func doneButtonTapped(sender: UIBarButtonItem) {
         
         print("done tapped")
+       
         
         if isLocationOn() == true {
             createChallenge()
@@ -69,6 +70,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         }
         
         _ = self.navigationController?.popViewController(animated: true)
+
     }
     
     func createChallenge() {
@@ -76,13 +78,16 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         let user = FIRAuth.auth()!.currentUser!.uid
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
+        
         let linkRef = self.databaseRef.childByAutoId()
         let challengeId = linkRef.key
         challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
         
-        self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
         
+ 
+        self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
+      
     }
     
     func isLocationOn() -> Bool {
@@ -91,6 +96,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
             return true
         }
         return false
+    }
+
+    
+    func dismissViewcontroller(){
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func showDatePicker() {

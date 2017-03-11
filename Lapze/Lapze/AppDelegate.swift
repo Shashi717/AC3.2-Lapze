@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //Styling
         UILabel.appearance().font = UIFont(name: "Avenir Next", size: 11.0)
         
+        
         //Application appearance
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
      
