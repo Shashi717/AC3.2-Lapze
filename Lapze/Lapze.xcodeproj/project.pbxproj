@@ -37,6 +37,9 @@
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
 		E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */; };
 		E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */; };
+		E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */; };
+		E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */; };
+		E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +77,9 @@
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
 		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
+		E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsLauncher.swift; sourceTree = "<group>"; };
+		E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingCell.swift; sourceTree = "<group>"; };
+		E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgesCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,7 @@
 				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
 				1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */,
 				1A9552871E71E70C00E37E50 /* UserLocationMarker.swift */,
+				E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -142,6 +149,8 @@
 		1A4AA7C51E678BE6006EC158 /* Controller Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */,
+				E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */,
 			);
 			name = "Controller Cells";
 			sourceTree = "<group>";
@@ -346,6 +355,7 @@
 			files = (
 				1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */,
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
+				E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */,
 				9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
@@ -361,6 +371,8 @@
 				9B0767991E738A8C005AA3B8 /* Location.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9552881E71E70C00E37E50 /* UserLocationMarker.swift in Sources */,
+				E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */,
+				E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
 				9B1684961E70911B00377543 /* Path.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
