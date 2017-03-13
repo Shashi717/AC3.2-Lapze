@@ -15,9 +15,9 @@ struct Challenge {
     let champion: String
     let lastUpdated: String
     let type: String
-    let lat: Double
-    let long: Double
-    let path: [Location]
+    let lat: Double?
+    let long: Double?
+    let timeToBeat: Double?
+    let path: [Location]?
         
-
 }

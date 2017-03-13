@@ -8,33 +8,61 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
+import CoreLocation
+
+protocol JoinActivityDelegate {
+    func joinChallenge(user: String, challengeId: String)
+    func actionButtonTapped(didCreateActivity: Bool)
+}
 
 class PopupViewController: UIViewController {
+    
     var segment: Int?
+    var delegate: JoinActivityDelegate?
+    var userId: String = ""
+    var activityId: String = ""
+    var didCreateActivity = false
+    var userLocation: CLLocation?
+    
+    var challengeLocation: Location?
+    let locationStore = LocationStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .clear
+        
         //tap gesture
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dissmissView))
         view.addGestureRecognizer(tap)
         setupViewHierarchy()
         configureConstraints()
         
-        //popup data
-        // fillMockupData()
         fillPopupForChallenge()
         
         //switch
         if segment == 0 {
             self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
-            actionButton.setTitle("Join", for: .normal)
         } else {
             self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-            actionButton.setTitle("Start", for: .normal)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.isBeingDismissed {
+            self.clearData()
+        }
+        
+    }
+    
+    func dissmissView() {
+        if didCreateActivity == false {
+            dismissPopup()
+            
         }
     }
     
@@ -44,6 +72,48 @@ class PopupViewController: UIViewController {
         profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
     }
     
+    
+    func dismissPopup() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func startActivity() {
+        
+        if segment == 0 {
+            
+        }
+        else {
+            if let id = FIRAuth.auth()?.currentUser?.uid {
+                self.userId = id
+            }
+            if didCreateActivity == true {
+                self.delegate?.actionButtonTapped(didCreateActivity: didCreateActivity)
+                dismissPopup()
+            }
+            else {
+                
+                let location = Location(lat: self.challengeLocation!.lat, long: self.challengeLocation!.long)
+                if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
+                    print("User is within the radius")
+                    self.delegate?.joinChallenge(user: userId, challengeId: activityId)
+                    dismissPopup()
+                }
+                else {
+                    print("User is NOT within the radius")
+                    let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge starting point!", useDefaultAction: true)
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+        
+    }
+    
+    func clearData() {
+        self.challengeNameLabel.text = nil
+        self.challengeDescriptionLabel.text = nil
+        self.challengeStatsLabel.text = nil
+    }
     
     //MARK: - setup
     func setupViewHierarchy() {
@@ -96,22 +166,11 @@ class PopupViewController: UIViewController {
         
     }
     
-    func dismissPopup() {
-        print("dismiss popup")
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func startActivity() {
-        print("join/start button")
-        
-    }
-    
     //MARK: - Views
     internal lazy var popupContainerView: UIView! = {
         let view = UIView()
         view.layer.cornerRadius = 15.0
         view.layer.masksToBounds = false
-        view.backgroundColor = ColorPalette.purpleThemeColor
         return view
     }()
     
@@ -158,10 +217,11 @@ class PopupViewController: UIViewController {
     
     internal lazy var actionButton: UIButton = {
         let button = UIButton()
+        button.setTitle("Start", for: .normal)
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
-        button.backgroundColor = ColorPalette.purpleThemeColor
         return button
     }()
     
     
 }
+
