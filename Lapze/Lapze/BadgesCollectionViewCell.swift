@@ -13,11 +13,19 @@ import SnapKit
 class BadgesCollectionViewCell: BaseCell {
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .clear
+        backgroundColor = .blue
         
         addSubview(badgeImageView)
+        addSubview(badgeLabel)
+        
         badgeImageView.snp.makeConstraints { (view) in
             view.size.equalToSuperview()
+        }
+        
+        badgeLabel.snp.makeConstraints { (view) in
+            view.top.equalTo(badgeImageView.snp.bottom).offset(5)
+            view.width.equalTo(badgeImageView.snp.width)
+            view.height.equalTo(20)
         }
     }
     
@@ -25,8 +33,13 @@ class BadgesCollectionViewCell: BaseCell {
     //MARK: - inits
     internal var badgeImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "004-boy")
+        imageView.image = UIImage(named: "question")
         imageView.contentMode = .scaleAspectFill
         return imageView
+    }()
+    
+    internal var badgeLabel: UILabel = {
+        let label = UILabel()
+        return label
     }()
 }

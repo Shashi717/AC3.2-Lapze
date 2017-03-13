@@ -102,8 +102,25 @@ class PopupViewController: UIViewController {
     }
     
     func startActivity() {
-        print("join/start button")
-        
+        //print("join/start button")
+        if segment == 0 {
+            //let user = FIRAuth.auth()!.currentUser!.uid
+            //let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
+            
+            
+            //let linkRef = self.databaseRef.childByAutoId()
+           // let challengeId = linkRef.key
+            //challengeRef = databaseRef.child("Challenge").child(challengeId)
+            //challengeRef.updateChildValues(dict)
+            
+            
+            
+            //self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
+            print("user challenging")
+            _ = self.navigationController?.popViewController(animated: true)
+        } else {
+           print("start event")
+        }
     }
     
     //MARK: - Views

@@ -14,7 +14,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
-    let badges = ["1", "2", "3", "4", "5"]
+    let badges = ["1", "2", "3", "4", "5"] //this will change
     let cellId = "badges"
     var userProfileImage = "1"
     let uid = FIRAuth.auth()?.currentUser?.uid
@@ -62,6 +62,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let image = self.profileSetting.chosenProfileImage
             self.profileImageView.image = UIImage(named: "\(image)")
         }
+    }
+    
+    func determineBadgesEarned() {
+        //based on number of challenges with user name
+        
         
     }
     
@@ -73,7 +78,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
-        cell.badgeImageView.image = UIImage(named: "\(badges[indexPath.row])")
+        //cell.badgeImageView.image = UIImage(named: "\(badges[indexPath.row])")
+        cell.badgeImageView.image = UIImage(named: "question")
         return cell
     }
     
