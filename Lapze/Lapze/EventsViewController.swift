@@ -508,7 +508,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                     })
                     
                     if self.userChampionshipChallenges.contains(id) {
-                        print(self.userChampionshipChallenges)
                         thumbView.profileImageView.image = UIImage(named: "crown")
                     }
                     else {
