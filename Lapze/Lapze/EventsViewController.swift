@@ -559,7 +559,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     //MARK: EndActivity Delegate methods
-    
     func endChallenge() {
         
         guard path.count > 0 else {

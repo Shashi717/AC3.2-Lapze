@@ -30,9 +30,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadUser()
         
         //test
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-        let unitsSold = [10.0, 4.0, 6.0, 3.0, 12.0, 16.0]
-        setChart(dataPoints: months, values: unitsSold)
+        let activities = ["Cycling", "Running", "Basketball"]
+        let numOfActivities = [10.0, 4.0, 6.0]
+        setChart(dataPoints: activities, values: numOfActivities)
         
     }
     
@@ -115,7 +115,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.topContainerView.addSubview(usernameLabel)
         self.view.addSubview(badgesCollectionView)
         self.view.addSubview(userRankLabel)
-        self.view.addSubview(activitiesLabel)
+        //self.view.addSubview(activitiesLabel)
         
         //test
         self.view.addSubview(pieChart)
@@ -152,12 +152,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(20.0)
         }
-        activitiesLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(userRankLabel.snp.bottom).offset(16.0)
-            view.left.equalToSuperview().offset(8.0)
-            view.right.equalToSuperview().inset(8.0)
-            view.height.equalTo(50.0)
-        }
+//        activitiesLabel.snp.makeConstraints { (view) in
+//            view.top.equalTo(userRankLabel.snp.bottom).offset(16.0)
+//            view.left.equalToSuperview().offset(8.0)
+//            view.right.equalToSuperview().inset(8.0)
+//            view.height.equalTo(50.0)
+//        }
 //        challengesLabel.snp.makeConstraints { (view) in
 //            view.top.equalTo(activitiesLabel.snp.bottom).offset(16.0)
 //            view.left.equalToSuperview().offset(8.0)
@@ -169,8 +169,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.75)
-            view.height.equalToSuperview().multipliedBy(0.75)
-            view.centerX.equalToSuperview()
+            //view.height.equalTo(150)
+            view.trailing.equalToSuperview()
         }
     }
     
@@ -184,11 +184,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         for i in 0..<dataPoints.count {
             let dataEntry1 = PieChartDataEntry(value: Double(i), label: dataPoints[i], data:  dataPoints[i] as AnyObject)
-            
             dataEntries.append(dataEntry1)
         }
         //print(dataEntries[0].data)
-        let pieChartDataSet = PieChartDataSet(values: dataEntries, label: "Units Sold")
+        let pieChartDataSet = PieChartDataSet(values: dataEntries, label: nil)
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
         pieChart.data = pieChartData
         
@@ -202,8 +201,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
             colors.append(color)
         }
-        
         pieChartDataSet.colors = colors
+        self.pieChart.legend.enabled =  false
+        //self.pieChart.drawEntryLabelsEnabled = false
+        self.pieChart.
     }
 
     
