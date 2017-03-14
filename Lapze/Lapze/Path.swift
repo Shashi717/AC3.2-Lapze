@@ -12,10 +12,11 @@ import GoogleMaps
 
 class Path {
     
-    let path = GMSMutablePath()
-    var polyline = GMSPolyline()
+    private let path = GMSMutablePath()
+    private var polyline = GMSPolyline()
     
     func getPolyline(_ coordinatesArr: [Location] ) -> GMSPolyline {
+         path.removeAllCoordinates()
         for location in coordinatesArr {
             let lat = location.lat
             let long = location.long
