@@ -145,7 +145,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         case 1:
             print("\(events[1])")
             GoogleMapManager.shared.hideAllMarkers()
-            self.navigationItem.title = "Challenge"
+            self.navigationItem.title = "Challenges"
             self.addButton.backgroundColor = ColorPalette.orangeThemeColor
             topStatusView.backgroundColor = ColorPalette.orangeThemeColor
             bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
