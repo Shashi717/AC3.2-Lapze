@@ -9,7 +9,6 @@
 import Foundation
 
 struct Challenge {
-    
     let id: String
     let name: String
     let champion: String
@@ -18,8 +17,4 @@ struct Challenge {
     let lat: Double
     let long: Double
     let location: [[String:Double]]
-        
-
-    
-    
 }

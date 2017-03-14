@@ -24,8 +24,9 @@ enum DatePickerType {
     case endTime
 }
 
-protocol EventDelegate{
+protocol EventViewControllerDelegate{
     func startEvent(name: String)
+    //func endEvent()
 }
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -33,7 +34,8 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
     let noTimeLimitActivities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
     var currentPickerType: DatePickerType = .date
-    var delegate: EventDelegate?
+    var pickedActivity: Activity =  .running
+    var delegate: EventViewControllerDelegate?
     var shareLocation = false
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
@@ -74,8 +76,9 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     func showAlert(message:String){
         let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
         let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
+            self.delegate?.startEvent(name: self.pickedActivity.rawValue.capitalized)
+            //FirebaseManager.shared.addToFirebase(event: self.createEventObject())
             self.dismissViewcontroller()
-            self.delegate?.startEvent(name: "Bike event")
         }
         
         let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -85,6 +88,13 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func createEventObject() -> Event{
+        let currentLocation = LocationManager.sharedManager.currentLocation
+        //let event = Event(type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+        let event = Event(id:FirebaseManager.shared.uid! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+        return event
     }
     
     func showDatePicker() {
@@ -175,7 +185,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        let pickedActivity = activities[row]
+        pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
         userEventInfo["type"] = pickedActivity.rawValue
         

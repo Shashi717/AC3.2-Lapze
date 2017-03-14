@@ -9,20 +9,21 @@
 import Foundation
 import Firebase
 
-class FirebaseObserver{
-    static let manager: FirebaseObserver  = FirebaseObserver()
-    let dataBaseRefence = FIRDatabase.database().reference()
+class FirebaseManager{
+    static let shared: FirebaseManager  = FirebaseManager()
+    let uid = FIRAuth.auth()?.currentUser?.uid
+    let databaseReference = FIRDatabase.database().reference()
     private var childAddedhandler: UInt?
     private var childRemovedhandler: UInt?
     private var childChangedhandler: UInt?
     private init(){}
     
-    enum FireBaseNode: String{
+    enum FirebaseNode: String{
         case location,event
     }
     
-    func startObserving(node: FireBaseNode){
-        let childRef = dataBaseRefence.child(node.rawValue.capitalized)
+    func startObserving(node: FirebaseNode){
+        let childRef = databaseReference.child(node.rawValue.capitalized)
         
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
             if let dict = self.getSnapshotValue(snapshot: snapshot){
@@ -42,7 +43,26 @@ class FirebaseObserver{
     }
     
     func stopObserving(){
-        dataBaseRefence.removeAllObservers()
+        databaseReference.removeAllObservers()
+    }
+    
+    func addToFirebase(event: Event){
+        let childRef = databaseReference.child("Event").child(uid!)
+        childRef.updateChildValues(event.toJson()) { (error, ref) in
+            if error != nil{
+                print(error?.localizedDescription)
+            }else{
+                print("Success posting event")
+            }
+        }
+    }
+    
+    func addToFirebase(location: Location){
+        
+    }
+    
+    func addToFirebase(challenge: Challenge){
+        
     }
     
     private func getSnapshotValue(snapshot: FIRDataSnapshot)->[String:Double]?{

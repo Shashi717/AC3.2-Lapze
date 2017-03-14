@@ -56,6 +56,10 @@ class GoogleMapThumbView: UIView {
         }
     }
     
+    private func addPulse(){
+      
+    }
+    
     let profileImageView: UIImageView = {
         let imageview: UIImageView = UIImageView()
         imageview.image = UIImage(named: "010-man")

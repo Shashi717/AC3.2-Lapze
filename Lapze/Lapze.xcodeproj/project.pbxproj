@@ -8,14 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		1A9552881E71E70C00E37E50 /* UserLocationMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9552871E71E70C00E37E50 /* UserLocationMarker.swift */; };
-		1A95528A1E71FD1200E37E50 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9552891E71FD1200E37E50 /* UserLocation.swift */; };
+		1A95528C1E723FF200E37E50 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A95528B1E723FF200E37E50 /* LocationManager.swift */; };
+		1A95528E1E72460500E37E50 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A95528D1E72460500E37E50 /* MapViewController.swift */; };
+		1A9552901E73579600E37E50 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A95528F1E73579600E37E50 /* ActivityViewController.swift */; };
 		1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9767F61E6789EB00F6B28C /* AppDelegate.swift */; };
 		1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FD1E6789EB00F6B28C /* Assets.xcassets */; };
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
 		1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */; };
 		1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */; };
 		1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */; };
-		1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */; };
+		1AEF108E1E7583EC0086C8E6 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF108D1E7583EC0086C8E6 /* Event.swift */; };
+		1AEF10901E7586C70086C8E6 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF108F1E7586C70086C8E6 /* Location.swift */; };
+		1AEF10921E759FB10086C8E6 /* TopActivityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */; };
+		1AEF10941E75BA710086C8E6 /* BottomActivityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */; };
+		1AEF10961E764F850086C8E6 /* BottomActivityInfoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */; };
+		1AEF10981E766B690086C8E6 /* PulseLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10971E766B690086C8E6 /* PulseLayer.swift */; };
+		1AFF36CE1E6DCA6800624AAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B1531531E72251C00853B2E /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531521E72251C00853B2E /* Challenge.swift */; };
@@ -38,7 +46,9 @@
 /* Begin PBXFileReference section */
 		1A8970F21F061C3BBAB803B0 /* Pods-Lapze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.debug.xcconfig"; sourceTree = "<group>"; };
 		1A9552871E71E70C00E37E50 /* UserLocationMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLocationMarker.swift; sourceTree = "<group>"; };
-		1A9552891E71FD1200E37E50 /* UserLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
+		1A95528B1E723FF200E37E50 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		1A95528D1E72460500E37E50 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		1A95528F1E73579600E37E50 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		1A9767F31E6789EB00F6B28C /* Lapze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lapze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9767F61E6789EB00F6B28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A9767FD1E6789EB00F6B28C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -47,7 +57,13 @@
 		1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkBlueStyle.json; sourceTree = "<group>"; };
 		1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapThumbView.swift; sourceTree = "<group>"; };
 		1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
-		1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FireBaseObserver.swift; sourceTree = "<group>"; };
+		1AEF108D1E7583EC0086C8E6 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		1AEF108F1E7586C70086C8E6 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopActivityInfoView.swift; sourceTree = "<group>"; };
+		1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomActivityInfoView.swift; sourceTree = "<group>"; };
+		1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomActivityInfoScrollView.swift; sourceTree = "<group>"; };
+		1AEF10971E766B690086C8E6 /* PulseLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulseLayer.swift; sourceTree = "<group>"; };
+		1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,12 +117,14 @@
 			isa = PBXGroup;
 			children = (
 				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
+				1A95528F1E73579600E37E50 /* ActivityViewController.swift */,
 				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
 				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
 				1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */,
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
 				9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */,
+				1A95528D1E72460500E37E50 /* MapViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -115,8 +133,12 @@
 			isa = PBXGroup;
 			children = (
 				E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */,
+				1AEF10971E766B690086C8E6 /* PulseLayer.swift */,
 				1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */,
 				1A9552871E71E70C00E37E50 /* UserLocationMarker.swift */,
+				1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */,
+				1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */,
+				1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -124,9 +146,9 @@
 		1A4AA7C41E678BD5006EC158 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				1AFF36CD1E6DCA6800624AAA /* FireBaseObserver.swift */,
+				1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */,
 				1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */,
-				1A9552891E71FD1200E37E50 /* UserLocation.swift */,
+				1A95528B1E723FF200E37E50 /* LocationManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -144,6 +166,8 @@
 				9B1684951E70911B00377543 /* Path.swift */,
 				9B1531521E72251C00853B2E /* Challenge.swift */,
 				9B1531541E72276A00853B2E /* ChallengeStore.swift */,
+				1AEF108F1E7586C70086C8E6 /* Location.swift */,
+				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -332,23 +356,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AFF36CE1E6DCA6800624AAA /* FireBaseObserver.swift in Sources */,
+				1AFF36CE1E6DCA6800624AAA /* FirebaseManager.swift in Sources */,
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
+				1A95528E1E72460500E37E50 /* MapViewController.swift in Sources */,
+				1A9552901E73579600E37E50 /* ActivityViewController.swift in Sources */,
+				1AEF10981E766B690086C8E6 /* PulseLayer.swift in Sources */,
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				9B1531531E72251C00853B2E /* Challenge.swift in Sources */,
 				E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */,
-				1A95528A1E71FD1200E37E50 /* UserLocation.swift in Sources */,
+				1AEF10941E75BA710086C8E6 /* BottomActivityInfoView.swift in Sources */,
 				9B1531551E72276A00853B2E /* ChallengeStore.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
 				1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */,
 				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
+				1AEF10901E7586C70086C8E6 /* Location.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
+				1AEF10961E764F850086C8E6 /* BottomActivityInfoScrollView.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9552881E71E70C00E37E50 /* UserLocationMarker.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
 				9B1684961E70911B00377543 /* Path.swift in Sources */,
+				1AEF10921E759FB10086C8E6 /* TopActivityInfoView.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
+				1A95528C1E723FF200E37E50 /* LocationManager.swift in Sources */,
+				1AEF108E1E7583EC0086C8E6 /* Event.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

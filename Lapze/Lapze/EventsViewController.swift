@@ -14,12 +14,12 @@ import CoreLocation
 import FirebaseDatabase
 import FirebaseAuth
 
-public enum Event: String {
+public enum EventChange: String {
     case currentEvents = "Events"
     case challenges = "Challenges"
 }
 
-class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
+class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,ChallengeDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
@@ -29,7 +29,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
+    private let events: [EventChange.RawValue] = [EventChange.currentEvents.rawValue, EventChange.challenges.rawValue]
 
     private var challengeFirebaseRef: FIRDatabaseReference?
     private let databaseRef = FIRDatabase.database().reference()
@@ -86,11 +86,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
     }
     override func viewDidDisappear(_ animated: Bool) {
-        FirebaseObserver.manager.stopObserving()
+        FirebaseManager.shared.stopObserving()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        FirebaseObserver.manager.startObserving(node: .event)
+        FirebaseManager.shared.startObserving(node: .event)
         if challengeOn {
             print("you're in a challenge")
         }
@@ -221,7 +221,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         switch selectedSegmentIndex {
         case 0:
             let createEventVc = CreateEventViewController()
-            createEventVc.delegate = self
+            //createEventVc.delegate = self
             self.show(createEventVc, sender: self)
             
         case 1:
@@ -231,7 +231,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             }
             else {
                 let createEventVc = CreateChallengeViewController()
-                createEventVc.delegate = self
+              //  createEventVc.delegate = self
                 self.show(createEventVc, sender: self)
             }
         default:
@@ -396,8 +396,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.endButton
             ].map({$0.isHidden = false})
     }
-
-
     
     //MARK: Location Utilities
     
@@ -411,7 +409,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         if FIRAuth.auth()?.currentUser == nil{
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
         }else{
-            FirebaseObserver.manager.startObserving(node: .location)
+            //FirebaseObserver.manager.startObserving(node: .location)
         }
     }
     
@@ -422,7 +420,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
 
     
     //MARK: Location Utilities
-    private func updateUserLocationMarker(location:CLLocation){
+    private func updateUserLocationMarker(location: CLLocation){
         let locationCordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         switch showUserLocation{
             
@@ -500,23 +498,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         print(error.localizedDescription)
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status{
-        case .authorizedAlways, .authorizedWhenInUse:
-            print("All good")
-            manager.startUpdatingLocation()
-            //manager.startMonitoringSignificantLocationChanges()
-            
-        case .denied, .restricted:
-            print("NOPE")
-            locationManager.requestAlwaysAuthorization()
-            
-        case .notDetermined:
-            print("IDK")
-            locationManager.requestAlwaysAuthorization()
-        }
-    }
-    
     //MARK: Googlemaps Delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         let view: GoogleMapThumbView = GoogleMapThumbView()
@@ -576,34 +557,34 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     fileprivate func addEventToFireBase(type: String,location: CLLocation){
-        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
-        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
-            
-            if error != nil{
-                print(error!.localizedDescription)
-                
-            }else{
-                print("Success adding location")
-            }
-        }
+        //let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+//        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+//            
+//            if error != nil{
+//                print(error!.localizedDescription)
+//                
+//            }else{
+//                print("Success adding location")
+//            }
+//        }
     }
     
     private func updateEventLocation(location: CLLocation){
-        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
-        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
-            
-            if error != nil{
-                print(error!.localizedDescription)
-                
-            }else{
-                print("Success adding location")
-            }
-        }
+        //let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+//        childRef.updateChildValues(["lat": location.coordinate.latitude,"long":location.coordinate.longitude]) { (error, ref) in
+//            
+//            if error != nil{
+//                print(error!.localizedDescription)
+//                
+//            }else{
+//                print("Success adding location")
+//            }
+//        }
     }
     
     @objc private func endEvent(){
-        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
-        childRef.removeValue()
+//        let childRef = FirebaseObserver.manager.dataBaseRefence.child("Event").child((FIRAuth.auth()?.currentUser?.uid)!)
+//        childRef.removeValue()
         self.eventOn = false
         self.showUserMarker()
     }
@@ -835,9 +816,5 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         label.textAlignment = .center
         return label
     }()
-    
-    
-    
-    
 }
 
