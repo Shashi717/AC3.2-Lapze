@@ -18,6 +18,7 @@ struct Challenge {
     let lat: Double?
     let long: Double?
     let timeToBeat: Double?
+    let distance: Double?
     let path: [Location]?
         
 }

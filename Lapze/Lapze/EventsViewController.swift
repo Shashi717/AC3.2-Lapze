@@ -545,7 +545,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             break
         }
     }
-
+    
     func timerAction() {
         counter += 1
         bottomStatus2Label.text = "Time: \(timeString(TimeInterval(counter)))"
@@ -588,7 +588,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         if userCreatedActivity == true {
             let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
             alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime] as [String : Any]
+                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": (self.distance/1609.34).roundTo(places: 2)] as [String : Any]
                 self.challengeFirebaseRef!.updateChildValues(dict)
                 self.dismiss(animated: true, completion: nil)
             }))
@@ -604,7 +604,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             challengeStore.getChallenge(id: challengeId!, completion: { (challenge) in
                 if let path = challenge.path, let endLocation = path.last {
                     if locationStore.isUserWithinRadius(userLocation: self.userLocation!, challengeLocation: endLocation) {
-                        if challengeTime < challenge.timeToBeat! {
+                        let currentDistance = (self.distance/1609.34).roundTo(places: 2)
+                        if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.1) {
                             let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": "now"] as [String : Any]
                             self.challengeFirebaseRef?.updateChildValues(dict)
                             let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
