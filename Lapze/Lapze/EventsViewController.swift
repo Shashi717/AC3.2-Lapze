@@ -397,16 +397,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //timer
         
         self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
-        // print("Calls this >>>>>>>> \(challengeFirebaseRef?.key)")
         
+        //this populates the top label when you start a challenge
         challengeStore.getChallenge(id: (challengeFirebaseRef?.key)!) { (challenge) in
             self.topStatusLabel.text = challenge.name
-            
-            print("Calling this too >>>>>>>> \(self.challengeFirebaseRef?.key) \(challenge.name)")
         }
         
     }
-    
     
     //MARK: Location manager Delegate methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -431,9 +428,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             }
             
             previousLocation = currentLocation
-            
-            print("Previous Location: \(previousLocation)")
-            print("Distance: \(distance)")
             
             //challenge view
             self.bottomStatus1Label.text = "\((distance/1609.34).roundTo(places: 2)) miles"
@@ -575,6 +569,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let locationStore = LocationStore()
         let pathArray = locationStore.createPathArray(self.path)
         let challengeTime = Double(counter)
+        let userDistance = (self.distance/1609.34).roundTo(places: 2)
         
         let polyline = self.userPath.getPolyline(self.path)
         polyline.strokeColor = .green
@@ -588,7 +583,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         if userCreatedActivity == true {
             let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
             alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": (self.distance/1609.34).roundTo(places: 2)] as [String : Any]
+                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": userDistance] as [String : Any]
                 self.challengeFirebaseRef!.updateChildValues(dict)
                 self.dismiss(animated: true, completion: nil)
             }))
@@ -605,7 +600,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                 if let path = challenge.path, let endLocation = path.last {
                     if locationStore.isUserWithinRadius(userLocation: self.userLocation!, challengeLocation: endLocation) {
                         let currentDistance = (self.distance/1609.34).roundTo(places: 2)
-                        if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.1) {
+                        if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.05) {
                             let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": "now"] as [String : Any]
                             self.challengeFirebaseRef?.updateChildValues(dict)
                             let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
@@ -728,11 +723,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.width.equalToSuperview()
             view.top.equalToSuperview()
         })
-        
         topStatusLabel.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.width.equalToSuperview().multipliedBy(0.5)
-            view.height.equalToSuperview().multipliedBy(0.5)
+            view.left.right.top.bottom.equalToSuperview()
         }
         bottomStatusView.snp.makeConstraints { (view) in
             view.height.equalTo(60)
@@ -853,14 +845,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }()
     internal lazy var bottomStatus1Label: UILabel = {
         var label = UILabel()
-        label.text = "distance"
+        label.text = "0.0 miles"
         label.textAlignment = .center
         label.textColor = .white
         return label
     }()
     internal lazy var bottomStatus2Label: UILabel = {
         var label = UILabel()
-        label.text = "time"
+        label.text = "Time: 00:00:00"
         label.textAlignment = .center
         label.textColor = .white
         return label
