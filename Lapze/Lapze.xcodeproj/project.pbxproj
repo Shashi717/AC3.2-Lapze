@@ -41,6 +41,8 @@
 		E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */; };
 		E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */; };
 		E39BA26B1E766E47007A9D90 /* MainLeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */; };
+		E39BA26D1E771C73007A9D90 /* LeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */; };
+		E39BA26F1E771D40007A9D90 /* LeaderBoardCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +84,8 @@
 		E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingCell.swift; sourceTree = "<group>"; };
 		E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgesCollectionViewCell.swift; sourceTree = "<group>"; };
 		E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLeaderBoardViewController.swift; sourceTree = "<group>"; };
+		E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardViewController.swift; sourceTree = "<group>"; };
+		E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,9 +120,9 @@
 		1A4AA7C11E678BB1006EC158 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E39BA2701E772118007A9D90 /* Leaderboard */,
 				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
-				E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
 				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
 				1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */,
@@ -154,6 +158,7 @@
 			children = (
 				E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */,
 				E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */,
+				E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */,
 			);
 			name = "Controller Cells";
 			sourceTree = "<group>";
@@ -226,6 +231,15 @@
 				3306D834986CC67455EA3764 /* Pods_Lapze.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E39BA2701E772118007A9D90 /* Leaderboard */ = {
+			isa = PBXGroup;
+			children = (
+				E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */,
+				E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */,
+			);
+			name = Leaderboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -360,6 +374,7 @@
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
 				E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */,
 				9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */,
+				E39BA26D1E771C73007A9D90 /* LeaderBoardViewController.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				9B1531531E72251C00853B2E /* Challenge.swift in Sources */,
@@ -370,6 +385,7 @@
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
 				1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */,
 				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
+				E39BA26F1E771D40007A9D90 /* LeaderBoardCollectionCell.swift in Sources */,
 				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				9B0767991E738A8C005AA3B8 /* Location.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,

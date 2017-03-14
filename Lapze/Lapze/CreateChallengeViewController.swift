@@ -14,6 +14,7 @@ import CoreLocation
 
 protocol ChallengeDelegate {
     func startChallenge(id: String, linkRef: FIRDatabaseReference)
+    func doChallenge(userId: String)
     // var challengeRef: FIRDatabaseReference? { get set }
 }
 
@@ -77,7 +78,10 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
         let user = FIRAuth.auth()!.currentUser!.uid
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
+        let userDict = ["challengeData" : "challengeData"]
         
+        //test
+        databaseRef.child("user").child(user).updateChildValues(userDict)
         
         let linkRef = self.databaseRef.childByAutoId()
         let challengeId = linkRef.key

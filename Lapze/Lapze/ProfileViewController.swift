@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import FirebaseAuth
+import Charts
 
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -28,6 +29,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         configureConstraints()
         loadUser()
         
+        //test
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+        let unitsSold = [10.0, 4.0, 6.0, 3.0, 12.0, 16.0]
+        setChart(dataPoints: months, values: unitsSold)
         
     }
     
@@ -64,10 +69,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    func changeAvatar(userPic: String) {
+        self.profileImageView.image = UIImage(named: "\(userPic)")
+    }
+    
     func determineBadgesEarned() {
         //based on number of challenges with user name
-        
-        
     }
     
     //MARK: - Collection data flow
@@ -109,12 +116,15 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(badgesCollectionView)
         self.view.addSubview(userRankLabel)
         self.view.addSubview(activitiesLabel)
+        
+        //test
+        self.view.addSubview(pieChart)
     }
     
     func configureConstraints() {
         topContainerView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            view.height.equalToSuperview().multipliedBy(0.5)
+            view.height.equalToSuperview().multipliedBy(0.4)
             view.top.equalToSuperview()
         }
         
@@ -154,10 +164,59 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
 //            view.right.equalToSuperview().inset(8.0)
 //            view.height.equalTo(50.0)
 ////        }
+        
+        pieChart.snp.makeConstraints { (view) in
+            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
+            view.bottom.equalToSuperview()
+            view.width.equalToSuperview().multipliedBy(0.75)
+            view.height.equalToSuperview().multipliedBy(0.75)
+            view.centerX.equalToSuperview()
+        }
     }
+    
+    //MARK: - pie data
+    //test
+    
+    
+    func setChart(dataPoints: [String], values: [Double]) {
+        
+        var dataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dataPoints.count {
+            let dataEntry1 = PieChartDataEntry(value: Double(i), label: dataPoints[i], data:  dataPoints[i] as AnyObject)
+            
+            dataEntries.append(dataEntry1)
+        }
+        //print(dataEntries[0].data)
+        let pieChartDataSet = PieChartDataSet(values: dataEntries, label: "Units Sold")
+        let pieChartData = PieChartData(dataSet: pieChartDataSet)
+        pieChart.data = pieChartData
+        
+        var colors: [UIColor] = []
+        
+        for _ in 0..<dataPoints.count {
+            let red = Double(arc4random_uniform(256))
+            let green = Double(arc4random_uniform(256))
+            let blue = Double(arc4random_uniform(256))
+            
+            let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
+            colors.append(color)
+        }
+        
+        pieChartDataSet.colors = colors
+    }
+
     
 
     //MARK: - Views
+    //test
+    internal var pieChart: PieChartView = {
+        let view = PieChartView()
+        //view.backgroundColor = .red
+        return view
+    }()
+   
+    
     internal var topContainerView: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
@@ -210,7 +269,5 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         barButton = UIBarButtonItem(title: "Logout", style: .done, target: self, action: #selector(logoutButtonTapped(sender:)))
         return barButton
     }()
-    
- 
    
 }

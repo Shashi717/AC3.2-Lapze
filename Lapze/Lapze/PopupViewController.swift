@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Firebase
 
 class PopupViewController: UIViewController {
     var segment: Int?
@@ -101,27 +102,16 @@ class PopupViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    //MARK: - Activity Utilities
     func startActivity() {
         //print("join/start button")
         if segment == 0 {
-            //let user = FIRAuth.auth()!.currentUser!.uid
-            //let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
-            
-            
-            //let linkRef = self.databaseRef.childByAutoId()
-           // let challengeId = linkRef.key
-            //challengeRef = databaseRef.child("Challenge").child(challengeId)
-            //challengeRef.updateChildValues(dict)
-            
-            
-            
-            //self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
-            print("user challenging")
-            _ = self.navigationController?.popViewController(animated: true)
+            print("start event")
         } else {
-           print("start event")
+            print("challenge event")
         }
     }
+    
     
     //MARK: - Views
     internal lazy var popupContainerView: UIView! = {

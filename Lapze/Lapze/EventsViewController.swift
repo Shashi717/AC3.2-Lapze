@@ -490,7 +490,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.state = .challenge
         updateViews(.challenge)
         
-        //delete setupChallenge
         
         self.endButton.addTarget(self, action: #selector(self.endChallenge), for: .touchUpInside)
         
@@ -504,14 +503,17 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             print("challenge id: \(id), name: \(challenge.name)")
             self.topStatusLabel.text = challenge.name
         }
-        
+    }
+    
+    //test
+    func doChallenge(userId: String) {
+        print("\(userId) started another challenge")
     }
     
     func timerAction() {
         counter += 1
         bottomStatus2Label.text = "Time: \(timeString(TimeInterval(counter)))"
     }
-    
     
     func timeString(_ time: TimeInterval) -> String {
         let hours = Int(time) / 3600
@@ -532,6 +534,8 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let pathArray = locationStore.createPathArray(self.path)
         let challengeTime = Double(counter)
         let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime] as [String : Any]
+        //test
+        //let userDict = ["challengeWins" : 1]
         
         let polyline = self.pathObject.getPolyline(self.path)
         polyline.strokeColor = .green
@@ -546,6 +550,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             
             self.challengeFirebaseRef!.updateChildValues(dict)
+            
+            //test
+            //let currentUser = FIRAuth.auth()?.currentUser?.uid
+            //self.databaseRef.child("users").child(currentUser!).updateChildValues(userDict)
+            
             self.dismiss(animated: true, completion: nil)
         }))
         

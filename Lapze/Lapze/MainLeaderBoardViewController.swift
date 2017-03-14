@@ -8,18 +8,12 @@
 
 import UIKit
 
-//public enum Leaderboard: String {
-//    case badges = "Badge Collection"
-//    case leaderboard = "Leaderboard"
-//}
 
-class MainLeaderBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let cellId = "badgeCell"
-    let badges = ["b1","b2", "b2.1","b3","b4","b5","b6"]
-    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian"]
+    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
     
-    //let boardItems: [Leaderboard.RawValue] = [Leaderboard.badges.rawValue, Leaderboard.leaderboard.rawValue]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +39,6 @@ class MainLeaderBoardViewController: UIViewController, UICollectionViewDelegate,
         titleLabel.snp.makeConstraints { (view) in
             view.center.equalToSuperview()
             view.height.equalTo(40)
-            
         }
         
         mainBadgesCollectionView.snp.makeConstraints { (view) in
@@ -57,13 +50,13 @@ class MainLeaderBoardViewController: UIViewController, UICollectionViewDelegate,
     
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return badges.count
+        return badgeTitles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
-        cell.badgeImageView.image = UIImage(named: "\(badges[indexPath.row])")
+        cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
         cell.badgeLabel.text = "\(badgeTitles[indexPath.row])"
         return cell
     }
@@ -78,28 +71,18 @@ class MainLeaderBoardViewController: UIViewController, UICollectionViewDelegate,
         
         print(indexPath.row)
     }
-   
-    //MARK: - segmented control
-    func segmentedControlValueChanged() {
-        print("value changed")
+    
+    func showLeaderboard() {
+        print("show leaderBoard")
+        self.navigationController?.pushViewController(LeaderBoardViewController(), animated: true)
     }
     
 
   //MARK: - views
-//    internal var eventSegmentedControl: UISegmentedControl = {
-//        var segmentedControl = UISegmentedControl()
-//        segmentedControl = UISegmentedControl(items: self.boardItems)
-//        let font = UIFont.systemFont(ofSize: 14)
-//        segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
-//        segmentedControl.tintColor = .white
-//        segmentedControl.backgroundColor = ColorPalette.greenThemeColor
-//        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
-//        return segmentedControl
-//    }()
     
     internal var topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .orange
         return view
     }()
     

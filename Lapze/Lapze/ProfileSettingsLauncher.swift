@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+//protocol ProfileDelegate {
+//    func changeAvatar(userPic: String)
+//}
+
 class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     override init() {
@@ -79,6 +83,7 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.chosenProfileImage = "\(indexPath.row)"
+        
         print(indexPath.row)
         
     }
