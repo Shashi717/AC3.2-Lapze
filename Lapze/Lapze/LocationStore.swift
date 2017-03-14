@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class LocationStore {
     
@@ -21,5 +22,18 @@ class LocationStore {
         
         return array
     }
+    
+    func isUserWithinRadius(userLocation: CLLocation, challengeLocation: Location) -> Bool {
+        
+        let loc = CLLocation(latitude: challengeLocation.lat, longitude: challengeLocation.long)
+        let distance = userLocation.distance(from: loc)
+        
+        if  distance < 100.0 {
+            return true
+        }
+        
+        return false
+    }
+
     
 }

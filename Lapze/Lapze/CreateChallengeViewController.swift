@@ -13,8 +13,10 @@ import FirebaseAuth
 import CoreLocation
 
 protocol ChallengeDelegate {
-    func startChallenge(id: String, linkRef: FIRDatabaseReference)
-    func doChallenge(userId: String)
+
+//    func startChallenge(id: String, linkRef: FIRDatabaseReference)
+    func challengeCreated(id: String, linkRef: FIRDatabaseReference)
+
     // var challengeRef: FIRDatabaseReference? { get set }
 }
 
@@ -60,38 +62,54 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     func doneButtonTapped(sender: UIBarButtonItem) {
         
         print("done tapped")
-       
         
         if isLocationOn() == true {
-            createChallenge()
+            
+            let alertController = showAlert(title: "Create this challenge?", message: nil, useDefaultAction: false)
+            
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                
+                self.dismissViewcontroller()
+                self.createChallenge()
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
         }
+            
         else {
-            let alertController = showAlert(title: "Unsuccessful", message: "Seems like your location is off, please check your settings!", useDefaultAction: true)
+            let alertController = showAlert(title: "Unsuccessful", message: "Seems like your location is not turned on, please check your settings!", useDefaultAction: true)
             self.present(alertController, animated: true, completion: nil)
         }
-        
-        _ = self.navigationController?.popViewController(animated: true)
-
     }
     
+    //    func doneButtonTapped(sender: UIBarButtonItem) {
+    //        print("done tapped")
+    //
+    //        let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
+    //
+    //        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+    //            self.dismissViewcontroller()
+    //            self.delegate?.startEvent(name: "Bike")
+    //        }))
+    //
+    //        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    //        present(alertController, animated: true, completion: nil)
+    //
+    //    }
+    //
+
     func createChallenge() {
         
         let user = FIRAuth.auth()!.currentUser!.uid
         let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
-        let userDict = ["challengeData" : "challengeData"]
-        
-        //test
-        databaseRef.child("user").child(user).updateChildValues(userDict)
         
         let linkRef = self.databaseRef.childByAutoId()
         let challengeId = linkRef.key
         challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
+        self.delegate?.challengeCreated(id: challengeId, linkRef: challengeRef)
         
-        
- 
-        self.delegate?.startChallenge(id: challengeId, linkRef: challengeRef)
-      
     }
     
     func isLocationOn() -> Bool {
@@ -101,7 +119,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         }
         return false
     }
-
+    
     
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)

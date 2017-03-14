@@ -43,14 +43,14 @@ class GoogleMapThumbView: UIView {
             view.top.equalTo(profileImageView.snp.bottom).offset(padding)
             view.left.equalToSuperview().offset(padding)
             view.right.equalToSuperview().inset(padding)
-            view.height.equalTo(30.0)
+            view.height.equalTo(40.0)
         }
         
         self.currentChampionNameLabel.snp.makeConstraints { (view) in
             view.top.equalTo(titleLabel.snp.bottom).offset(padding)
             view.left.equalToSuperview().offset(padding)
             view.right.equalToSuperview().inset(padding)
-            view.height.equalTo(30.0)
+            view.height.equalTo(20.0)
         }
         
         self.descriptionLabel.snp.makeConstraints { (view) in
@@ -76,6 +76,7 @@ class GoogleMapThumbView: UIView {
     var titleLabel: UILabel = {
         let label: UILabel = UILabel()
         label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping 
         label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white

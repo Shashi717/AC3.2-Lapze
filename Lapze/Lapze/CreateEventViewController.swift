@@ -71,21 +71,19 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
-        showAlert(message: "Start this event?")
+        
+        let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
+        
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            self.dismissViewcontroller()
+            self.delegate?.startEvent(name: "Bike")
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
+
     }
     
-    func showAlert(message:String){
-        let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
-        let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
-            self.dismissViewcontroller()
-            self.delegate?.startEvent(name: "Bike event")
-        }
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(createEvent)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
-    }
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)
     }
