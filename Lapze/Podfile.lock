@@ -1,4 +1,7 @@
 PODS:
+  - Charts (3.0.1):
+    - Charts/Core (= 3.0.1)
+  - Charts/Core (3.0.1)
   - Firebase (3.13.0):
     - Firebase/Core (= 3.13.0)
   - Firebase/Core (3.13.0):
@@ -42,6 +45,7 @@ PODS:
   - SnapKit (3.2.0)
 
 DEPENDENCIES:
+  - Charts
   - Firebase
   - Firebase/Database
   - FirebaseAuth
@@ -50,6 +54,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC CHECKSUMS:
+  Charts: 0e84f4418e87dad6a9edde221fba37ebb51d3ba7
   Firebase: 5bc34d7b5ff5792e3386c8b28dc6265deeab0da4
   FirebaseAnalytics: 0d1b7d81d5021155be37702a94ba1ec16d45365d
   FirebaseAuth: cc8a1824170adbd351edb7f994490a3fb5c18be6
@@ -62,6 +67,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
 
-PODFILE CHECKSUM: d4b03f2576174a59f68ac6d646152af354d92967
+PODFILE CHECKSUM: 40a8e35ed48c14b6a20895591f522d0fc0e7c326
 
 COCOAPODS: 1.1.1

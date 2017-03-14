@@ -165,7 +165,7 @@ class PopupViewController: UIViewController {
         }
         
     }
-    
+ 
     //MARK: - Views
     internal lazy var popupContainerView: UIView! = {
         let view = UIView()
