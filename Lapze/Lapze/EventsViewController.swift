@@ -58,6 +58,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
     private var allChallenges: [Challenge] = []
+    private var userChampionshipChallenges: [String] = []
     private var eventOn = false
     
     let popVc = PopupViewController()
@@ -93,8 +94,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         challengeStore.getAllChallenges { (challenges) in
             self.allChallenges = challenges
+            self.userChampionshipChallenges = self.getUsersChampionships(challenges)
         }
         findUser()
+
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -116,7 +120,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         for challenge in challenges {
             
-            GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: challenge.type)
+            if self.userChampionshipChallenges.contains(challenge.id) {
+                 GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: "crown")
+            }
+            else {
+                GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: challenge.type)
+            }
         }
     }
     
@@ -185,6 +194,18 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         print("Join event")
         //this should change mapview to specific event
         //dismissPopup()
+    }
+    
+    func getUsersChampionships(_ challenges: [Challenge]) -> [String] {
+        var challengeIds: [String] = []
+        
+        for challenge in challenges {
+            if challenge.champion == currentUser?.uid {
+                challengeIds.append(challenge.id)
+            }
+        }
+        return challengeIds
+        
     }
     
     //MARK: JoinActivity Delegate methods
@@ -485,7 +506,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
                         thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
                     })
-                    thumbView.profileImageView.image = UIImage(named: challenge.type)
+                    
+                    if self.userChampionshipChallenges.contains(id) {
+                        print(self.userChampionshipChallenges)
+                        thumbView.profileImageView.image = UIImage(named: "crown")
+                    }
+                    else {
+                        thumbView.profileImageView.image = UIImage(named: challenge.type)
+                    }
+                    
                     thumbView.titleLabel.text = challenge.name
                     thumbView.descriptionLabel.text = ("\(challenge.type), \(challenge.lastUpdated) ")
                     if let challengePath = challenge.path {
