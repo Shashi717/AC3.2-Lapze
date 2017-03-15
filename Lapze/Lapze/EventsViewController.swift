@@ -94,6 +94,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         challengeStore.getAllChallenges { (challenges) in
             self.allChallenges = challenges
         }
+        
         findUser()
     }
     

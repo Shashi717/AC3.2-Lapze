@@ -40,7 +40,7 @@
 		E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */; };
 		E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */; };
 		E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */; };
-		E39BA26B1E766E47007A9D90 /* MainLeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */; };
+		E39BA26B1E766E47007A9D90 /* MainBadgesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26A1E766E47007A9D90 /* MainBadgesViewController.swift */; };
 		E39BA26D1E771C73007A9D90 /* LeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */; };
 		E39BA26F1E771D40007A9D90 /* LeaderBoardCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */; };
 /* End PBXBuildFile section */
@@ -83,7 +83,7 @@
 		E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsLauncher.swift; sourceTree = "<group>"; };
 		E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingCell.swift; sourceTree = "<group>"; };
 		E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgesCollectionViewCell.swift; sourceTree = "<group>"; };
-		E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLeaderBoardViewController.swift; sourceTree = "<group>"; };
+		E39BA26A1E766E47007A9D90 /* MainBadgesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBadgesViewController.swift; sourceTree = "<group>"; };
 		E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardViewController.swift; sourceTree = "<group>"; };
 		E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,7 +236,7 @@
 		E39BA2701E772118007A9D90 /* Leaderboard */ = {
 			isa = PBXGroup;
 			children = (
-				E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */,
+				E39BA26A1E766E47007A9D90 /* MainBadgesViewController.swift */,
 				E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */,
 			);
 			name = Leaderboard;
@@ -393,7 +393,7 @@
 				E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */,
 				E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
-				E39BA26B1E766E47007A9D90 /* MainLeaderBoardViewController.swift in Sources */,
+				E39BA26B1E766E47007A9D90 /* MainBadgesViewController.swift in Sources */,
 				9B1684961E70911B00377543 /* Path.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,

@@ -13,8 +13,6 @@ import FirebaseAuth
 import CoreLocation
 
 protocol ChallengeDelegate {
-
-//    func startChallenge(id: String, linkRef: FIRDatabaseReference)
     func challengeCreated(id: String, linkRef: FIRDatabaseReference)
 
     // var challengeRef: FIRDatabaseReference? { get set }
