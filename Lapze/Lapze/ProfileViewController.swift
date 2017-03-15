@@ -272,7 +272,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
 //            view.top.bottom.equalToSuperview()
 //            //view.width.equalToSuperview().multipliedBy(0.75)
 //        }
-        
     }
 
     

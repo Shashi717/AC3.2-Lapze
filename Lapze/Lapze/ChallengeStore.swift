@@ -24,6 +24,7 @@ class ChallengeStore {
                 
                 let id = snap.key
                 var timeToBeat: Double?
+                var distance: Double?
                 
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let champion = snap.childSnapshot(forPath: "champion").value as? String,
@@ -33,8 +34,9 @@ class ChallengeStore {
                     let lat = snap.childSnapshot(forPath: "lat").value as? Double,
                     let long = snap.childSnapshot(forPath: "long").value as? Double {
                     
-                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double {
+                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double, let challengeDistance =  snap.childSnapshot(forPath: "distance").value as? Double {
                         timeToBeat = challengeTime
+                        distance = challengeDistance
                     }
                     
                     var path: [Location] = []
@@ -51,15 +53,14 @@ class ChallengeStore {
                                               lat: lat,
                                               long: long,
                                               timeToBeat: timeToBeat,
+                                              distance: distance,
                                               path: path)
                     
                     challengeArray.append(challenge)
                 }
             }
-            
             completion(challengeArray)
         })
-        dump("challenge array >> \(challengeArray)")
     }
     
     
@@ -73,13 +74,15 @@ class ChallengeStore {
             var long: Double?
             var path: [Location] = []
             var timeToBeat: Double?
+            var distance: Double?
             
             if let name = snapshot.childSnapshot(forPath: "name").value as? String,
                 let champion = snapshot.childSnapshot(forPath: "champion").value as? String,
                 let lastUpdated = snapshot.childSnapshot(forPath: "lastUpdated").value as? String,
                 let type = snapshot.childSnapshot(forPath: "type").value as? String {
-                if let challengeTime = snapshot.childSnapshot(forPath: "timeToBeat").value as? Double {
+                if let challengeTime = snapshot.childSnapshot(forPath: "timeToBeat").value as? Double, let challengeDistance =  snapshot.childSnapshot(forPath: "distance").value as? Double {
                     timeToBeat = challengeTime
+                    distance = challengeDistance
                 }
                 
                 if let latitude = snapshot.childSnapshot(forPath: "lat").value as? Double,
@@ -103,6 +106,7 @@ class ChallengeStore {
                                       lat: lat,
                                       long: long,
                                       timeToBeat: timeToBeat,
+                                      distance: distance,
                                       path: path)
                 
             }
@@ -123,6 +127,7 @@ class ChallengeStore {
                 
                 let id = snap.key
                 var timeToBeat: Double?
+                var distance: Double?
                 
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let champion = snap.childSnapshot(forPath: "champion").value as? String,
@@ -132,8 +137,10 @@ class ChallengeStore {
                     let lat = snap.childSnapshot(forPath: "lat").value as? Double,
                     let long = snap.childSnapshot(forPath: "long").value as? Double {
                     
-                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double {
+                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double,
+                        let challengeDistance =  snap.childSnapshot(forPath: "distance").value as? Double {
                         timeToBeat = challengeTime
+                        distance = challengeDistance
                     }
                     
                     var path: [Location] = []
@@ -151,6 +158,7 @@ class ChallengeStore {
                                               lat: lat,
                                               long: long,
                                               timeToBeat: timeToBeat,
+                                              distance: distance,
                                               path: path)
                     
                     challengeArray.append(challenge)
@@ -161,6 +169,4 @@ class ChallengeStore {
         })
         //dump("challenge array >> \(challengeArray)")
     }
-    
- 
 }

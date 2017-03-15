@@ -92,7 +92,7 @@ class PopupViewController: UIViewController {
             }
             else {
                 
-                let location = Location(lat: self.challengeLocation!.lat, long: self.challengeLocation!.long)
+                let location = Location(lat: self.challengeLocation!.latitude, long: self.challengeLocation!.longitude)
                 if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
                     print("User is within the radius")
                     self.delegate?.joinChallenge(user: userId, challengeId: activityId)

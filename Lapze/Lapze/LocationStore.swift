@@ -16,7 +16,7 @@ class LocationStore {
         var array: [[String:Any]] = []
         
         for location in locationArray {
-            let dict = ["lat": location.lat, "long": location.long]
+            let dict = ["lat": location.latitude, "long": location.longitude]
             array.append(dict)
         }
         
@@ -25,7 +25,7 @@ class LocationStore {
     
     func isUserWithinRadius(userLocation: CLLocation, challengeLocation: Location) -> Bool {
         
-        let loc = CLLocation(latitude: challengeLocation.lat, longitude: challengeLocation.long)
+        let loc = CLLocation(latitude: challengeLocation.latitude, longitude: challengeLocation.longitude)
         let distance = userLocation.distance(from: loc)
         
         if  distance < 100.0 {
