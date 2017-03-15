@@ -42,22 +42,26 @@ class GoogleMapThumbView: UIView {
         self.nameLabel.snp.makeConstraints { (view) in
             view.top.equalTo(profileImageView.snp.bottom)
             view.centerX.equalToSuperview()
+            view.height.equalTo(15.0)
         }
         
         self.titleLabel.snp.makeConstraints { (view) in
             view.top.equalTo(nameLabel.snp.bottom).offset(padding)
             view.centerX.equalToSuperview()
+            view.height.equalTo(15.0)
         }
         
         self.descriptionLabel.snp.makeConstraints { (view) in
             view.top.equalTo(titleLabel.snp.bottom).offset(padding)
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
+            view.bottom.equalToSuperview().inset(padding)
         }
     }
     
-    private func addPulse(){
-      
+    
+    func fillData(name: String) {
+        titleLabel.text = name
     }
     
     let profileImageView: UIImageView = {
@@ -72,7 +76,6 @@ class GoogleMapThumbView: UIView {
         let label: UILabel = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textColor = .white
-        label.text = "Thunder Cat"
         return label
     }()
     
@@ -80,15 +83,13 @@ class GoogleMapThumbView: UIView {
         let label: UILabel = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textColor = .white
-        label.text = "Speed Champ"
         return label
     }()
     
     var descriptionLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textColor = .white
-        label.text = "Some random data"
         label.numberOfLines = 2
         label.textAlignment = .center
         return label

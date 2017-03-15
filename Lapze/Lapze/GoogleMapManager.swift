@@ -17,7 +17,7 @@ class GoogleMapManager{
     private var dict: [String: GMSMarker] = [:]
     
     func manage(map: GMSMapView){
-       self.map = map
+        self.map = map
     }
     
     func addMarker(id: String, with locationDict:[String:Double]){
@@ -30,8 +30,26 @@ class GoogleMapManager{
             marker.map = map
             marker.icon = UIImage(named: "010-man")
             marker.title = id
+            
         }
     }
+    
+    func addMarker(id: String, lat: Double, long: Double){
+        if dict[id] == nil{
+            let cllocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let marker = GMSMarker(position: cllocation)
+            self.dict[id] = marker
+            marker.map = map
+            marker.icon = UIImage(named: "marker")
+            marker.title = id
+        }else{
+            let markerTest = getMarker(id: id)
+            markerTest?.position.latitude = lat
+            markerTest?.position.longitude = long
+        }
+        
+    }
+    
     func addMarker(id: String, marker:GMSMarker){
         self.dict[id] = marker
         marker.map = map
@@ -56,7 +74,10 @@ class GoogleMapManager{
         return dict
     }
     
-    func hideAllMarlers(){
-        
+    func hideAllMarkers(){
+        for marker in self.dict{
+            marker.value.map = nil
+        }
+        self.dict = [:]
     }
 }
