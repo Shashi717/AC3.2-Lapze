@@ -113,7 +113,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //test
-        return userStore.
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
