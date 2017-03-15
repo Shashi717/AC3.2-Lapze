@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         
         //Styling
-        UILabel.appearance().font = UIFont(name: "Avenir Next", size: 11.0)
+        UILabel.appearance().font = UIFont(name: "Heiti SC", size: 11.0)
         
         
         //Application appearance

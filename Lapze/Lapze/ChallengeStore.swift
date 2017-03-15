@@ -117,6 +117,56 @@ class ChallengeStore {
         
     }
     
-    
-    
+    func getAllUserChallenges(userId: String, completion: @escaping ([Challenge]) -> Void) {
+        
+        var challengeArray: [Challenge] = []
+        
+        self.databaseRef.child("Challenge").observe(.value, with: {(snapshot) in
+            let enumerator = snapshot.children
+            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
+                
+                let id = snap.key
+                var timeToBeat: Double?
+                var distance: Double?
+                
+                if let name = snap.childSnapshot(forPath: "name").value as? String,
+                    let champion = snap.childSnapshot(forPath: "champion").value as? String,
+                    let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value as? String,
+                    let locationArray = snap.childSnapshot(forPath: "location").value as? [[String:Double]],
+                    let type = snap.childSnapshot(forPath: "type").value as? String,
+                    let lat = snap.childSnapshot(forPath: "lat").value as? Double,
+                    let long = snap.childSnapshot(forPath: "long").value as? Double {
+                    
+                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double,
+                        let challengeDistance =  snap.childSnapshot(forPath: "distance").value as? Double {
+                        timeToBeat = challengeTime
+                        distance = challengeDistance
+                    }
+                    
+                    var path: [Location] = []
+                    for locationDict in locationArray {
+                        let locationObject = Location(lat: locationDict["lat"]!, long: locationDict["long"]!)
+                        path.append(locationObject)
+                    }
+                    
+                    if champion == userId {
+                    let challenge = Challenge(id: id,
+                                              name: name,
+                                              champion: champion,
+                                              lastUpdated: lastUpdated,
+                                              type: type,
+                                              lat: lat,
+                                              long: long,
+                                              timeToBeat: timeToBeat,
+                                              distance: distance,
+                                              path: path)
+                    
+                    challengeArray.append(challenge)
+                    }
+                }
+            }
+            completion(challengeArray)
+        })
+        //dump("challenge array >> \(challengeArray)")
+    }
 }
