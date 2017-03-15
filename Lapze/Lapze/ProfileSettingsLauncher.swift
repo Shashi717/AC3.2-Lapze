@@ -18,7 +18,7 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
         profileImagePicker.dataSource = self
         profileImagePicker.register(ProfileSettingCell.self, forCellWithReuseIdentifier: cellId)
         
-        for i in 0...20 {
+        for i in 0...60 {
             self.appProfileImages.append(String(i))
         }
     }

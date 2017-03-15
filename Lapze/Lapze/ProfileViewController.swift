@@ -67,14 +67,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
-            
         }
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
-        //dump("self userchallenge \(self.userChallenges)")
         for i in 0..<self.userChallenges.count {
             let values = ["\(i)": "\(self.badgeTitles[i])"]
             self.userStore.updateUserData(id: uid!, values: values, child: "badges")
@@ -89,10 +87,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             
             self.userBadges = user.badges //access to global var
         }
-        
-        //profileImageView.image = UIImage(named: "\(userProfileImage)")
-        //userRankLabel.text = "\(self.userChallenges.count)"//"Rank: Master Rider"
-        //activitiesLabel.text = "Activities: Biking, Running"
         challengesLabel.text = "Challenges: Running"
     }
     
@@ -117,14 +111,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //test
         return userChallenges.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
-        //hack badge implementation for visuals
         cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
         return cell
     }
