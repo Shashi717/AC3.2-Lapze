@@ -18,14 +18,16 @@
 		1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */; };
 		1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */; };
 		1AEF108E1E7583EC0086C8E6 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF108D1E7583EC0086C8E6 /* Event.swift */; };
-		1AEF10901E7586C70086C8E6 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF108F1E7586C70086C8E6 /* Location.swift */; };
 		1AEF10921E759FB10086C8E6 /* TopActivityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */; };
 		1AEF10941E75BA710086C8E6 /* BottomActivityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */; };
 		1AEF10961E764F850086C8E6 /* BottomActivityInfoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */; };
 		1AEF10981E766B690086C8E6 /* PulseLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10971E766B690086C8E6 /* PulseLayer.swift */; };
+		1AEF109A1E78CBED0086C8E6 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */; };
 		1AFF36CE1E6DCA6800624AAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
+		9B0767991E738A8C005AA3B8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0767981E738A8C005AA3B8 /* Location.swift */; };
+		9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B07679A1E73902F005AA3B8 /* LocationStore.swift */; };
 		9B1531531E72251C00853B2E /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531521E72251C00853B2E /* Challenge.swift */; };
 		9B1531551E72276A00853B2E /* ChallengeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531541E72276A00853B2E /* ChallengeStore.swift */; };
 		9B1531571E7281E700853B2E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531561E7281E700853B2E /* User.swift */; };
@@ -36,13 +38,18 @@
 		9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */; };
 		9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B19204E1E6DED8400868AB2 /* LoginViewController.swift */; };
 		9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */; };
-		9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */; };
 		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
 		E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */; };
 		E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2F91E6F41B2005BE3B8 /* dayStyle.json */; };
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
 		E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */; };
 		E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */; };
+		E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */; };
+		E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */; };
+		E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */; };
+		E39BA26B1E766E47007A9D90 /* MainLeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */; };
+		E39BA26D1E771C73007A9D90 /* LeaderBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */; };
+		E39BA26F1E771D40007A9D90 /* LeaderBoardCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,15 +67,17 @@
 		1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapThumbView.swift; sourceTree = "<group>"; };
 		1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 		1AEF108D1E7583EC0086C8E6 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		1AEF108F1E7586C70086C8E6 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopActivityInfoView.swift; sourceTree = "<group>"; };
 		1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomActivityInfoView.swift; sourceTree = "<group>"; };
 		1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomActivityInfoScrollView.swift; sourceTree = "<group>"; };
 		1AEF10971E766B690086C8E6 /* PulseLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulseLayer.swift; sourceTree = "<group>"; };
+		1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
+		9B0767981E738A8C005AA3B8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		9B07679A1E73902F005AA3B8 /* LocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
 		9B1531521E72251C00853B2E /* Challenge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
 		9B1531541E72276A00853B2E /* ChallengeStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengeStore.swift; sourceTree = "<group>"; };
 		9B1531561E7281E700853B2E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -79,13 +88,18 @@
 		9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9B19204E1E6DED8400868AB2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		E363F2F91E6F41B2005BE3B8 /* dayStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dayStyle.json; sourceTree = "<group>"; };
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
 		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
+		E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsLauncher.swift; sourceTree = "<group>"; };
+		E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingCell.swift; sourceTree = "<group>"; };
+		E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgesCollectionViewCell.swift; sourceTree = "<group>"; };
+		E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLeaderBoardViewController.swift; sourceTree = "<group>"; };
+		E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardViewController.swift; sourceTree = "<group>"; };
+		E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeaderBoardCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,10 +134,11 @@
 		1A4AA7C11E678BB1006EC158 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				1A95528F1E73579600E37E50 /* ActivityViewController.swift */,
-				9BC893D01E69E1C100FAF0B8 /* ProfileViewController.swift */,
+				E39BA2701E772118007A9D90 /* Leaderboard */,
+				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
+				1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */,
 				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
 				1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */,
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
@@ -143,6 +158,7 @@
 				1AEF10911E759FB10086C8E6 /* TopActivityInfoView.swift */,
 				1AEF10931E75BA710086C8E6 /* BottomActivityInfoView.swift */,
 				1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */,
+				E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -160,6 +176,9 @@
 		1A4AA7C51E678BE6006EC158 /* Controller Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */,
+				E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */,
+				E39BA26E1E771D40007A9D90 /* LeaderBoardCollectionCell.swift */,
 			);
 			name = "Controller Cells";
 			sourceTree = "<group>";
@@ -171,10 +190,10 @@
 				9B1531561E7281E700853B2E /* User.swift */,
 				9B1531521E72251C00853B2E /* Challenge.swift */,
 				9B1531541E72276A00853B2E /* ChallengeStore.swift */,
-				1AEF108F1E7586C70086C8E6 /* Location.swift */,
 				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
 				9B1531581E72820900853B2E /* UserStore.swift */,
-
+				9B0767981E738A8C005AA3B8 /* Location.swift */,
+				9B07679A1E73902F005AA3B8 /* LocationStore.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -235,6 +254,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E39BA2701E772118007A9D90 /* Leaderboard */ = {
+			isa = PBXGroup;
+			children = (
+				E39BA26A1E766E47007A9D90 /* MainLeaderBoardViewController.swift */,
+				E39BA26C1E771C73007A9D90 /* LeaderBoardViewController.swift */,
+			);
+			name = Leaderboard;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -270,7 +298,7 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = ZSE2A75FGT;
+						DevelopmentTeam = G6ZU47QNTF;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -365,6 +393,9 @@
 			files = (
 				1AFF36CE1E6DCA6800624AAA /* FirebaseManager.swift in Sources */,
 				1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */,
+				E39BA2611E74DD61007A9D90 /* ProfileSettingCell.swift in Sources */,
+				9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */,
+				E39BA26D1E771C73007A9D90 /* LeaderBoardViewController.swift in Sources */,
 				9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */,
 				1A95528E1E72460500E37E50 /* MapViewController.swift in Sources */,
 				1A9552901E73579600E37E50 /* ActivityViewController.swift in Sources */,
@@ -372,27 +403,27 @@
 				9B170C241E6A6830003EE1D7 /* ColorPalette.swift in Sources */,
 				9B1531531E72251C00853B2E /* Challenge.swift in Sources */,
 				E363F3021E6F4F46005BE3B8 /* CreateChallengeViewController.swift in Sources */,
-
 				1AEF10941E75BA710086C8E6 /* BottomActivityInfoView.swift in Sources */,
-
 				9B1531591E72820900853B2E /* UserStore.swift in Sources */,
-				1A95528A1E71FD1200E37E50 /* UserLocation.swift in Sources */,
-
 				9B1531551E72276A00853B2E /* ChallengeStore.swift in Sources */,
 				9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */,
 				1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */,
 				1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */,
-				1AEF10901E7586C70086C8E6 /* Location.swift in Sources */,
-				9BC893D11E69E1C100FAF0B8 /* ProfileViewController.swift in Sources */,
 				1AEF10961E764F850086C8E6 /* BottomActivityInfoScrollView.swift in Sources */,
+				E39BA26F1E771D40007A9D90 /* LeaderBoardCollectionCell.swift in Sources */,
+				9B0767991E738A8C005AA3B8 /* Location.swift in Sources */,
 				9B170C221E6A5FEC003EE1D7 /* EventsViewController.swift in Sources */,
 				1A9552881E71E70C00E37E50 /* UserLocationMarker.swift in Sources */,
+				E39BA25F1E74CC60007A9D90 /* ProfileSettingsLauncher.swift in Sources */,
+				E39BA2651E75171B007A9D90 /* BadgesCollectionViewCell.swift in Sources */,
 				1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */,
+				E39BA26B1E766E47007A9D90 /* MainLeaderBoardViewController.swift in Sources */,
 				9B1684961E70911B00377543 /* Path.swift in Sources */,
 				1AEF10921E759FB10086C8E6 /* TopActivityInfoView.swift in Sources */,
 				9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */,
 				1A95528C1E723FF200E37E50 /* LocationManager.swift in Sources */,
 				1AEF108E1E7583EC0086C8E6 /* Event.swift in Sources */,
+				1AEF109A1E78CBED0086C8E6 /* ProfileViewController.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
 				9B1531571E7281E700853B2E /* User.swift in Sources */,
 			);
@@ -512,10 +543,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = G6ZU47QNTF;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.shashi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -528,10 +559,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = G6ZU47QNTF;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.shashi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

@@ -24,8 +24,8 @@ class GoogleMapThumbView: UIView {
     
     private func setUpView(){
         self.addSubview(profileImageView)
-        self.addSubview(nameLabel)
         self.addSubview(titleLabel)
+        self.addSubview(currentChampionNameLabel)
         self.addSubview(descriptionLabel)
         
         self.backgroundColor = ColorPalette.orangeThemeColor
@@ -39,20 +39,22 @@ class GoogleMapThumbView: UIView {
             view.size.equalTo(CGSize(width: 30, height: 30))
         }
         
-        self.nameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(profileImageView.snp.bottom)
-            view.centerX.equalToSuperview()
-            view.height.equalTo(15.0)
+        self.titleLabel.snp.makeConstraints { (view) in
+            view.top.equalTo(profileImageView.snp.bottom).offset(padding)
+            view.left.equalToSuperview().offset(padding)
+            view.right.equalToSuperview().inset(padding)
+            view.height.equalTo(40.0)
         }
         
-        self.titleLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(nameLabel.snp.bottom).offset(padding)
-            view.centerX.equalToSuperview()
-            view.height.equalTo(15.0)
+        self.currentChampionNameLabel.snp.makeConstraints { (view) in
+            view.top.equalTo(titleLabel.snp.bottom).offset(padding)
+            view.left.equalToSuperview().offset(padding)
+            view.right.equalToSuperview().inset(padding)
+            view.height.equalTo(20.0)
         }
         
         self.descriptionLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(titleLabel.snp.bottom).offset(padding)
+            view.top.equalTo(currentChampionNameLabel.snp.bottom).offset(padding)
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
             view.bottom.equalToSuperview().inset(padding)
@@ -72,25 +74,31 @@ class GoogleMapThumbView: UIView {
         return imageview
     }()
     
-    var nameLabel: UILabel = {
+    var titleLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping 
+        label.numberOfLines = 0
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white
         return label
     }()
     
-    var titleLabel: UILabel = {
+    var currentChampionNameLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white
         return label
     }()
     
     var descriptionLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.numberOfLines = 0
         label.textColor = .white
-        label.numberOfLines = 2
         label.textAlignment = .center
         return label
     }()

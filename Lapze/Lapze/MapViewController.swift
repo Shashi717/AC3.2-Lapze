@@ -142,7 +142,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         let view: GoogleMapThumbView = GoogleMapThumbView()
         view.profileImageView.image = marker.icon
-        view.nameLabel.text = marker.title
+        view.titleLabel.text = marker.title
         
         switch markerOption {
         case .event:

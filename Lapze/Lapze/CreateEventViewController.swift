@@ -49,7 +49,10 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         setupViewHierarchy()
         configureConstraints()
+        
+
     }
+
     
     //MARK: - Utilities
     
@@ -70,22 +73,20 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         print("done tapped")
-        showAlert(message: "Start this event?")
+        
+        let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
+        
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            self.dismissViewcontroller()
+            self.delegate?.startEvent(name: "Bike")
+        }))
+
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
+
     }
     
-    func showAlert(message:String){
-        let alert: UIAlertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
-        let createEvent: UIAlertAction = UIAlertAction(title: "Create", style: .default) { (_) in
-            self.delegate?.startEvent(name: self.pickedActivity.rawValue.capitalized)
-            //FirebaseManager.shared.addToFirebase(event: self.createEventObject())
-            self.dismissViewcontroller()
-        }
-        
-        let cancel: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(createEvent)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
-    }
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)
     }
@@ -188,15 +189,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
         userEventInfo["type"] = pickedActivity.rawValue
-        
-        //end time can only be configured for certain activities
-        if noTimeLimitActivities.contains(pickedActivity) {
-            pickedEndTimeLabel.isUserInteractionEnabled = false
-        }
-        else {
-            pickedEndTimeLabel.isUserInteractionEnabled = true
-        }
-        
+     
     }
     //MARK: - Setup
     
@@ -422,7 +415,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         label.text = "..."
         label.textColor = .lightGray
         label.textAlignment = .right
-        label.isUserInteractionEnabled = false
+        label.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(endTimeLabelTapped(sender:)))
         label.addGestureRecognizer(tap)
         return label
@@ -474,5 +467,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         barButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelButtonTapped(sender:)))
         return barButton
     }()
+    
     
 }

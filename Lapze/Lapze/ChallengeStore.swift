@@ -23,46 +23,80 @@ class ChallengeStore {
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
                 
                 let id = snap.key
-                
+                var timeToBeat: Double?
+                var distance: Double?
                 
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let champion = snap.childSnapshot(forPath: "champion").value as? String,
                     let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value as? String,
-                    let location = snap.childSnapshot(forPath: "location").value as? [[String:Double]],
+                    let locationArray = snap.childSnapshot(forPath: "location").value as? [[String:Double]],
                     let type = snap.childSnapshot(forPath: "type").value as? String,
                     let lat = snap.childSnapshot(forPath: "lat").value as? Double,
                     let long = snap.childSnapshot(forPath: "long").value as? Double {
                     
-                    let challengeObject = Challenge(id: id,
-                                                    name: name,
-                                                    champion: champion,
-                                                    lastUpdated: lastUpdated,
-                                                    type: type,
-                                                    lat: lat,
-                                                    long: long,
-                                                    location: location)
+                    if let challengeTime = snap.childSnapshot(forPath: "timeToBeat").value as? Double, let challengeDistance =  snap.childSnapshot(forPath: "distance").value as? Double {
+                        timeToBeat = challengeTime
+                        distance = challengeDistance
+                    }
                     
-                    challengeArray.append(challengeObject)
+                    var path: [Location] = []
+                    for locationDict in locationArray {
+                        let locationObject = Location(lat: locationDict["lat"]!, long: locationDict["long"]!)
+                        path.append(locationObject)
+                    }
+                    
+                    let challenge = Challenge(id: id,
+                                              name: name,
+                                              champion: champion,
+                                              lastUpdated: lastUpdated,
+                                              type: type,
+                                              lat: lat,
+                                              long: long,
+                                              timeToBeat: timeToBeat,
+                                              distance: distance,
+                                              path: path)
+                    
+                    challengeArray.append(challenge)
                 }
             }
-            
             completion(challengeArray)
         })
     }
     
+    
     func getChallenge(id: String, completion: @escaping (Challenge) -> Void) {
         
-        var challenge: Challenge!
+        var challenge: Challenge?
         
         self.databaseRef.child("Challenge").child(id).observe(.value, with: {(snapshot) in
+            
+            var lat: Double?
+            var long: Double?
+            var path: [Location] = []
+            var timeToBeat: Double?
+            var distance: Double?
             
             if let name = snapshot.childSnapshot(forPath: "name").value as? String,
                 let champion = snapshot.childSnapshot(forPath: "champion").value as? String,
                 let lastUpdated = snapshot.childSnapshot(forPath: "lastUpdated").value as? String,
-                let location = snapshot.childSnapshot(forPath: "location").value as? [[String:Double]],
-                let type = snapshot.childSnapshot(forPath: "type").value as? String,
-                let lat = snapshot.childSnapshot(forPath: "lat").value as? Double,
-                let long = snapshot.childSnapshot(forPath: "long").value as? Double {
+                let type = snapshot.childSnapshot(forPath: "type").value as? String {
+                if let challengeTime = snapshot.childSnapshot(forPath: "timeToBeat").value as? Double, let challengeDistance =  snapshot.childSnapshot(forPath: "distance").value as? Double {
+                    timeToBeat = challengeTime
+                    distance = challengeDistance
+                }
+                
+                if let latitude = snapshot.childSnapshot(forPath: "lat").value as? Double,
+                    let longitude = snapshot.childSnapshot(forPath: "long").value as? Double,
+                    let locationArray = snapshot.childSnapshot(forPath: "location").value as? [[String:Double]]
+                {
+                    lat = latitude
+                    long = longitude
+                    
+                    for locationDict in locationArray {
+                        let locationObject = Location(lat: locationDict["lat"]!, long: locationDict["long"]!)
+                        path.append(locationObject)
+                    }
+                }
                 
                 challenge = Challenge(id: id,
                                       name: name,
@@ -71,12 +105,18 @@ class ChallengeStore {
                                       type: type,
                                       lat: lat,
                                       long: long,
-                                      location: location)
+                                      timeToBeat: timeToBeat,
+                                      distance: distance,
+                                      path: path)
                 
             }
-            
-            completion(challenge)
+            if let challenge = challenge {
+                completion(challenge)
+            }
         })
+        
     }
+    
+    
     
 }

@@ -13,8 +13,8 @@ import CoreLocation
 class MainTabController: UITabBarController{
     
     private let profileVC = UINavigationController(rootViewController: ProfileViewController())
-    private let createEventVC = UINavigationController(rootViewController: CreateEventViewController())
     private let activityVC = UINavigationController(rootViewController: ActivityViewController())
+    private let leaderBoardVc = UINavigationController(rootViewController: LeaderBoardViewController())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,15 +72,16 @@ class MainTabController: UITabBarController{
     }
     
     private func setUpTabBar(){
-        self.viewControllers = [activityVC, profileVC, createEventVC]
+
+        self.viewControllers = [activityVC, profileVC, leaderBoardVc]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         profileVC.tabBarItem = profileTab
-        
-        let createEventTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "011-crown"), selectedImage: #imageLiteral(resourceName: "011-crown"))
-        createEventTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-        createEventVC.tabBarItem = createEventTab
+
+        let leaderBoardTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "011-crown"), selectedImage: #imageLiteral(resourceName: "011-crown"))
+        leaderBoardTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        leaderBoardVc.tabBarItem = leaderBoardTab
         
         let activityTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "home"), selectedImage: #imageLiteral(resourceName: "home"))
         activityTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
