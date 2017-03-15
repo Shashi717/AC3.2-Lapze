@@ -97,7 +97,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.userChampionshipChallenges = self.getUsersChampionships(challenges)
         }
         findUser()
-
         
     }
     
@@ -629,7 +628,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                     if locationStore.isUserWithinRadius(userLocation: self.userLocation!, challengeLocation: endLocation) {
                         let currentDistance = (self.distance/1609.34).roundTo(places: 2)
                         if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.05) {
-                            let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": "now"] as [String : Any]
+                            
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "MMM dd, yyyy"
+                            let date = dateFormatter.string(from: Date())
+                            
+                            
+                            
+                            let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": date] as [String : Any]
                             self.challengeFirebaseRef?.updateChildValues(dict)
                             let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
                             self.present(alertController, animated: true, completion: nil)
