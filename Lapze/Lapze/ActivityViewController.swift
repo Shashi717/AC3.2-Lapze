@@ -13,6 +13,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
     private var showInfoWindow: Bool = false
+    private var timer: Timer = Timer()
+    private var counter = 0
     
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
@@ -43,8 +45,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         
         //Notify child view controller
         mapViewController.didMove(toParentViewController: self)
+        
+        //Default map state
+        mapViewController.updateMapState(state: .events)
     }
-    
+    //MARK:- Map Utilties
     @objc private func changeMapState(sender: UISegmentedControl){
         guard let activity = MapViewControllerState(rawValue: sender.selectedSegmentIndex) else { return }
         
@@ -68,7 +73,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         }
     }
     
-    @objc private func addButtonHandle(){
+    @objc private func createActivityHandle(){
         switch viewControllerState{
         case .challenges:
             let challengeVc: CreateChallengeViewController = CreateChallengeViewController()
@@ -167,14 +172,43 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
+        startTimer()
         animateInfoWindow()
     }
     
     func endEvent() {
         mapViewController.endActivity()
+        stopTimer()
         animateInfoWindow()
     }
     
+    //MARK:- Timer Utilities
+    private func startTimer(){
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+        timer.fire()
+    }
+    
+    private func stopTimer(){
+        timer.invalidate()
+        counter = 0
+    }
+    
+    @objc private func tick(){
+        counter += 1
+        bottomScrollInfoView.infoView.timeLabel.text = timeString(TimeInterval(counter))
+    }
+    
+    private func timeString(_ time: TimeInterval) -> String {
+        let hours = Int(time) / 3600
+        let minutes = Int(time) / 60 % 60
+        let seconds = Int(time) % 60
+        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+    }
+    
+    //MARK: - Challenge Delegate methods
+    
+    
+    //MARK:- Views
     fileprivate lazy var activitySegmentedControl: UISegmentedControl = {
         var segmentedControl = UISegmentedControl(items: ["Events","Challenges"])
         let font = UIFont.systemFont(ofSize: 14)
@@ -198,7 +232,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         button.layer.shadowRadius = 2
         button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(addButtonHandle), for: .touchUpInside)
+        button.addTarget(self, action: #selector(createActivityHandle), for: .touchUpInside)
         return button
     }()
 }

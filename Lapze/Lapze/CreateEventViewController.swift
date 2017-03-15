@@ -49,8 +49,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         setupViewHierarchy()
         configureConstraints()
-        
-
     }
 
     

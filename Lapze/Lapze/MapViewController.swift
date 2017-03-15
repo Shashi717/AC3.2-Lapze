@@ -22,7 +22,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     fileprivate enum TrackingBehavior {
         case followWithPathMarking
-       // case limitedFollow(radius:Int)
+        // case limitedFollow(radius:Int)
         case limitedFollow
         case none
     }
@@ -33,7 +33,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case none
     }
     
-    fileprivate var markerOption: MarkerOption = .none
+    fileprivate var markerOption: MarkerOption = .event{
+        didSet{
+            updateMarkers()
+        }
+    }
     fileprivate var trackingBehavior: TrackingBehavior = .none
     fileprivate var userLocationMarker: GMSMarker?
     fileprivate var viewControllerState: MapViewControllerState = .events
@@ -68,29 +72,49 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     public func updateMapState(state: MapViewControllerState){
         viewControllerState = state
+        switch state{
+        case .challenges:
+            markerOption = .challenge
+        case .events:
+            markerOption = .event
+        }
     }
     
     //MARK:- Activity update
     public func startActivity(){
         switch viewControllerState{
         case .challenges:
-            print("Challenges start")
+            trackingBehavior = .followWithPathMarking
         case .events:
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
-            userLocationMarker?.iconView = nil
-            userLocationMarker?.icon = UIImage(named: "010-man")
         }
+        userLocationMarker?.iconView = nil
+        userLocationMarker?.icon = UIImage(named: "7")
+        markerOption = .none
     }
     
     public func endActivity(){
         switch viewControllerState{
         case .challenges:
             print("Challenges end")
+            markerOption = .challenge
         case .events:
-            userLocationMarker?.iconView = UserLocationMarker()
-            userLocationMarker?.icon = nil
+            markerOption = .event
         }
+        userLocationMarker?.iconView = UserLocationMarker()
+        userLocationMarker?.icon = nil
         trackingBehavior = .none
+    }
+    
+    private func updateMarkers(){
+        switch markerOption {
+        case .challenge:
+            print("challenge markers")
+        case .event:
+            print("event markers")
+        case .none:
+            print("show no markers")
+        }
     }
     
     //MARK:- Location manager delegate methods
@@ -150,7 +174,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case .challenge:
             view.backgroundColor = ColorPalette.orangeThemeColor
         case .none:
-            break
+            return nil
         }
         return view
     }

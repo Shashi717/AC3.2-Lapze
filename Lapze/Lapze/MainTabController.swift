@@ -15,6 +15,7 @@ class MainTabController: UITabBarController{
     private let profileVC = UINavigationController(rootViewController: ProfileViewController())
     private let activityVC = UINavigationController(rootViewController: ActivityViewController())
     private let leaderBoardVc = UINavigationController(rootViewController: LeaderBoardViewController())
+    private let eventVC = UINavigationController(rootViewController: EventsViewController())
     
     override func viewDidLoad() {
         super.viewDidLoad()

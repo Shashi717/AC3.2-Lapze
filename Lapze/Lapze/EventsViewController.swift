@@ -188,7 +188,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             }
             else {
                 let createEventVc = CreateChallengeViewController()
-                //  createEventVc.delegate = self
+                createEventVc.delegate = self
                 self.show(createEventVc, sender: self)
             }
         default:
