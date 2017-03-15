@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     var userChallenges: [Challenge] = [] {
         didSet {
             print("changed from \(oldValue) to \(userChallenges)")
+            self.badgesCollectionView.reloadData()
         }
     }
 
@@ -54,8 +55,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         //setupDataChart(dataPoints: months, values: unitsSold)
     }
     
-    
-    
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
@@ -68,6 +67,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
+            
         }
     }
     
@@ -87,7 +87,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.usernameLabel.text = "\(user.name)"
             self.profileImageView.image = UIImage(named: "\(user.profilePic)")
             
-            self.userBadges = user.badges
+            self.userBadges = user.badges //access to global var
         }
         
         //profileImageView.image = UIImage(named: "\(userProfileImage)")
@@ -125,7 +125,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         //hack badge implementation for visuals
-        cell.badgeImageView.image = UIImage(named: "question")
+        cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
         return cell
     }
     
@@ -212,6 +212,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         //self.barStatusContainer.addSubview(horiBarChart)
         self.view.addSubview(activitiesLabel)
     
+        
     }
     
     func configureConstraints() {
