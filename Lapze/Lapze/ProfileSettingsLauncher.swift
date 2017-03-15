@@ -8,11 +8,7 @@
 
 import Foundation
 import UIKit
-
-protocol ProfilePicDelegate {
-    //func setAvatar(userPic: String)
-    var setAvatar: String { get }
-}
+import Firebase
 
 class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -30,8 +26,9 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     let cellId = "cellId"
     
     var appProfileImages = [String]()
-    var chosenProfileImage = "Profile"
-    let delegate: ProfilePicDelegate? = nil
+    let databaseRef = FIRDatabase.database().reference()
+    let uid = FIRAuth.auth()?.currentUser?.uid
+    private let userStore = UserStore()
     
     func showAvatars() {
         
@@ -87,8 +84,9 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.chosenProfileImage = "\(indexPath.row)"
-        //self.delegate?.setAvatar
+        
+        let values = ["profilePic": "\(indexPath.row)"]
+        userStore.updateUserData(id: self.uid!, values: values, child: nil)
         
         print(indexPath.row)
         

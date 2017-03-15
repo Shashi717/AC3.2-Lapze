@@ -16,15 +16,12 @@ protocol ProfileDelegate {
     func getActivityData(_ challenges: [Challenge])
 }
 
-//protocol ProfilePicDelegate {
-//    func setAvatar(userPic: String)
-//}
-
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ProfileDelegate {
     
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
     let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
+    var userBadges = [String]()
     let cellId = "badges"
     var userProfileImage = "0"
     let uid = FIRAuth.auth()?.currentUser?.uid
@@ -51,8 +48,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         getUserChallenges()
     
         //setupDataChart(dataPoints: months, values: unitsSold)
-        
-        
     }
     
     func getUserChallenges() {
@@ -60,39 +55,37 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.userChallenges = challenges
             self.userRankLabel.text = "\(self.userChallenges.count)"
             
+            //piechart data
             var activityDataDict = [String: Double]()
             for challenge in challenges {
                 activityDataDict[challenge.type] = activityDataDict[challenge.type] ?? 1
             }
             self.setChart(userData: activityDataDict)
-            
             self.getActivityData(challenges)
             
-            //test: set badges
         }
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
-        //dump("protocol \(userChallenges)")
-    }
-    
-    func setAvatar(userPic: String) {
-        DispatchQueue.main.async {
-            self.profileImageView.image = UIImage(named: userPic)
+        
+        for i in 0..<self.userChallenges.count {
+            let values = ["\(i)": "\(self.badgeTitles[i])"]
+            self.userStore.updateUserData(id: uid!, values: values, child: "badges")
         }
     }
-    
-
 
     func loadUser() {
         guard let userId = uid else { return }
         userStore.getUser(id: userId) { (user) in
             self.usernameLabel.text = "\(user.name)"
+            self.profileImageView.image = UIImage(named: "\(user.profilePic)")
+            
+            self.userBadges = user.badges
         }
         
-        profileImageView.image = UIImage(named: "\(userProfileImage)")
+        //profileImageView.image = UIImage(named: "\(userProfileImage)")
         //userRankLabel.text = "\(self.userChallenges.count)"//"Rank: Master Rider"
         //activitiesLabel.text = "Activities: Biking, Running"
         challengesLabel.text = "Challenges: Running"
@@ -115,26 +108,19 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func pickAvatar() {
         print("picking pic")
         profileSetting.showAvatars()
-        DispatchQueue.main.async {
-            let image = self.profileSetting.chosenProfileImage
-            self.profileImageView.image = UIImage(named: "\(image)")
-        }
-    }
-    
-    func changeAvatar(userPic: String) {
-        self.profileImageView.image = UIImage(named: "\(userPic)")
     }
     
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return badgeTitles.count - 4
+        //test
+        return userStore.
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         //hack badge implementation for visuals
-        cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
+        cell.badgeImageView.image = UIImage(named: "question")
         return cell
     }
     
