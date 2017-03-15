@@ -14,7 +14,7 @@ class ChallengeStore {
     
     let databaseRef = FIRDatabase.database().reference()
     
-    func getAllChallenges(completion: @escaping ([Challenge]) -> Void) {
+     func getAllChallenges(completion: @escaping ([Challenge]) -> Void) {
         
         var challengeArray: [Challenge] = []
         
