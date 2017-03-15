@@ -61,7 +61,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         
-        if isLocationOn() == true {
+        if isLocationOn() {
             
             let alertController = showAlert(title: "Create this challenge?", message: nil, useDefaultAction: false)
             
