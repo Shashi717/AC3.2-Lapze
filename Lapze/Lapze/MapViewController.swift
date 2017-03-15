@@ -46,6 +46,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             updateUserLocationMarker(location: userCurrentLocation!)
         }
     }
+
     private var previousLocation: CLLocation?
     private var allChallenges: [Challenge] = []
     private var userChampionshipChallenges: [String] = []
@@ -56,7 +57,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     let userPath = Path()
     var path: [Location] = []
     var distance: Double = 0.0
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +64,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         LocationManager.sharedManager.delegate = self
         googleMapView.delegate = self
         FirebaseManager.shared.startObserving(node: .event)
+
         GoogleMapManager.shared.manage(map: self.googleMapView)
         getAllChallenges()
+
     }
     
     private func setUpViewController(){
@@ -117,13 +119,17 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
+
         distance = 0.0
+
     }
     
     private func updateMarkers(){
         switch markerOption {
         case .challenge:
+
             self.markChallenges(allChallenges)
+
         case .event:
             print("event markers")
         case .none:
@@ -240,9 +246,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch trackingBehavior{
         case .followWithPathMarking:
+
                 trackDistance()
         case .limitedFollow:
                 trackDistance()
+
         case .none:
             print(trackingBehavior)
         }
@@ -273,6 +281,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+
     private func trackDistance(){
         let currentLocation = LocationManager.sharedManager.currentLocation
         if previousLocation != nil {
@@ -283,6 +292,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         previousLocation = currentLocation
     }
     
+
     public func viewMarkers() {
         
     }
@@ -291,6 +301,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
         
+
         let thumbView: GoogleMapThumbView = GoogleMapThumbView()
         thumbView.profileImageView.image = marker.icon
         marker.tracksInfoWindowChanges = true

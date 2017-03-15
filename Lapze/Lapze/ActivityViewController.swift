@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 import FirebaseDatabase
 
 class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate {
@@ -20,6 +21,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let timerEnd:TimeInterval = 0.0
     private var counter = 0
     private let challengeStore: ChallengeStore = ChallengeStore()
+
     
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
@@ -181,12 +183,15 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animateInfoWindow()
     }
     
+
     @objc private func endEvent() {
+
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
     }
     
+
     //MARK:- Challenge Delegate Methods
     func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
         
@@ -203,6 +208,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
+
     //MARK:- Timer Utilities
     private func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
@@ -217,7 +223,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func tick(){
         counter += 1
         bottomScrollInfoView.infoView.timeLabel.text = timeString(TimeInterval(counter))
+
         bottomScrollInfoView.infoView.distanceLabel.text = String((mapViewController.distance/1609.34).roundTo(places: 2))
+
     }
     
     private func timeString(_ time: TimeInterval) -> String {
