@@ -179,15 +179,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         let pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
         userEventInfo["type"] = pickedActivity.rawValue
-        
-        //end time can only be configured for certain activities
-        if noTimeLimitActivities.contains(pickedActivity) {
-            pickedEndTimeLabel.isUserInteractionEnabled = false
-        }
-        else {
-            pickedEndTimeLabel.isUserInteractionEnabled = true
-        }
-        
+     
     }
     //MARK: - Setup
     
@@ -413,7 +405,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         label.text = "..."
         label.textColor = .lightGray
         label.textAlignment = .right
-        label.isUserInteractionEnabled = false
+        label.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(endTimeLabelTapped(sender:)))
         label.addGestureRecognizer(tap)
         return label

@@ -59,10 +59,8 @@ class ChallengeStore {
                     challengeArray.append(challenge)
                 }
             }
-            
             completion(challengeArray)
         })
-        dump("challenge array >> \(challengeArray)")
     }
     
     

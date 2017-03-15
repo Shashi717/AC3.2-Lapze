@@ -204,7 +204,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         pieChartDataSet.colors = colors
         self.pieChart.legend.enabled =  false
         //self.pieChart.drawEntryLabelsEnabled = false
-        self.pieChart.
+       // self.pieChart.
     }
 
     
