@@ -12,16 +12,22 @@ import GoogleMaps
 
 class Path {
     
-    let path = GMSMutablePath()
+    private let path = GMSMutablePath()
+    private var polyline = GMSPolyline()
     
-    func getPolyline(_ coordinatesArr: [[String:CLLocationDegrees]] ) -> GMSPolyline {
-        for dict in coordinatesArr {
-            if let lat = dict["lat"], let long = dict["long"] {
-                let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
-                path.add(coordinates)
-            }
+    func getPolyline(_ coordinatesArr: [Location] ) -> GMSPolyline {
+         path.removeAllCoordinates()
+        for location in coordinatesArr {
+            let lat = location.lat
+            let long = location.long
+            let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
+            path.add(coordinates)
         }
-        return GMSPolyline(path: path)
+        polyline.path = path
+        return polyline
     }
     
+    func removePolyline() {
+        polyline.map = nil
+    }
 }

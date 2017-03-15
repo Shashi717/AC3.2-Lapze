@@ -13,8 +13,11 @@ import FirebaseAuth
 import CoreLocation
 
 protocol ChallengeDelegate {
-    func startChallenge(user: String, linkRef: FIRDatabaseReference)
-   // var challengeRef: FIRDatabaseReference? { get set }
+
+//    func startChallenge(id: String, linkRef: FIRDatabaseReference)
+    func challengeCreated(id: String, linkRef: FIRDatabaseReference)
+
+    // var challengeRef: FIRDatabaseReference? { get set }
 }
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
@@ -25,10 +28,10 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var shareLocation = false
     var shareProfile = false
     var delegate: ChallengeDelegate?
-
+    
     let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,22 +61,70 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         
-        print("done tapped")
-        createChallenge()
-
-       _ = self.navigationController?.popViewController(animated: true)
+        if isLocationOn() == true {
+            
+            let alertController = showAlert(title: "Create this challenge?", message: nil, useDefaultAction: false)
+            
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                
+                self.dismissViewcontroller()
+                self.createChallenge()
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
+            
+        else {
+            let alertController = showAlert(title: "Unsuccessful", message: "Seems like your location is not turned on, please check your settings!", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
+    //    func doneButtonTapped(sender: UIBarButtonItem) {
+    //        print("done tapped")
+    //
+    //        let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
+    //
+    //        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+    //            self.dismissViewcontroller()
+    //            self.delegate?.startEvent(name: "Bike")
+    //        }))
+    //
+    //        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    //        present(alertController, animated: true, completion: nil)
+    //
+    //    }
+    //
+
     func createChallenge() {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        let date = dateFormatter.string(from: Date())
+        
         let user = FIRAuth.auth()!.currentUser!.uid
-        let dict = ["champion": user, "lastUpdated":pickedDateLabel.text!,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
+        let dict = ["champion": user, "lastUpdated": date,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
         
         let linkRef = self.databaseRef.childByAutoId()
-        challengeRef = databaseRef.child("Challenge").child(linkRef.key)
+        let challengeId = linkRef.key
+        challengeRef = databaseRef.child("Challenge").child(challengeId)
         challengeRef.updateChildValues(dict)
+        self.delegate?.challengeCreated(id: challengeId, linkRef: challengeRef)
         
-  
-        self.delegate?.startChallenge(user: user, linkRef: challengeRef)
+    }
+    
+    func isLocationOn() -> Bool {
+        let locationManager = CLLocationManager()
+        if locationManager.location != nil {
+            return true
+        }
+        return false
+    }
+    
+    
+    func dismissViewcontroller(){
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func showDatePicker() {
@@ -178,14 +229,14 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         navigationItem.rightBarButtonItem = doneButton
         self.view.addSubview(challengeNameContainer)
         self.view.addSubview(activityContainer)
-        self.view.addSubview(dateContainer)
+//        self.view.addSubview(dateContainer)
         self.view.addSubview(pickerContainer)
         self.challengeNameContainer.addSubview(challengeNameLabel)
         self.challengeNameContainer.addSubview(challengeNameTextField)
         self.activityContainer.addSubview(activityLabel)
         self.activityContainer.addSubview(pickedActivityLabel)
-        self.dateContainer.addSubview(dateLabel)
-        self.dateContainer.addSubview(pickedDateLabel)
+//        self.dateContainer.addSubview(dateLabel)
+//        self.dateContainer.addSubview(pickedDateLabel)
     }
     
     func configureConstraints() {
@@ -199,11 +250,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
             view.left.right.equalToSuperview()
             view.height.equalTo(44.0)
         }
-        dateContainer.snp.makeConstraints { (view) in
-            view.top.equalTo(activityContainer.snp.bottom).offset(22.0)
-            view.left.right.equalToSuperview()
-            view.height.equalTo(44.0)
-        }
+//        dateContainer.snp.makeConstraints { (view) in
+//            view.top.equalTo(activityContainer.snp.bottom).offset(22.0)
+//            view.left.right.equalToSuperview()
+//            view.height.equalTo(44.0)
+//        }
         challengeNameLabel.snp.makeConstraints { (view) in
             view.top.bottom.equalToSuperview()
             view.left.equalToSuperview().offset(16.0)
@@ -224,16 +275,16 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
             view.right.equalToSuperview().inset(16.0)
             view.width.equalTo(150.0)
         }
-        dateLabel.snp.makeConstraints { (view) in
-            view.top.bottom.equalToSuperview()
-            view.left.equalToSuperview().offset(16.0)
-            view.width.equalTo(100.0)
-        }
-        pickedDateLabel.snp.makeConstraints { (view) in
-            view.top.bottom.equalToSuperview()
-            view.right.equalToSuperview().inset(16.0)
-            view.width.equalTo(150.0)
-        }
+//        dateLabel.snp.makeConstraints { (view) in
+//            view.top.bottom.equalToSuperview()
+//            view.left.equalToSuperview().offset(16.0)
+//            view.width.equalTo(100.0)
+//        }
+//        pickedDateLabel.snp.makeConstraints { (view) in
+//            view.top.bottom.equalToSuperview()
+//            view.right.equalToSuperview().inset(16.0)
+//            view.width.equalTo(150.0)
+//        }
         pickerContainer.snp.makeConstraints { (view) in
             view.bottom.left.right.equalToSuperview()
         }

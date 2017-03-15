@@ -17,4 +17,7 @@ struct ColorPalette {
     static let logoGreenColor = UIColor(red:0.21, green:0.54, blue:0.53, alpha:1.0)
     static let spaceGrayColor = UIColor(red:0.93, green:0.93, blue:0.93, alpha:1.0)
     
+    
+    //profile color test
+    static let darkBlue = UIColor(red:0.22, green:0.26, blue:0.35, alpha:1.0)
 }

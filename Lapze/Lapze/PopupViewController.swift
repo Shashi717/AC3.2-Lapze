@@ -8,34 +8,61 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
+import CoreLocation
+
+protocol JoinActivityDelegate {
+    func joinChallenge(user: String, challengeId: String)
+    func actionButtonTapped(didCreateActivity: Bool)
+}
 
 class PopupViewController: UIViewController {
-    var segment: Int?
     
+    var segment: Int?
+    var delegate: JoinActivityDelegate?
+    var userId: String = ""
+    var activityId: String = ""
+    var didCreateActivity = false
+    var userLocation: CLLocation?
+    
+    var challengeLocation: Location?
+    let locationStore = LocationStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .clear
+        
         //tap gesture
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dissmissView))
         view.addGestureRecognizer(tap)
         setupViewHierarchy()
         configureConstraints()
         
-        //popup data
-       // fillMockupData()
         fillPopupForChallenge()
         
         //switch
         if segment == 0 {
-            print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
         } else {
-            print("segment: \(segment)")
             self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.isBeingDismissed {
+            self.clearData()
+        }
+        
+    }
+    
+    func dissmissView() {
+        if didCreateActivity == false {
+            dismissPopup()
+            
         }
     }
     
@@ -45,10 +72,47 @@ class PopupViewController: UIViewController {
         profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
     }
     
-    func fillMockupData() {
-        userNameLabel.text = "CoolGuy123"
-        challengeDescriptionLabel.text = "Bike Champ"
-        challengeStatsLabel.text = "Ran 10 mile in 1 hr"
+    
+    func dismissPopup() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func startActivity() {
+        
+        if segment == 0 {
+            
+        }
+        else {
+            if let id = FIRAuth.auth()?.currentUser?.uid {
+                self.userId = id
+            }
+            if didCreateActivity == true {
+                self.delegate?.actionButtonTapped(didCreateActivity: didCreateActivity)
+                dismissPopup()
+            }
+            else {
+                
+                let location = Location(lat: self.challengeLocation!.lat, long: self.challengeLocation!.long)
+                if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
+                    print("User is within the radius")
+                    self.delegate?.joinChallenge(user: userId, challengeId: activityId)
+                    dismissPopup()
+                }
+                else {
+                    print("User is NOT within the radius")
+                    let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge starting point!", useDefaultAction: true)
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+        
+    }
+    
+    func clearData() {
+        self.challengeNameLabel.text = nil
+        self.challengeDescriptionLabel.text = nil
+        self.challengeStatsLabel.text = nil
     }
     
     //MARK: - setup
@@ -58,9 +122,9 @@ class PopupViewController: UIViewController {
         self.blurView.addSubview(popupContainerView)
         self.blurView.addSubview(actionButton)
         self.popupContainerView.addSubview(profileImageView)
-        self.popupContainerView.addSubview(challengeStatsLabel)
-        self.popupContainerView.addSubview(userNameLabel)
+        self.popupContainerView.addSubview(challengeNameLabel)
         self.popupContainerView.addSubview(challengeDescriptionLabel)
+        self.popupContainerView.addSubview(challengeStatsLabel)
     }
     
     func configureConstraints() {
@@ -75,22 +139,23 @@ class PopupViewController: UIViewController {
             view.centerY.equalTo(popupContainerView.snp.top)
         }
         
-        userNameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(profileImageView.snp.bottom).offset(4.0)
-            view.height.equalTo(15.0)
-            view.centerX.equalToSuperview()
+        challengeNameLabel.snp.makeConstraints { (view) in
+            view.top.equalToSuperview().offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
         }
         
         challengeDescriptionLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(userNameLabel.snp.bottom)
-            view.bottom.equalTo(challengeStatsLabel.snp.top)
-            view.centerX.equalToSuperview()
+            view.top.equalTo(challengeNameLabel.snp.bottom).offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
         }
         
         challengeStatsLabel.snp.makeConstraints { (view) in
-            view.bottom.equalToSuperview().inset(2.0)
-            view.height.equalTo(15.0)
-            view.centerX.equalToSuperview()
+            view.top.equalTo(challengeDescriptionLabel.snp.bottom).offset(25.0)
+            view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
+            view.bottom.equalToSuperview().inset(25.0)
         }
         
         actionButton.snp.makeConstraints { (view) in
@@ -100,23 +165,12 @@ class PopupViewController: UIViewController {
         }
         
     }
-    
-    func dismissPopup() {
-        print("dismiss popup")
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func startActivity() {
-        print("join/start button")
-        
-    }
-    
+ 
     //MARK: - Views
     internal lazy var popupContainerView: UIView! = {
         let view = UIView()
         view.layer.cornerRadius = 15.0
         view.layer.masksToBounds = false
-        view.backgroundColor = ColorPalette.purpleThemeColor
         return view
     }()
     
@@ -130,21 +184,26 @@ class PopupViewController: UIViewController {
         return imageView
     }()
     
-    internal lazy var userNameLabel: UILabel! = {
+    internal lazy var challengeNameLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
     internal lazy var challengeDescriptionLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping // or NSLineBreakMode.ByWordWrapping
+        label.numberOfLines = 0
         return label
     }()
     
     internal lazy var challengeStatsLabel: UILabel! = {
         let label = UILabel()
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
@@ -158,11 +217,11 @@ class PopupViewController: UIViewController {
     
     internal lazy var actionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Join/Start", for: .normal)
+        button.setTitle("Start", for: .normal)
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
-        button.backgroundColor = ColorPalette.purpleThemeColor
         return button
     }()
     
     
 }
+

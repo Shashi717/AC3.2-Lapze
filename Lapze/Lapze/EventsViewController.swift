@@ -20,16 +20,16 @@ public enum Event: String {
 }
 
 private enum State {
-    case Static
-    case Event
-    case Challenge
+    case home
+    case event
+    case challenge
 }
 
-class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate {
+class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,EventDelegate,ChallengeDelegate, JoinActivityDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
-            findUser()
+            //findUser()
             //addLocationtoFireBase(location: userLocation!)
             updateUserLocationMarker(location: userLocation!)
         }
@@ -38,16 +38,19 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private let events: [Event.RawValue] = [Event.currentEvents.rawValue, Event.challenges.rawValue]
     
     private var challengeFirebaseRef: FIRDatabaseReference?
+    private var challengeId: String?
     private let databaseRef = FIRDatabase.database().reference()
     private var challengeOn = false
+    private var state: State = .home
     
-    private var activeViewOn = false // added this
+    private var path: [Location] = []
     
-    private var path: [[String: CLLocationDegrees]] = []
-    
-    private var userCreatedEvent: Bool = false
+    private var userCreatedActivity: Bool = false
     private var currentUser = FIRAuth.auth()?.currentUser
     private var timer = Timer()
+    private var challengeTime: Double = 0.0
+    private let timeInterval:TimeInterval = 1
+    private let timerEnd:TimeInterval = 0.0
     private var counter = 0
     
     private var userLocationMarker: GMSMarker?
@@ -55,29 +58,29 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
     private var allChallenges: [Challenge] = []
-     private var eventOn = false
+    private var userChampionshipChallenges: [String] = []
+    private var eventOn = false
     
+    let popVc = PopupViewController()
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
+    let challengePath = Path()
+    let userPath = Path()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Current Events"
+        self.navigationItem.title = "Open Events"
         setupViewHierarchy()
         configureConstraints()
-        
         //initial view of events
         self.eventSegmentedControl.selectedSegmentIndex = 0
         
-        //tap gesture
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
-        view.addGestureRecognizer(tap)
         GoogleMapManager.shared.manage(map: self.googleMapView)
         googleMapView.delegate = self
         
-       // FirebaseObserver.manager.startObserving(node: .location)
+        // FirebaseObserver.manager.startObserving(node: .location)
         
         //Change Map view to reflect part session/challenge
         if challengeOn {
@@ -87,12 +90,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
         
         locationManager.delegate = self
+        popVc.delegate = self
         
         challengeStore.getAllChallenges { (challenges) in
-            
             self.allChallenges = challenges
-            
+            self.userChampionshipChallenges = self.getUsersChampionships(challenges)
         }
+        findUser()
         
     }
     
@@ -115,16 +119,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         for challenge in challenges {
             
-            //            var name = ""
-            //            let user = userStore.getUser(id: challenge.champion, completion: { (user) in
-            //                name = user.name
-            //            })
-            //
-            GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat, long: challenge.long)
+            if self.userChampionshipChallenges.contains(challenge.id) {
+                 GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: "crown")
+            }
+            else {
+                GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: challenge.type)
+            }
         }
-        
     }
-    
     
     //MARK: - Utilities
     deinit {
@@ -132,109 +134,38 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     }
     
     func segementedControlValueChanged(sender: UISegmentedControl) {
+        
         let segment = eventSegmentedControl.selectedSegmentIndex
-        let popVc = PopupViewController()
+        userPath.removePolyline()
+        challengePath.removePolyline()
+        
         switch segment {
         case 0:
+            GoogleMapManager.shared.hideAllMarkers()
             
             print("\(events[0])")
-            //thumbButton.setTitle("Join", for: .normal)
             self.navigationItem.title = "Current Events"
             self.addButton.backgroundColor = ColorPalette.purpleThemeColor
+            topStatusView.backgroundColor = ColorPalette.purpleThemeColor
+            bottomStatusView.backgroundColor = ColorPalette.purpleThemeColor
             popVc.segment = 0
             
         case 1:
             print("\(events[1])")
             GoogleMapManager.shared.hideAllMarkers()
-            //thumbButton.setTitle("Challenge", for: .normal)
-            self.navigationItem.title = "Challenge"
+            self.navigationItem.title = "Challenges"
             self.addButton.backgroundColor = ColorPalette.orangeThemeColor
+            topStatusView.backgroundColor = ColorPalette.orangeThemeColor
+            bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
             popVc.segment = 1
             self.markChallenges(allChallenges)
+            
         default:
             print("none")
         }
     }
     
-    func fillPopupForCreateEvent() {
-        thumbStatContainerView.backgroundColor = ColorPalette.purpleThemeColor
-        thumbProfileImageView.layer.borderColor = ColorPalette.orangeThemeColor.cgColor
-    }
-    
-    func fillPopupForChallenge() {
-        thumbStatContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        thumbProfileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
-    }
-    
-    func fillMockupDataForThumbView() {
-        thumbUserNameLabel.text = "CoolGuy123"
-        thumbChallengeDescriptionLabel.text = "Bike Champ"
-        thumbChallengeStatsLabel.text = "Ran 10 mile in 1 hr"
-    }
-    
-    //MARK: - Setup Utilities
-    
-    func createThumbView(userName: String) {
-        self.view.addSubview(thumbStatContainerView)
-        self.thumbStatContainerView.addSubview(thumbButton)
-        self.thumbStatContainerView.addSubview(thumbProfileImageView)
-        self.thumbStatContainerView.addSubview(thumbUserNameLabel)
-        self.thumbStatContainerView.addSubview(thumbChallengeDescriptionLabel)
-        self.thumbStatContainerView.addSubview(thumbChallengeStatsLabel)
-        
-        
-        thumbStatContainerView.snp.makeConstraints { (view) in
-            view.height.equalTo(130.0)
-            view.width.equalTo(180.0)
-            
-            //should be changed to the location of the pin
-            view.centerX.centerY.equalToSuperview()
-        }
-        
-        thumbButton.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(4.0)
-            view.right.equalToSuperview().inset(4.0)
-            view.width.height.equalTo(40.0)
-        }
-        thumbProfileImageView.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(4.0)
-            view.height.width.equalTo(50.0)
-            view.centerX.equalToSuperview()
-        }
-        thumbUserNameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(thumbProfileImageView.snp.bottom).offset(4.0)
-            view.left.right.equalToSuperview()
-            view.height.equalTo(15.0)
-        }
-        thumbChallengeStatsLabel.snp.makeConstraints { (view) in
-            view.left.right.equalToSuperview()
-            view.bottom.equalToSuperview().inset(2.0)
-            view.height.equalTo(15.0)
-        }
-        thumbChallengeDescriptionLabel.snp.makeConstraints { (view) in
-            view.left.right.equalToSuperview()
-            view.top.equalTo(thumbUserNameLabel.snp.bottom)
-            view.bottom.equalTo(thumbChallengeStatsLabel.snp.top)
-        }
-    }
-    
-    func thumbButtonTapped(sender: UIButton) {
-        let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
-        
-        switch selectedSegmentIndex {
-        case 0:
-            notificationEvent()
-            joinedCurrentEvent()
-            
-        case 1:
-            print("Challenge Event")
-        default:
-            break
-        }
-    }
-    
     func addButtonTapped(sender: UIButton) {
-        print("add button tapped")
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
         switch selectedSegmentIndex {
@@ -264,6 +195,47 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         //dismissPopup()
     }
     
+    func getUsersChampionships(_ challenges: [Challenge]) -> [String] {
+        var challengeIds: [String] = []
+        
+        for challenge in challenges {
+            if challenge.champion == currentUser?.uid {
+                challengeIds.append(challenge.id)
+            }
+        }
+        return challengeIds
+        
+    }
+    
+    //MARK: JoinActivity Delegate methods
+    
+    func joinChallenge(user: String, challengeId: String) {
+        
+        self.challengeOn = true
+        self.challengeId = challengeId
+        self.challengeTime = 0
+        self.state = .challenge
+        updateViews(.challenge)
+        
+        //delete setupChallenge
+        
+        self.endButton.addTarget(self, action: #selector(self.endChallenge), for: .touchUpInside)
+        
+        //timer
+        
+        self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
+        
+        challengeStore.getChallenge(id: challengeId) { (challenge) in
+            self.topStatusLabel.text = challenge.name
+            
+        }
+        
+    }
+    
+    func checkIfBeatChallenge() {
+        
+    }
+    
     func notificationEvent() {
         let content = UNMutableNotificationContent()
         content.title = "Join Event"
@@ -274,23 +246,10 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    func eventPopup() {
-        print("want to join this event?")
-        //popup box
-        thumbButton.setImage(UIImage(named: "Join3"), for: .normal)
-        fillPopupForCreateEvent()
-        fillMockupDataForThumbView()
-        self.thumbStatContainerView.isHidden = false
-        //self.view.addSubview(blurView)
-    }
-    
     func dismissPopup() {
         print("tap gesture")
-        self.thumbStatContainerView.isHidden = true
         //self.blurView.removeFromSuperview()
     }
-    
-    
     
     //activity view setup
     func setupChallengeView() {
@@ -309,8 +268,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.endButton
             ].map({$0.isHidden = false})
     }
-    
-    
     
     //MARK: Location Utilities
     
@@ -331,8 +288,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     func handleLogout(){
         present(LoginViewController(), animated: true, completion: nil)
     }
-    
-    
     
     //MARK: Location Utilities
     fileprivate func addLocationtoFireBase(location: CLLocation){
@@ -372,7 +327,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.userLocationMarker?.map = nil
     }
     
-    
     func findUser(){
         if let location = userLocation{
             let clocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
@@ -381,19 +335,19 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    
     //MARK: Event Utilities
     func startEvent(name: String) {
-        let eventPopUp: PopupViewController = PopupViewController()
-        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
-        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        eventPopUp.modalTransitionStyle = .crossDissolve
-        eventPopUp.modalPresentationStyle = .overCurrentContext
+        // let eventPopUp: PopupViewController = PopupViewController()
+        popVc.challengeDescriptionLabel.text = "You just created a \(name) event!"
+        popVc.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
         self.eventOn = true
-        present(eventPopUp, animated: true, completion: nil)
+        present(popVc, animated: true, completion: nil)
         removeUserMarker()
         addEventToFireBase(type:name,location: userLocation!)
         self.endButton.addTarget(self, action: #selector(endEvent), for: .touchUpInside)
+        self.endButton.isHidden = false
     }
     
     fileprivate func addEventToFireBase(type: String,location: CLLocation){
@@ -429,6 +383,48 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.showUserMarker()
     }
     
+    //MARK: Challenge Delegate methods
+    func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
+        self.challengeFirebaseRef = linkRef
+        popVc.challengeDescriptionLabel.text = "You just created a challenge!"
+        popVc.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        popVc.didCreateActivity = true
+        self.userCreatedActivity = true
+        popVc.activityId = (challengeFirebaseRef?.key)!
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
+        present(popVc, animated: true, completion: nil)
+        
+    }
+    
+    func actionButtonTapped(didCreateActivity: Bool) {
+        
+        startChallenge(didCreateActivity: didCreateActivity)
+    }
+    
+    
+    func startChallenge(didCreateActivity: Bool) {
+        self.challengeOn = true
+        
+        self.challengeTime = 0
+        self.state = .challenge
+        updateViews(.challenge)
+        
+        //delete setupChallenge
+        
+        self.endButton.addTarget(self, action: #selector(self.endChallenge), for: .touchUpInside)
+        
+        //timer
+        
+        self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
+        
+        //this populates the top label when you start a challenge
+        challengeStore.getChallenge(id: (challengeFirebaseRef?.key)!) { (challenge) in
+            self.topStatusLabel.text = challenge.name
+        }
+        
+    }
+    
     //MARK: Location manager Delegate methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -436,36 +432,31 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         self.userLocation = validLocation
         
-        let locationDict = ["lat": validLocation.coordinate.latitude, "long": validLocation.coordinate.longitude ]
+        let locationObject = Location(lat: validLocation.coordinate.latitude, long: validLocation.coordinate.longitude)
         
         if challengeOn == true {
             
-            
-            path.append(locationDict)
+            path.append(locationObject)
             //calculating distance
             let currentLocation = manager.location!
             print("Current Location: \(currentLocation)")
             
-            
             if previousLocation != nil {
                 let lastDistance = currentLocation.distance(from: previousLocation as CLLocation!)
                 //distance in meters
-                
                 distance += lastDistance
             }
             
             previousLocation = currentLocation
             
-            print("Previous Location: \(previousLocation)")
-            print("Distance: \(distance)")
-            
             //challenge view
-            self.bottomStatus1Label.text = "\((distance/1609.34)) miles"
-            
+            self.bottomStatus1Label.text = "\((distance/1609.34).roundTo(places: 2)) miles"
         }
+        
         if eventOn{
             self.updateEventLocation(location: validLocation)
         }
+        
         print("location change")
     }
     
@@ -492,42 +483,58 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     //MARK: Googlemaps Delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
-        let view: GoogleMapThumbView = GoogleMapThumbView()
-        view.profileImageView.image = marker.icon
         
-        
-        //        view.nameLabel.text = marker.title
-     
+        let thumbView: GoogleMapThumbView = GoogleMapThumbView()
+        marker.tracksInfoWindowChanges = true
+        challengePath.removePolyline()
+        guard marker != userLocation else { return nil}
         
         let selectedSegmentIndex = eventSegmentedControl.selectedSegmentIndex
         
         switch selectedSegmentIndex {
         case 0:
             //event
-            
-            view.backgroundColor = ColorPalette.purpleThemeColor
+            userPath.removePolyline()
+            thumbView.backgroundColor = ColorPalette.purpleThemeColor
         case 1:
             //challenge
-            view.backgroundColor = ColorPalette.orangeThemeColor
-            
+            thumbView.backgroundColor = ColorPalette.orangeThemeColor
+            userPath.removePolyline()
             if let id = marker.title {
-                
                 challengeStore.getChallenge(id: id) { (challenge) in
-                    view.nameLabel.text = challenge.name
-                    view.descriptionLabel.text = ("\(challenge.type), \(challenge.champion), \(challenge.lastUpdated) ")
+                    self.userStore.getUser(id: challenge.champion, completion: { (user) in
+                        thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
+                    })
+                    
+                    if self.userChampionshipChallenges.contains(id) {
+                        thumbView.profileImageView.image = UIImage(named: "crown")
+                    }
+                    else {
+                        thumbView.profileImageView.image = UIImage(named: challenge.type)
+                    }
+                    
+                    thumbView.titleLabel.text = challenge.name
+                    thumbView.descriptionLabel.text = ("\(challenge.type), \(challenge.lastUpdated) ")
+                    if let challengePath = challenge.path {
+                        let polyline = self.challengePath.getPolyline(challengePath)
+                        polyline.strokeColor = .cyan
+                        polyline.strokeWidth = 3.0
+                        polyline.map = self.googleMapView
+                    }
                 }
             }
             
         default:
             break
         }
-        return view
+        return thumbView
     }
     
+    func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
+        challengePath.removePolyline()
+    }
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        print("show delegate profile")
         
-        let popVc = PopupViewController()
         popVc.modalTransitionStyle = .crossDissolve
         popVc.modalPresentationStyle = .overCurrentContext
         
@@ -539,84 +546,125 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.present(popVc, animated: true, completion: nil)
         case 1:
             popVc.segment = 1
+            if let id = marker.title {
+                challengeStore.getChallenge(id: id) { (challenge) in
+                    self.userStore.getUser(id: challenge.champion, completion: { (user) in
+                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
+                        
+                    })
+                    self.popVc.activityId = challenge.id
+                    self.popVc.userLocation = self.userLocation
+                    self.popVc.challengeNameLabel.text = challenge.name
+                    self.popVc.challengeStatsLabel.text = "\(challenge.type)"
+                    if let lat = challenge.lat, let long = challenge.long {
+                        self.popVc.challengeLocation = Location(lat: lat , long: long)
+                    }
+                }
+            }
             self.present(popVc, animated: true, completion: nil)
         default:
             break
         }
     }
     
-    //MARK: Event Delegate methods
-//    func startEvent(name: String) {
-//        let eventPopUp: PopupViewController = PopupViewController()
-//        eventPopUp.challengeDescriptionLabel.text = "You just created a\(name) event!"
-//        eventPopUp.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
-//        eventPopUp.modalTransitionStyle = .crossDissolve
-//        eventPopUp.modalPresentationStyle = .overCurrentContext
-//        present(eventPopUp, animated: true, completion: nil)
-//    }
-    
-    
-    //MARK: Challenge Delegate methods
-    func startChallenge(user: String, linkRef: FIRDatabaseReference) {
-        print("Challenge started \(user)")
-        self.challengeOn = true
-        self.activeViewOn = true
-        self.challengeFirebaseRef = linkRef
-        linkRef.updateChildValues(["champion": user])
-        
-        setupChallengeView()
-        
-        self.databaseRef.child("users").child(user).child("name").observe(.value, with: { (snapshot) in
-            let name = snapshot.value as! String
-            
-            self.topStatusLabel.text = "\(name)'s Something Challenge"
-            print("name: \(name)")
-        })
-        
-        self.endButton.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
-        //timer
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-    }
-    
     func timerAction() {
         counter += 1
-        bottomStatus2Label.text = "Time: \(counter)"
+        bottomStatus2Label.text = "Time: \(timeString(TimeInterval(counter)))"
     }
     
+    func timeString(_ time: TimeInterval) -> String {
+        let hours = Int(time) / 3600
+        let minutes = Int(time) / 60 % 60
+        let seconds = Int(time) % 60
+        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+    }
     
     //MARK: EndActivity Delegate methods
-    
     func endChallenge() {
-        print("End Challenge")
         
-        let alertController = showAlert(title: "Challenge ended", message: "Champion mastah", useDefaultAction: true)
-        self.present(alertController, animated: true, completion: nil)
-        //self.locateMeButton.isHidden = true
-        
-        self.challengeOn = false
-        self.activeViewOn = false
-        
-        let firstCoordinate = path[0]
-        if let firstLat = firstCoordinate["lat"],
-            let firstLong = firstCoordinate["long"] {
-            let dict = ["location": path, "lat": firstLat,"long": firstLong] as [String : Any]
-            
-            self.challengeFirebaseRef!.updateChildValues(dict)
+        guard path.count > 0 else {
+            let alertController = showAlert(title: "OOPS", message: "Sorry, we coudn't locate you! Please try again!", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+            return
         }
-        let pathObject = Path()
-        let polyline = pathObject.getPolyline(path)
+        userPath.removePolyline()
+        
+        let firstCoordinate = self.path[0]
+        let firstLat = firstCoordinate.lat
+        let firstLong = firstCoordinate.long
+        let locationStore = LocationStore()
+        let pathArray = locationStore.createPathArray(self.path)
+        let challengeTime = Double(counter)
+        let userDistance = (self.distance/1609.34).roundTo(places: 2)
+        
+        let polyline = self.userPath.getPolyline(self.path)
         polyline.strokeColor = .green
         polyline.strokeWidth = 3.0
-        polyline.map = googleMapView
+        polyline.map = self.googleMapView
         
+        self.challengeOn = false
+        updateViews(.home)
         
+        //if this is a user created challenge
+        if userCreatedActivity == true {
+            let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": userDistance] as [String : Any]
+                self.challengeFirebaseRef!.updateChildValues(dict)
+                self.dismiss(animated: true, completion: nil)
+            }))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction!) in
+                self.challengeFirebaseRef?.removeValue()
+                self.dismiss(animated: true, completion: nil)
+            }))
+            self.present(alertController, animated: true, completion: nil)
+        }
+            
+            //if this is not a user created challenge
+        else {
+            challengeStore.getChallenge(id: challengeId!, completion: { (challenge) in
+                if let path = challenge.path, let endLocation = path.last {
+                    if locationStore.isUserWithinRadius(userLocation: self.userLocation!, challengeLocation: endLocation) {
+                        let currentDistance = (self.distance/1609.34).roundTo(places: 2)
+                        if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.05) {
+                            
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "MMM dd, yyyy"
+                            let date = dateFormatter.string(from: Date())
+                            
+                            
+                            
+                            let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": date] as [String : Any]
+                            self.challengeFirebaseRef?.updateChildValues(dict)
+                            let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                        else {
+                            let alertController = showAlert(title: "Nice Try!", message: "Sorry, your time didn't beat the current champion.", useDefaultAction: true)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    }
+                    else {
+                        let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge ending point!", useDefaultAction: true)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                }
+            })
+            
+        }
+        
+        //self.locateMeButton.isHidden = true
+        popVc.didCreateActivity = false
+        self.userCreatedActivity = false
         timer.invalidate()
+        
+        distance = 0.0
         //get back to original view
         setupViewHierarchy()
         configureConstraints()
-        
     }
     
+    //MARK: - Setup views
     private func updateViews(_ state: State) {
         let activeViews = [
             self.topStatusView,
@@ -628,17 +676,17 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         DispatchQueue.main.async {
             switch state {
-            case .Static:
+            case .home:
                 self.setupViewHierarchy()
                 self.eventSegmentedControl.isHidden = false
                 
-            case .Challenge:
+            case .challenge:
                 self.eventSegmentedControl.isHidden = true
                 _ = activeViews.map({$0.isHidden = false})
                 self.topStatusView.backgroundColor = ColorPalette.orangeThemeColor
                 self.bottomStatusView.backgroundColor = ColorPalette.orangeThemeColor
                 
-            case .Event:
+            case .event:
                 self.eventSegmentedControl.isHidden = true
                 _ = activeViews.map({$0.isHidden = false})
                 self.topStatusView.backgroundColor = ColorPalette.purpleThemeColor
@@ -648,7 +696,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
     }
     
-    //MARK: - Setup views
     func setupViewHierarchy() {
         locationManager.delegate = self
         self.edgesForExtendedLayout = []
@@ -667,24 +714,14 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         self.bottomStatusView.addSubview(bottomStatus1Label)
         self.bottomStatusView.addSubview(bottomStatus2Label)
         
-        
-        if !activeViewOn {
-            //when in challenge view
-            _ = [topStatusView,
-                 topStatusLabel,
-                 bottomStatusView,
-                 bottomStatus1Label,
-                 bottomStatus2Label
-                ].map({$0.isHidden = true})
-            
-            
-            //when in original view
-            _ = [
-                eventSegmentedControl,
-                locateMeButton,
-                addButton
-                ].map({$0.isHidden = false})
-        }
+        let activeViews = [
+            self.topStatusView,
+            self.topStatusLabel,
+            self.bottomStatusView,
+            self.bottomStatus1Label,
+            self.endButton
+        ]
+        _ = activeViews.map({$0.isHidden = true})
     }
     
     func configureConstraints() {
@@ -695,65 +732,51 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             view.height.equalTo(30.0)
             view.centerX.equalToSuperview()
         }
-        
         googleMapView.snp.makeConstraints { (view) in
             view.top.bottom.leading.trailing.equalToSuperview()
         }
-        
         locateMeButton.snp.makeConstraints { (view) in
             view.trailing.equalToSuperview().inset(10)
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
         }
-        
         addButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
         }
-        
         endButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
             view.bottom.equalTo(bottomStatusView.snp.top)
         }
-        
-        
         //challenge view configs
         topStatusView.snp.makeConstraints({ (view) in
-            view.height.equalTo(60)
+            view.height.equalTo(50)
             view.width.equalToSuperview()
             view.top.equalToSuperview()
         })
-        
         topStatusLabel.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.width.equalToSuperview().multipliedBy(0.5)
-            view.height.equalToSuperview().multipliedBy(0.5)
+            view.left.right.top.bottom.equalToSuperview()
         }
-        
-        
         bottomStatusView.snp.makeConstraints { (view) in
             view.height.equalTo(60)
             view.width.equalToSuperview()
             view.bottom.equalToSuperview()
         }
-        
         bottomStatus1Label.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.5)
             view.height.equalToSuperview().multipliedBy(0.5)
             view.top.equalToSuperview()
         }
-        
         bottomStatus2Label.snp.makeConstraints { (view) in
             view.width.equalToSuperview().multipliedBy(0.5)
             view.height.equalTo(50)
-            view.leading.equalTo(endButton.snp.trailing)
+            view.leading.equalTo(bottomStatus1Label.snp.leading)
             view.bottom.equalToSuperview()
         }
     }
-    
     
     //MARK: - Views
     
@@ -768,19 +791,15 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.layer.shadowRadius = 2
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = 25
-       // button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+        // button.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
         return button
     }()
-    //Delete^^
-    
-    
     private let googleMapView: GMSMapView = {
         let mapview: GMSMapView = GMSMapView()
         mapview.translatesAutoresizingMaskIntoConstraints = false
         mapview.mapType = .normal
         mapview.isBuildingsEnabled = false
         // mapview.isMyLocationEnabled = true
-        
         do {
             if let styleURL = Bundle.main.url(forResource: "darkBlueStyle", withExtension: "json") {
                 mapview.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
@@ -792,14 +811,12 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         }
         return mapview
     }()
-    
     private lazy var locationManager: CLLocationManager = {
         let locMan: CLLocationManager = CLLocationManager()
         locMan.desiredAccuracy = kCLLocationAccuracyBest
         locMan.distanceFilter = 50.0
         return locMan
     }()
-    
     private let locateMeButton: UIButton = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "locate"), for: .normal)
@@ -815,7 +832,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.addTarget(self, action: #selector(findUser), for: .touchUpInside)
         return button
     }()
-    
     internal lazy var eventSegmentedControl: UISegmentedControl = {
         var segmentedControl = UISegmentedControl()
         segmentedControl = UISegmentedControl(items: self.events)
@@ -826,51 +842,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         segmentedControl.addTarget(self, action: #selector(segementedControlValueChanged(sender:)), for: .valueChanged)
         return segmentedControl
     }()
-    
-    internal lazy var thumbStatContainerView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 5.0
-        view.layer.masksToBounds = false
-        return view
-    }()
-    internal lazy var thumbProfileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 25.0
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderWidth = 2
-        imageView.layer.masksToBounds = false
-        return imageView
-    }()
-    internal lazy var thumbUserNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    internal lazy var thumbChallengeDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbChallengeStatsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        return label
-    }()
-    
-    internal lazy var thumbButton: UIButton = {
-        let button = UIButton()
-        // button.titleLabel!.font =  UIFont(name: "System - System", size: 5)
-        // button.backgroundColor = ColorPalette.logoGreenColor
-        //        button.layer.cornerRadius = 10.0
-        //        button.layer.masksToBounds = false
-        button.addTarget(self, action: #selector(thumbButtonTapped(sender:)), for: .touchUpInside)
-        return button
-    }()
-    
     internal lazy var addButton: UIButton = {
         let button: UIButton = UIButton()
         button.setImage(UIImage(named: "add-1"), for: .normal)
@@ -886,40 +857,37 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         button.addTarget(self, action: #selector(addButtonTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    
     //hosting, joined activity, or challenge view
     internal lazy var topStatusView: UIView = {
         var view = UIView()
         view.layer.masksToBounds = true
-        view.backgroundColor = .red
         return view
     }()
-    
     internal lazy var topStatusLabel: UILabel = {
         var label = UILabel()
-        label.text = "title of activity here"
         label.textAlignment = .center
+        label.numberOfLines = 2
+        label.textColor = .white
+        label.font.withSize(20.0)
         return label
     }()
-    
     internal lazy var bottomStatusView: UIView = {
         var view = UIView()
         view.layer.masksToBounds = true
-        view.backgroundColor = .red
         return view
     }()
-    
     internal lazy var bottomStatus1Label: UILabel = {
         var label = UILabel()
-        label.text = "distance"
+        label.text = "0.0 miles"
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
-    
     internal lazy var bottomStatus2Label: UILabel = {
         var label = UILabel()
-        label.text = "time"
+        label.text = "Time: 00:00:00"
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -933,4 +901,3 @@ extension Double {
     }
     
 }
-
