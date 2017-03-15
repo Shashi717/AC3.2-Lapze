@@ -559,7 +559,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         self.databaseRef.child("users").child(user).child("name").observe(.value, with: { (snapshot) in
             let name = snapshot.value as! String
-            
+
             self.topStatusLabel.text = "\(name)'s Something Challenge"
             print("name: \(name)")
         })

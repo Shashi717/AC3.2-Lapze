@@ -13,7 +13,6 @@ import CoreLocation
 
 protocol JoinActivityDelegate {
     func joinChallenge(user: String, challengeId: String)
-    func actionButtonTapped(didCreateActivity: Bool)
 }
 
 class PopupViewController: UIViewController {
@@ -87,7 +86,7 @@ class PopupViewController: UIViewController {
                 self.userId = id
             }
             if didCreateActivity == true {
-                self.delegate?.actionButtonTapped(didCreateActivity: didCreateActivity)
+               self.delegate?.joinChallenge(user: userId, challengeId: activityId)
                 dismissPopup()
             }
             else {

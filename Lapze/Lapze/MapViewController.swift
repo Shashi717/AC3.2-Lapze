@@ -46,6 +46,17 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             updateUserLocationMarker(location: userCurrentLocation!)
         }
     }
+
+    private var previousLocation: CLLocation?
+    private var allChallenges: [Challenge] = []
+    private var userChampionshipChallenges: [String] = []
+    private let challengeStore = ChallengeStore()
+    private let userStore = UserStore()
+    private let popVc: PopupViewController = PopupViewController()
+    let challengePath = Path()
+    let userPath = Path()
+    var path: [Location] = []
+    var distance: Double = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +64,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         LocationManager.sharedManager.delegate = self
         googleMapView.delegate = self
         FirebaseManager.shared.startObserving(node: .event)
+
+        GoogleMapManager.shared.manage(map: self.googleMapView)
+        getAllChallenges()
+
     }
     
     private func setUpViewController(){
@@ -104,17 +119,125 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
+
+        distance = 0.0
+
     }
     
     private func updateMarkers(){
         switch markerOption {
         case .challenge:
-            print("challenge markers")
+
+            self.markChallenges(allChallenges)
+
         case .event:
             print("event markers")
         case .none:
             print("show no markers")
         }
+    }
+    
+    //MARK:- Challenge Utilities
+    private func getAllChallenges(){
+        challengeStore.getAllChallenges { (challenges) in
+            self.allChallenges = challenges
+            self.userChampionshipChallenges = self.getUsersChampionships(challenges)
+        }
+    }
+    
+    private func getUsersChampionships(_ challenges: [Challenge]) -> [String] {
+        var challengeIds: [String] = []
+        
+        for challenge in challenges {
+            if challenge.champion == FirebaseManager.shared.uid {
+                challengeIds.append(challenge.id)
+            }
+        }
+        return challengeIds
+    }
+    
+    private func markChallenges(_ challenges: [Challenge]) {
+        for challenge in challenges {
+            if self.userChampionshipChallenges.contains(challenge.id) {
+                GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: "crown")
+            }
+            else {
+                GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: challenge.type)
+            }
+        }
+    }
+    
+    public func endChallenge(){
+        
+        guard path.count > 0 else {
+            let alertController = showAlert(title: "OOPS", message: "Sorry, we coudn't locate you! Please try again!", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        userPath.removePolyline()
+        
+        let firstCoordinate = self.path[0]
+        let firstLat = firstCoordinate.latitude
+        let firstLong = firstCoordinate.longitude
+        let locationStore = LocationStore()
+        let pathArray = locationStore.createPathArray(self.path)
+        
+        let polyline = self.userPath.getPolyline(self.path)
+        polyline.strokeColor = .green
+        polyline.strokeWidth = 3.0
+        polyline.map = self.googleMapView
+        
+     //if this is a user created challenge
+//        if userCreatedActivity == true {
+//            let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
+//            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+//                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": userDistance] as [String : Any]
+//                self.challengeFirebaseRef!.updateChildValues(dict)
+//                self.dismiss(animated: true, completion: nil)
+//            }))
+//            alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction!) in
+//                self.challengeFirebaseRef?.removeValue()
+//                self.dismiss(animated: true, completion: nil)
+//            }))
+//            self.present(alertController, animated: true, completion: nil)
+//        }
+//            
+//            //if this is not a user created challenge
+//        else {
+//            challengeStore.getChallenge(id: challengeId!, completion: { (challenge) in
+//                if let path = challenge.path, let endLocation = path.last {
+//                    if locationStore.isUserWithinRadius(userLocation: self.userLocation!, challengeLocation: endLocation) {
+//                        let currentDistance = (self.distance/1609.34).roundTo(places: 2)
+//                        if challengeTime < challenge.timeToBeat! && (abs(currentDistance - challenge.distance!) < 0.05) {
+//                            
+//                            let dateFormatter = DateFormatter()
+//                            dateFormatter.dateFormat = "MMM dd, yyyy"
+//                            let date = dateFormatter.string(from: Date())
+//                            
+//                            
+//                            
+//                            let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": date] as [String : Any]
+//                            self.challengeFirebaseRef?.updateChildValues(dict)
+//                            let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
+//                            self.present(alertController, animated: true, completion: nil)
+//                        }
+//                        else {
+//                            let alertController = showAlert(title: "Nice Try!", message: "Sorry, your time didn't beat the current champion.", useDefaultAction: true)
+//                            self.present(alertController, animated: true, completion: nil)
+//                        }
+//                    }
+//                    else {
+//                        let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge ending point!", useDefaultAction: true)
+//                        self.present(alertController, animated: true, completion: nil)
+//                    }
+//                }
+//            })
+//            
+//        }
+        
+        //self.locateMeButton.isHidden = true
+        popVc.didCreateActivity = false
+        //self.userCreatedActivity = false
     }
     
     //MARK:- Location manager delegate methods
@@ -123,9 +246,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch trackingBehavior{
         case .followWithPathMarking:
-            print(trackingBehavior)
+
+                trackDistance()
         case .limitedFollow:
-            print(trackingBehavior)
+                trackDistance()
+
         case .none:
             print(trackingBehavior)
         }
@@ -156,6 +281,18 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+
+    private func trackDistance(){
+        let currentLocation = LocationManager.sharedManager.currentLocation
+        if previousLocation != nil {
+            let lastDistance = currentLocation?.distance(from: previousLocation as CLLocation!)
+            distance += lastDistance!
+        }
+        
+        previousLocation = currentLocation
+    }
+    
+
     public func viewMarkers() {
         
     }
@@ -164,21 +301,75 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
         
-        let view: GoogleMapThumbView = GoogleMapThumbView()
-        view.profileImageView.image = marker.icon
-        view.titleLabel.text = marker.title
+
+        let thumbView: GoogleMapThumbView = GoogleMapThumbView()
+        thumbView.profileImageView.image = marker.icon
+        marker.tracksInfoWindowChanges = true
         
         switch markerOption {
         case .event:
-            view.backgroundColor = ColorPalette.purpleThemeColor
+            thumbView.backgroundColor = ColorPalette.purpleThemeColor
         case .challenge:
-            view.backgroundColor = ColorPalette.orangeThemeColor
+            thumbView.backgroundColor = ColorPalette.orangeThemeColor
+            userPath.removePolyline()
+            if let id = marker.title {
+                challengeStore.getChallenge(id: id) { (challenge) in
+                    self.userStore.getUser(id: challenge.champion, completion: { (user) in
+                        thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
+                    })
+                    
+                    if self.userChampionshipChallenges.contains(id) {
+                        thumbView.profileImageView.image = UIImage(named: "crown")
+                    }
+                    else {
+                        thumbView.profileImageView.image = UIImage(named: challenge.type)
+                    }
+                    
+                    thumbView.titleLabel.text = challenge.name
+                    thumbView.descriptionLabel.text = ("\(challenge.type), \(challenge.lastUpdated) ")
+                    if let challengePath = challenge.path {
+                        let polyline = self.challengePath.getPolyline(challengePath)
+                        polyline.strokeColor = .cyan
+                        polyline.strokeWidth = 3.0
+                        polyline.map = self.googleMapView
+                    }
+                }
+            }
+
         case .none:
             return nil
         }
-        return view
+        return thumbView
     }
     
+    func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
+        challengePath.removePolyline()
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        switch viewControllerState{
+        case .challenges:
+            popVc.segment = 1
+            if let id = marker.title {
+                challengeStore.getChallenge(id: id) { (challenge) in
+                    self.userStore.getUser(id: challenge.champion, completion: { (user) in
+                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
+                        
+                    })
+                    self.popVc.activityId = challenge.id
+                    self.popVc.userLocation = LocationManager.sharedManager.currentLocation
+                    self.popVc.challengeNameLabel.text = challenge.name
+                    self.popVc.challengeStatsLabel.text = "\(challenge.type)"
+                    if let lat = challenge.lat, let long = challenge.long {
+                        self.popVc.challengeLocation = Location(lat: lat , long: long)
+                    }
+                }
+            }
+            self.present(popVc, animated: true, completion: nil)
+        case .events:
+            print("Events")
+        }
+    }
     // MARK:- Views
     private let googleMapView: GMSMapView = {
         let mapview: GMSMapView = GMSMapView()

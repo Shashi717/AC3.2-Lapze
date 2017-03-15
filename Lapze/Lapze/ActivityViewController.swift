@@ -8,13 +8,20 @@
 
 import UIKit
 
-class ActivityViewController: UIViewController,EventViewControllerDelegate {
+import FirebaseDatabase
+
+class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate {
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
     private var showInfoWindow: Bool = false
     private var timer: Timer = Timer()
+    private var activityTime: Double = 0.0
+    private let timeInterval:TimeInterval = 1
+    private let timerEnd:TimeInterval = 0.0
     private var counter = 0
+    private let challengeStore: ChallengeStore = ChallengeStore()
+
     
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
@@ -176,12 +183,32 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         animateInfoWindow()
     }
     
-    func endEvent() {
+
+    @objc private func endEvent() {
+
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
     }
     
+
+    //MARK:- Challenge Delegate Methods
+    func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
+        
+    }
+    
+    private func endChallenge(){
+      
+        
+    }
+    //MARK:- Join Challenge Delegate method
+    func joinChallenge(user: String, challengeId: String) {
+        challengeStore.getChallenge(id: challengeId) { (challenge) in
+            self.topInfoView.titleLabel.text = challenge.name
+        }
+    }
+    
+
     //MARK:- Timer Utilities
     private func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
@@ -196,6 +223,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
     @objc private func tick(){
         counter += 1
         bottomScrollInfoView.infoView.timeLabel.text = timeString(TimeInterval(counter))
+
+        bottomScrollInfoView.infoView.distanceLabel.text = String((mapViewController.distance/1609.34).roundTo(places: 2))
+
     }
     
     private func timeString(_ time: TimeInterval) -> String {
@@ -204,9 +234,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate {
         let seconds = Int(time) % 60
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
-    
-    //MARK: - Challenge Delegate methods
-    
     
     //MARK:- Views
     fileprivate lazy var activitySegmentedControl: UISegmentedControl = {
