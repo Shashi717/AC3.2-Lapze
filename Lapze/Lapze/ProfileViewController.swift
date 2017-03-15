@@ -6,6 +6,7 @@
 //  Copyright © 2017 Lapze Inc. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import SnapKit
 import Firebase
@@ -30,10 +31,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
-    lazy var userChallenges: [Challenge] = []
+    //var userChallenges: [Challenge] = []
     var delegate: ProfileDelegate?
-    
-    
+   
+    var userChallenges: [Challenge] = [] {
+        didSet {
+            print("changed from \(oldValue) to \(userChallenges)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,9 +51,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         //test
         getUserChallenges()
-    
         //setupDataChart(dataPoints: months, values: unitsSold)
     }
+    
+    
     
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
@@ -62,14 +68,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
-            
         }
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
-        
+        //dump("self userchallenge \(self.userChallenges)")
         for i in 0..<self.userChallenges.count {
             let values = ["\(i)": "\(self.badgeTitles[i])"]
             self.userStore.updateUserData(id: uid!, values: values, child: "badges")
@@ -113,7 +118,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //test
-        return 5
+        return userChallenges.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
