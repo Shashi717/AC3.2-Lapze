@@ -24,8 +24,9 @@ enum DatePickerType {
     case endTime
 }
 
-protocol EventDelegate{
+protocol EventViewControllerDelegate{
     func startEvent(name: String)
+    //func endEvent()
 }
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -33,7 +34,8 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
     let noTimeLimitActivities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating]
     var currentPickerType: DatePickerType = .date
-    var delegate: EventDelegate?
+    var pickedActivity: Activity =  .running
+    var delegate: EventViewControllerDelegate?
     var shareLocation = false
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
@@ -47,8 +49,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         setupViewHierarchy()
         configureConstraints()
-        
-
     }
 
     
@@ -78,6 +78,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
             self.dismissViewcontroller()
             self.delegate?.startEvent(name: "Bike")
         }))
+
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
@@ -86,6 +87,13 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func dismissViewcontroller(){
         _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func createEventObject() -> Event{
+        let currentLocation = LocationManager.sharedManager.currentLocation
+        //let event = Event(type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+        let event = Event(id:FirebaseManager.shared.uid! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+        return event
     }
     
     func showDatePicker() {
@@ -176,7 +184,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        let pickedActivity = activities[row]
+        pickedActivity = activities[row]
         pickedActivityLabel.text = pickedActivity.rawValue
         userEventInfo["type"] = pickedActivity.rawValue
      

@@ -61,6 +61,7 @@ class GoogleMapThumbView: UIView {
         }
     }
     
+    
     func fillData(name: String) {
         titleLabel.text = name
     }

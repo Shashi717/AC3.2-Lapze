@@ -31,6 +31,9 @@ class UserLocationMarker: UIView {
         }
         
         self.layer.add(fadeAnimation(), forKey: nil)
+//        let pulse = Pulse()
+//        pulse.position = self.center
+//        self.layer.insertSublayer(pulse, below: self.layer)
     }
     
     private func fadeAnimation()-> CABasicAnimation{
@@ -43,4 +46,5 @@ class UserLocationMarker: UIView {
         animation.isRemovedOnCompletion = false
         return animation
     }
+    
 }

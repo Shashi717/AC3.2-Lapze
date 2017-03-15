@@ -18,8 +18,8 @@ class Path {
     func getPolyline(_ coordinatesArr: [Location] ) -> GMSPolyline {
          path.removeAllCoordinates()
         for location in coordinatesArr {
-            let lat = location.lat
-            let long = location.long
+            let lat = location.latitude
+            let long = location.longitude
             let coordinates = CLLocationCoordinate2D(latitude: lat , longitude: long)
             path.add(coordinates)
         }
