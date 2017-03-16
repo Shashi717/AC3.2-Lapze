@@ -117,20 +117,7 @@ class ChallengeStore {
         
     }
     
-    func add(_ challenge: Challenge) {
-        FirebaseManager.shared.updateFirebase { databaseReference in
-            let childRef = databaseReference.child("Challenge").child(challenge.id)
-            childRef.updateChildValues(challenge.toJson()) { (error, ref) in
-                if error != nil{
-                    print(error?.localizedDescription)
-                }else{
-                    print("Success posting event")
-                }
-            }
-        }
-    }
-    
-    
+
     func getAllUserChallenges(userId: String, completion: @escaping ([Challenge]) -> Void) {
         
         var challengeArray: [Challenge] = []
@@ -183,5 +170,21 @@ class ChallengeStore {
         })
         //dump("challenge array >> \(challengeArray)")
     }
+
+
+    func add(_ challenge: Challenge) {
+        FirebaseManager.shared.updateFirebase { databaseReference in
+            let childRef = databaseReference.child("Challenge").child(challenge.id)
+            childRef.updateChildValues(challenge.toJson()) { (error, ref) in
+                if error != nil{
+                    print(error?.localizedDescription)
+                }else{
+                    print("Success posting event")
+                }
+            }
+        }
+    }
+    
+    
 
 }

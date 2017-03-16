@@ -40,6 +40,7 @@
 		9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */; };
 		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
 		E35565B31E79E95E00DFEEAB /* toFoursquare.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */; };
+		E35565B71E7AA95000DFEEAB /* FoursquareLapze.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */; };
 		E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */; };
 		E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2F91E6F41B2005BE3B8 /* dayStyle.json */; };
 		E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */; };
@@ -91,6 +92,7 @@
 		9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = toFoursquare.gpx; sourceTree = "<group>"; };
+		E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FoursquareLapze.gpx; sourceTree = "<group>"; };
 		E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		E363F2F91E6F41B2005BE3B8 /* dayStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dayStyle.json; sourceTree = "<group>"; };
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
@@ -124,11 +126,11 @@
 				1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */,
 				1A9768021E6789EB00F6B28C /* Info.plist */,
 				9B19204C1E6DEC2800868AB2 /* GoogleService-Info.plist */,
-				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 				1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */,
 				E363F2F91E6F41B2005BE3B8 /* dayStyle.json */,
 				E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */,
 				E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */,
+				E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */,
 				E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */,
 			);
 			name = "Supporting Files";
@@ -139,9 +141,9 @@
 			children = (
 				1A95528F1E73579600E37E50 /* ActivityViewController.swift */,
 				E39BA2701E772118007A9D90 /* Leaderboard */,
+				1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */,
 				9B170C211E6A5FEC003EE1D7 /* EventsViewController.swift */,
 				9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */,
-				1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */,
 				E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */,
 				1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */,
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
@@ -204,6 +206,7 @@
 		1A4AA7C71E678C34006EC158 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9B170C231E6A6830003EE1D7 /* ColorPalette.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */,
 				1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */,
 				1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */,
+				E35565B71E7AA95000DFEEAB /* FoursquareLapze.gpx in Resources */,
 				E35565B31E79E95E00DFEEAB /* toFoursquare.gpx in Resources */,
 				1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */,
 				E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */,

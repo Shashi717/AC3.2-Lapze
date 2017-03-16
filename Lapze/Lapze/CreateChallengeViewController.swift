@@ -16,6 +16,7 @@ protocol ChallengeDelegate {
 
     func challengeCreated(_ challenge: Challenge)
 
+
 }
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
