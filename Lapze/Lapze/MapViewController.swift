@@ -97,6 +97,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+    public func hideAllMarkers(){
+       GoogleMapManager.shared.hideAllMarkers()
+    }
+    
     //MARK:- Activity update
     public func startActivity(){
         switch viewControllerState{
@@ -244,6 +248,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         line.map = nil
         line.map = googleMapView
     }
+    
     //MARK:- Google map delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
