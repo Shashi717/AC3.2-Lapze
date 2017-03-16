@@ -204,6 +204,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
+        showAlertSheet(title: "Kepp this challenge", message: nil, acceptClosure: { (_) in
+            print("Challenge saved")
+        }) { (_) in
+            self.mapViewController.removeUserPath()
+        }
     }
     
     @objc private func startChallenge(){
@@ -224,7 +229,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
         present(popVC, animated: true, completion: nil)
     }
-
+    
     //MARK:- Join Challenge Delegate method
     func joinChallenge(user: String, challengeId: String) {
         challengeStore.getChallenge(id: challengeId) { (challenge) in
@@ -254,6 +259,16 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let minutes = Int(time) / 60 % 60
         let seconds = Int(time) % 60
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+    }
+    
+    private func showAlertSheet(title:String, message: String?, acceptClosure: ((UIAlertAction)->Void)?, reject: ((UIAlertAction)->Void)?){
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let noAction: UIAlertAction = UIAlertAction(title: "no", style: .cancel, handler: reject)
+        let yesAction: UIAlertAction = UIAlertAction(title: "yes", style: .default, handler: acceptClosure)
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        present(alert, animated: true, completion: nil)
+        
     }
     
     //MARK:- Views
