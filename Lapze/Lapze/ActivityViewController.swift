@@ -22,8 +22,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let timerEnd:TimeInterval = 0.0
     private var counter = 0
     private let challengeStore: ChallengeStore = ChallengeStore()
-
-    
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
             updateInterface()
@@ -57,6 +55,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         //Default map state
         mapViewController.updateMapState(state: .events)
     }
+    
     //MARK:- Map Utilties
     @objc private func changeMapState(sender: UISegmentedControl){
         guard let activity = MapViewControllerState(rawValue: sender.selectedSegmentIndex) else { return }
@@ -79,6 +78,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "Challenge!"
         }
+        bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
     @objc private func createActivityHandle(){
@@ -179,20 +179,19 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     func startEvent(name: String){
         topInfoView.titleLabel.text = "Your \(name) session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
-        bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endEvent), for: .touchUpInside)
+        bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
         startTimer()
         animateInfoWindow()
     }
     
-
     @objc private func endEvent() {
+        print("End event infoview")
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
     }
     
-
     //MARK:- Challenge Delegate Methods
     func challengeCreated(_ challenge: Challenge) {
         //challengeStore.add(challenge)
@@ -201,16 +200,18 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     @objc private func endChallenge(){
-        print("End challenge")
+        print("End challenge infoview")
+        mapViewController.endActivity()
+        stopTimer()
         animateInfoWindow()
     }
     
     @objc private func startChallenge(){
         bottomScrollInfoView.actionButton.setTitle("End Challenge", for: .normal)
-        bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+        bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endChallenge), for: .touchUpInside)
+        mapViewController.startActivity()
         animateInfoWindow()
         startTimer()
-        mapViewController.startActivity()
     }
     
     private func showPopUpController(with id: String){
@@ -231,7 +232,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-
     //MARK:- Timer Utilities
     private func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
@@ -246,9 +246,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func tick(){
         counter += 1
         bottomScrollInfoView.infoView.timeLabel.text = timeString(TimeInterval(counter))
-
         bottomScrollInfoView.infoView.distanceLabel.text = String((mapViewController.distance/1609.34).roundTo(places: 2))
-
     }
     
     private func timeString(_ time: TimeInterval) -> String {

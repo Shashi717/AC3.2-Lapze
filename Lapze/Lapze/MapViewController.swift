@@ -237,7 +237,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         //self.locateMeButton.isHidden = true
         popVc.didCreateActivity = false
-        //self.userCreatedActivity = false
     }
     
     //MARK:- Location manager delegate methods
@@ -290,10 +289,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         previousLocation = currentLocation
     }
     
-
-    public func viewMarkers() {
-        
-    }
     
     //MARK:- Google map delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
