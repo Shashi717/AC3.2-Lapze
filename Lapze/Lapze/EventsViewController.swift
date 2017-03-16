@@ -27,7 +27,7 @@ private enum State {
 }
 
 
-class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,ChallengeDelegate, JoinActivityDelegate {
+class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate, JoinActivityDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
@@ -183,13 +183,13 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             self.show(createEventVc, sender: self)
             
         case 1:
-            if challengeOn == true {
+            if challengeOn {
                 let alertController = showAlert(title: "Create Challenge Unsuccessful", message: "You are already on a challenge! Please end the current challenge to create a new challenge.", useDefaultAction: true)
                 self.present(alertController, animated: true, completion: nil)
             }
             else {
                 let createEventVc = CreateChallengeViewController()
-                createEventVc.delegate = self
+                //createEventVc.delegate = self
                 self.show(createEventVc, sender: self)
             }
         default:
@@ -386,7 +386,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         let locationObject = Location(lat: validLocation.coordinate.latitude, long: validLocation.coordinate.longitude)
         
-        if challengeOn == true {
+        if challengeOn {
             
             path.append(locationObject)
             //calculating distance
@@ -609,7 +609,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         updateViews(.home)
         
         //if this is a user created challenge
-        if userCreatedActivity == true {
+        if userCreatedActivity {
             let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
             alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                 let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": userDistance] as [String : Any]

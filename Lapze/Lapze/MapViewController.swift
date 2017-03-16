@@ -188,7 +188,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         polyline.map = self.googleMapView
         
      //if this is a user created challenge
-//        if userCreatedActivity == true {
+//        if userCreatedActivity {
 //            let alertController = showAlert(title: "Challenge ended", message: "Would you like to add this challenge?", useDefaultAction: false)
 //            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
 //                let dict = ["location": pathArray, "lat": firstLat,"long": firstLong, "timeToBeat": challengeTime, "distance": userDistance] as [String : Any]
@@ -246,11 +246,9 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch trackingBehavior{
         case .followWithPathMarking:
-
                 trackDistance()
         case .limitedFollow:
                 trackDistance()
-
         case .none:
             print(trackingBehavior)
         }

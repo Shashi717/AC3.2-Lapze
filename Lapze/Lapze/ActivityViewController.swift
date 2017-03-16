@@ -14,6 +14,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
+    private let popVC: PopupViewController = PopupViewController()
     private var showInfoWindow: Bool = false
     private var timer: Timer = Timer()
     private var activityTime: Double = 0.0
@@ -85,6 +86,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         case .challenges:
             let challengeVc: CreateChallengeViewController = CreateChallengeViewController()
             navigationController?.pushViewController(challengeVc, animated: true)
+            challengeVc.delegate = self
         case .events:
             let eventVc: CreateEventViewController = CreateEventViewController()
             navigationController?.pushViewController(eventVc, animated: true)
@@ -185,7 +187,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
 
     @objc private func endEvent() {
-
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
@@ -193,14 +194,36 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
 
     //MARK:- Challenge Delegate Methods
-    func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
-        
+    func challengeCreated(_ challenge: Challenge) {
+        //challengeStore.add(challenge)
+        showPopUpController(with: challenge.id)
+        topInfoView.titleLabel.text = challenge.name
     }
     
-    private func endChallenge(){
-      
-        
+    @objc private func endChallenge(){
+        print("End challenge")
+        animateInfoWindow()
     }
+    
+    @objc private func startChallenge(){
+        bottomScrollInfoView.actionButton.setTitle("End Challenge", for: .normal)
+        bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+        animateInfoWindow()
+        startTimer()
+        mapViewController.startActivity()
+    }
+    
+    private func showPopUpController(with id: String){
+        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        popVC.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        popVC.didCreateActivity = true
+        popVC.activityId = id
+        popVC.modalTransitionStyle = .crossDissolve
+        popVC.modalPresentationStyle = .overCurrentContext
+        popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
+        present(popVC, animated: true, completion: nil)
+    }
+
     //MARK:- Join Challenge Delegate method
     func joinChallenge(user: String, challengeId: String) {
         challengeStore.getChallenge(id: challengeId) { (challenge) in
