@@ -171,6 +171,7 @@ class ChallengeStore {
         //dump("challenge array >> \(challengeArray)")
     }
 
+
     func add(_ challenge: Challenge) {
         FirebaseManager.shared.updateFirebase { databaseReference in
             let childRef = databaseReference.child("Challenge").child(challenge.id)

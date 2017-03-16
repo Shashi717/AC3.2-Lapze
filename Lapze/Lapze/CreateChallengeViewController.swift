@@ -14,10 +14,9 @@ import CoreLocation
 
 protocol ChallengeDelegate {
 
-    //func challengeCreated(id: String, linkRef: FIRDatabaseReference)
-    
-    // var challengeRef: FIRDatabaseReference? { get set }
     func challengeCreated(_ challenge: Challenge)
+
+
 }
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
