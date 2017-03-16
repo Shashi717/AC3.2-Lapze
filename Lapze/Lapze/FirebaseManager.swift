@@ -9,10 +9,10 @@
 import Foundation
 import Firebase
 
-class FirebaseManager{
+class FirebaseManager {
     static let shared: FirebaseManager  = FirebaseManager()
     let uid = FIRAuth.auth()?.currentUser?.uid
-    let databaseReference = FIRDatabase.database().reference()
+    private let databaseReference = FIRDatabase.database().reference()
     private var childAddedhandler: UInt?
     private var childRemovedhandler: UInt?
     private var childChangedhandler: UInt?
@@ -55,6 +55,10 @@ class FirebaseManager{
                 print("Success posting event")
             }
         }
+    }
+    
+    func updateFirebase(closure: (FIRDatabaseReference) -> Void) {
+        closure(databaseReference)
     }
     
     func addToFirebase(location: Location){

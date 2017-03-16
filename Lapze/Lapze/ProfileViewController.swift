@@ -55,26 +55,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         //setupDataChart(dataPoints: months, values: unitsSold)
     }
     
-    func addGradient() {
-        // 1
-        
-//        // 2
-//        gradientLayer.frame = self.view.bounds
-//        
-//        // 3
-//        let color1 = UIColor.yellowColor().CGColor as CGColorRef
-//        let color2 = UIColor(red: 1.0, green: 0, blue: 0, alpha: 1.0).CGColor as CGColorRef
-//        let color3 = UIColor.clearColor().CGColor as CGColorRef
-//        let color4 = UIColor(white: 0.0, alpha: 0.7).CGColor as CGColorRef
-//        gradientLayer.colors = [color1, color2, color3, color4]
-//        
-//        // 4
-//        gradientLayer.locations = [0.0, 0.25, 0.75, 1.0]
-//        
-//        // 5
-//        self.view.layer.addSublayer(gradientLayer)
-        
-    }
+
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges

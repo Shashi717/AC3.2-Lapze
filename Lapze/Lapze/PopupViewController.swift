@@ -85,7 +85,7 @@ class PopupViewController: UIViewController {
             if let id = FIRAuth.auth()?.currentUser?.uid {
                 self.userId = id
             }
-            if didCreateActivity == true {
+            if didCreateActivity {
                self.delegate?.joinChallenge(user: userId, challengeId: activityId)
                 dismissPopup()
             }

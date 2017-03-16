@@ -20,7 +20,7 @@ struct ColorPalette {
     
     //profile color test
     static let darkBlue = UIColor(red:0.22, green:0.26, blue:0.35, alpha:1.0)
-    
+    static let darkPurple = UIColor(red:0.13, green:0.00, blue:0.17, alpha:1.0)
     //gradients
     static let gPurple = UIColor(red:0.21, green:0.00, blue:0.20, alpha:1.0)
     static let gBlue = UIColor(red:0.04, green:0.53, blue:0.58, alpha:1.0)

@@ -34,17 +34,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UILabel.appearance().font = UIFont(name: "Heiti SC", size: 11.0)
         
         
-        //Application appearance
+        //MARK: - navbar
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
      
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let navAppearance = UINavigationBar.appearance()
-        navAppearance.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
-        navAppearance.barTintColor = ColorPalette.greenThemeColor
+        navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Gill Sans", size: 20)!, NSForegroundColorAttributeName : UIColor.white]
+        navAppearance.barTintColor = ColorPalette.darkPurple
         navAppearance.tintColor = .white
         
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 20.0),
-                                                            NSForegroundColorAttributeName : UIColor.white]
+        
+        
         //Root View
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()

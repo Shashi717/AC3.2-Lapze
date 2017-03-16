@@ -184,7 +184,7 @@ public func showAlert(title: String, message: String?, useDefaultAction: Bool) -
     
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
     
-    if useDefaultAction == true {
+    if useDefaultAction {
         let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(defaultAction)
     }

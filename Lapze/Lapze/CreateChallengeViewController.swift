@@ -13,9 +13,11 @@ import FirebaseAuth
 import CoreLocation
 
 protocol ChallengeDelegate {
-    func challengeCreated(id: String, linkRef: FIRDatabaseReference)
 
+    //func challengeCreated(id: String, linkRef: FIRDatabaseReference)
+    
     // var challengeRef: FIRDatabaseReference? { get set }
+    func challengeCreated(_ challenge: Challenge)
 }
 
 class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
@@ -27,7 +29,6 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     var shareProfile = false
     var delegate: ChallengeDelegate?
     
-    let databaseRef = FIRDatabase.database().reference()
     var challengeRef: FIRDatabaseReference!
     
     
@@ -59,7 +60,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func doneButtonTapped(sender: UIBarButtonItem) {
         
-        if isLocationOn() == true {
+        if isLocationOn() {
             
             let alertController = showAlert(title: "Create this challenge?", message: nil, useDefaultAction: false)
             
@@ -96,20 +97,17 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     //
 
     func createChallenge() {
-        
+    
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         let date = dateFormatter.string(from: Date())
         
-        let user = FIRAuth.auth()!.currentUser!.uid
-        let dict = ["champion": user, "lastUpdated": date,"name": challengeNameTextField.text!, "type": pickedActivityLabel.text!] as [String : Any]
-        
-        let linkRef = self.databaseRef.childByAutoId()
-        let challengeId = linkRef.key
-        challengeRef = databaseRef.child("Challenge").child(challengeId)
-        challengeRef.updateChildValues(dict)
-        self.delegate?.challengeCreated(id: challengeId, linkRef: challengeRef)
-        
+        let userId = FIRAuth.auth()!.currentUser!.uid
+        let newChallenge = Challenge(name: challengeNameTextField.text!,
+                    champion: userId,
+                    lastUpdated: date,
+                    type: pickedActivityLabel.text!)
+        self.delegate?.challengeCreated(newChallenge)
     }
     
     func isLocationOn() -> Bool {
