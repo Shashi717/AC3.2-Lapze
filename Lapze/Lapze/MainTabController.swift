@@ -20,9 +20,11 @@ class MainTabController: UITabBarController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         let dummyViewController: UIViewController = UIViewController()
         dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
         self.viewControllers = [dummyViewController]
+        
         checkForUserStatus()
     }
     
@@ -31,44 +33,25 @@ class MainTabController: UITabBarController{
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
-            }else if self.userLocationPermissonGranted(){
-                DispatchQueue.main.async {
-                    self.setUpTabBar()
+            }else if !self.userLocationPermissionGranted {
+                let locationNeededVC = LocationNeededViewController()
+                self.present(locationNeededVC, animated: true, completion: nil)
+                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
+                    self?.setUpTabBar()
                 }
+            }else{
+                self.setUpTabBar()
             }
         })
-        
-        //        if FIRAuth.auth()?.currentUser != nil{
-        //            self.setUpTabBar()
-        //        }else{
-        //            self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)
-        //        }
     }
-    
-    private func userLocationPermissonGranted() -> Bool{
-        LocationManager.sharedManager.requestWhenInUse()
-        switch CLLocationManager.authorizationStatus(){
-        case .authorizedWhenInUse:
-            print("Authorized when in use")
-            return true
-        case .authorizedAlways:
-            print("Authorized always")
-            return true
-        case .denied:
-            print("Denied")
-            return false
-        default:
-            print("Default")
-            return false
-        }
+
+    fileprivate var userLocationPermissionGranted: Bool {
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        return authorizationStatus == .authorizedWhenInUse
     }
-    
+
     @objc private func showLogin(){
         let loginVC = UINavigationController(rootViewController: LoginViewController())
-        let dummyViewController: UIViewController = UIViewController()
-        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
-        loginVC.modalTransitionStyle = .coverVertical
-        self.viewControllers = [dummyViewController]
         present(loginVC, animated: true, completion: nil)
     }
     
@@ -94,4 +77,5 @@ class MainTabController: UITabBarController{
         
         self.selectedIndex = 0
     }
+
 }
