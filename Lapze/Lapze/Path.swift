@@ -30,4 +30,13 @@ class Path {
     func removePolyline() {
         polyline.map = nil
     }
+    
+    func toJson(array: [Location])->[[String:Double]]{
+        var resultsArray: [[String:Double]] = []
+        for location in array{
+            let dict = ["lat": location.latitude, "long": location.longitude]
+            resultsArray.append(dict)
+        }
+        return resultsArray
+    }
 }
