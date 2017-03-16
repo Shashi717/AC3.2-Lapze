@@ -14,6 +14,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
+    private let popVC: PopupViewController = PopupViewController()
     private var showInfoWindow: Bool = false
     private var timer: Timer = Timer()
     private var activityTime: Double = 0.0
@@ -21,8 +22,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let timerEnd:TimeInterval = 0.0
     private var counter = 0
     private let challengeStore: ChallengeStore = ChallengeStore()
-
-    
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
             updateInterface()
@@ -56,6 +55,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         //Default map state
         mapViewController.updateMapState(state: .events)
     }
+    
     //MARK:- Map Utilties
     @objc private func changeMapState(sender: UISegmentedControl){
         guard let activity = MapViewControllerState(rawValue: sender.selectedSegmentIndex) else { return }
@@ -78,6 +78,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "Challenge!"
         }
+        bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
     @objc private func createActivityHandle(){
@@ -85,6 +86,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         case .challenges:
             let challengeVc: CreateChallengeViewController = CreateChallengeViewController()
             navigationController?.pushViewController(challengeVc, animated: true)
+            challengeVc.delegate = self
         case .events:
             let eventVc: CreateEventViewController = CreateEventViewController()
             navigationController?.pushViewController(eventVc, animated: true)
@@ -177,30 +179,57 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     func startEvent(name: String){
         topInfoView.titleLabel.text = "Your \(name) session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
-        bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endEvent), for: .touchUpInside)
+        bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
         startTimer()
         animateInfoWindow()
     }
     
-
     @objc private func endEvent() {
-
+        print("End event infoview")
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
     }
     
-
     //MARK:- Challenge Delegate Methods
-    func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
-        
+    func challengeCreated(_ challenge: Challenge) {
+        //challengeStore.add(challenge)
+        showPopUpController(with: challenge.id)
+        topInfoView.titleLabel.text = challenge.name
     }
     
-    private func endChallenge(){
-      
-        
+    @objc private func endChallenge(){
+        print("End challenge infoview")
+        mapViewController.endActivity()
+        stopTimer()
+        animateInfoWindow()
+        showAlertSheet(title: "Kepp this challenge", message: nil, acceptClosure: { (_) in
+            print("Challenge saved")
+        }) { (_) in
+            self.mapViewController.removeUserPath()
+        }
     }
+    
+    @objc private func startChallenge(){
+        bottomScrollInfoView.actionButton.setTitle("End Challenge", for: .normal)
+        bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endChallenge), for: .touchUpInside)
+        mapViewController.startActivity()
+        animateInfoWindow()
+        startTimer()
+    }
+    
+    private func showPopUpController(with id: String){
+        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        popVC.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        popVC.didCreateActivity = true
+        popVC.activityId = id
+        popVC.modalTransitionStyle = .crossDissolve
+        popVC.modalPresentationStyle = .overCurrentContext
+        popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
+        present(popVC, animated: true, completion: nil)
+    }
+    
     //MARK:- Join Challenge Delegate method
     func joinChallenge(user: String, challengeId: String) {
         challengeStore.getChallenge(id: challengeId) { (challenge) in
@@ -208,7 +237,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-
     //MARK:- Timer Utilities
     private func startTimer(){
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
@@ -223,9 +251,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func tick(){
         counter += 1
         bottomScrollInfoView.infoView.timeLabel.text = timeString(TimeInterval(counter))
-
         bottomScrollInfoView.infoView.distanceLabel.text = String((mapViewController.distance/1609.34).roundTo(places: 2))
-
     }
     
     private func timeString(_ time: TimeInterval) -> String {
@@ -233,6 +259,16 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let minutes = Int(time) / 60 % 60
         let seconds = Int(time) % 60
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+    }
+    
+    private func showAlertSheet(title:String, message: String?, acceptClosure: ((UIAlertAction)->Void)?, reject: ((UIAlertAction)->Void)?){
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let noAction: UIAlertAction = UIAlertAction(title: "no", style: .cancel, handler: reject)
+        let yesAction: UIAlertAction = UIAlertAction(title: "yes", style: .default, handler: acceptClosure)
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        present(alert, animated: true, completion: nil)
+        
     }
     
     //MARK:- Views
