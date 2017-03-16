@@ -14,6 +14,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
+    private let popVC: PopupViewController = PopupViewController()
     private var showInfoWindow: Bool = false
     private var timer: Timer = Timer()
     private var activityTime: Double = 0.0
@@ -196,13 +197,24 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     //MARK:- Challenge Delegate Methods
     func challengeCreated(_ challenge: Challenge) {
         challengeStore.add(challenge)
-        
+        showPopUpController(with: challenge.id)
     }
     
     private func endChallenge(){
       
         
     }
+    
+    private func showPopUpController(with id: String){
+        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        popVC.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        popVC.didCreateActivity = true
+        popVC.activityId = id
+        popVC.modalTransitionStyle = .crossDissolve
+        popVC.modalPresentationStyle = .overCurrentContext
+        present(popVC, animated: true, completion: nil)
+    }
+
     //MARK:- Join Challenge Delegate method
     func joinChallenge(user: String, challengeId: String) {
         challengeStore.getChallenge(id: challengeId) { (challenge) in
