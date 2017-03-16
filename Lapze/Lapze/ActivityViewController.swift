@@ -85,6 +85,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         case .challenges:
             let challengeVc: CreateChallengeViewController = CreateChallengeViewController()
             navigationController?.pushViewController(challengeVc, animated: true)
+            challengeVc.delegate = self
         case .events:
             let eventVc: CreateEventViewController = CreateEventViewController()
             navigationController?.pushViewController(eventVc, animated: true)
@@ -193,7 +194,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
 
     //MARK:- Challenge Delegate Methods
-    func challengeCreated(id: String, linkRef: FIRDatabaseReference) {
+    func challengeCreated(_ challenge: Challenge) {
+        challengeStore.add(challenge)
         
     }
     

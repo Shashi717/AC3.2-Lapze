@@ -27,7 +27,7 @@ private enum State {
 }
 
 
-class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate,ChallengeDelegate, JoinActivityDelegate {
+class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapViewDelegate, JoinActivityDelegate {
     
     private var userLocation: CLLocation?{
         didSet{
@@ -188,7 +188,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             }
             else {
                 let createEventVc = CreateChallengeViewController()
-                createEventVc.delegate = self
+                //createEventVc.delegate = self
                 self.show(createEventVc, sender: self)
             }
         default:
