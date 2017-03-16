@@ -8,10 +8,7 @@
 
 import Foundation
 import UIKit
-
-//protocol ProfileDelegate {
-//    func changeAvatar(userPic: String)
-//}
+import Firebase
 
 class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -21,12 +18,18 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
         profileImagePicker.dataSource = self
         profileImagePicker.register(ProfileSettingCell.self, forCellWithReuseIdentifier: cellId)
         
+        for i in 0...60 {
+            self.appProfileImages.append(String(i))
+        }
     }
     
     let cellId = "cellId"
-    let appProfileImages = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-    var chosenProfileImage = "1"
- 
+    
+    var appProfileImages = [String]()
+    let databaseRef = FIRDatabase.database().reference()
+    let uid = FIRAuth.auth()?.currentUser?.uid
+    private let userStore = UserStore()
+    
     func showAvatars() {
         
         if let window = UIApplication.shared.keyWindow {
@@ -50,7 +53,6 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
                 self.profileImagePicker.frame = CGRect(x: 0, y: y, width: self.profileImagePicker.frame.width, height: self.profileImagePicker.frame.height)
                 
             }, completion: nil)
-      
         }
     }
     
@@ -82,7 +84,9 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.chosenProfileImage = "\(indexPath.row)"
+        
+        let values = ["profilePic": "\(indexPath.row)"]
+        userStore.updateUserData(id: self.uid!, values: values, child: nil)
         
         print(indexPath.row)
         

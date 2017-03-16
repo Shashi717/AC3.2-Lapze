@@ -20,15 +20,27 @@ class UserStore {
             
             var userObject: User?
             let id = snapshot.key
-            if let name = snapshot.childSnapshot(forPath: "name").value as? String {
+            if let name = snapshot.childSnapshot(forPath: "name").value as? String,
+                let profilePic = snapshot.childSnapshot(forPath: "profilePic").value as? String,
+                let badges = snapshot.childSnapshot(forPath: "badges").value as? [String] {
                 userObject = User(id: id,
-                                  name: name)
+                                  name: name,
+                                  profilePic: profilePic,
+                                  badges: badges)
             }
             if let user = userObject {
                 completion(user)
             }
             
         })
+    }
+    
+    func updateUserData(id: String, values: [String: Any], child: String?) {
+        if child != nil {
+            self.databaseRef.child("users").child(id).child(child!).updateChildValues(values)
+        } else {
+            self.databaseRef.child("users").child(id).updateChildValues(values)
+        }
     }
     
 }
