@@ -187,7 +187,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
 
     @objc private func endEvent() {
-
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
@@ -196,13 +195,22 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
 
     //MARK:- Challenge Delegate Methods
     func challengeCreated(_ challenge: Challenge) {
-        challengeStore.add(challenge)
+        //challengeStore.add(challenge)
         showPopUpController(with: challenge.id)
+        topInfoView.titleLabel.text = challenge.name
     }
     
-    private func endChallenge(){
-      
-        
+    @objc private func endChallenge(){
+        print("End challenge")
+        animateInfoWindow()
+    }
+    
+    @objc private func startChallenge(){
+        bottomScrollInfoView.actionButton.setTitle("End Challenge", for: .normal)
+        bottomScrollInfoView.actionButton.addTarget(self, action: #selector(endChallenge), for: .touchUpInside)
+        animateInfoWindow()
+        startTimer()
+        mapViewController.startActivity()
     }
     
     private func showPopUpController(with id: String){
@@ -212,6 +220,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         popVC.activityId = id
         popVC.modalTransitionStyle = .crossDissolve
         popVC.modalPresentationStyle = .overCurrentContext
+        popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
         present(popVC, animated: true, completion: nil)
     }
 

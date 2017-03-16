@@ -246,11 +246,9 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch trackingBehavior{
         case .followWithPathMarking:
-
                 trackDistance()
         case .limitedFollow:
                 trackDistance()
-
         case .none:
             print(trackingBehavior)
         }
