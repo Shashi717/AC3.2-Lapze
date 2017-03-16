@@ -16,11 +16,12 @@ class LeaderBoardCollectionCell: BaseCell {
         
         addSubview(profileImageView)
         addSubview(leaderboardLabel)
+        addSubview(rankNumLabel)
         
         profileImageView.snp.makeConstraints { (view) in
             view.height.equalToSuperview()
             view.width.equalTo(50)
-            view.leading.equalToSuperview()
+            view.leading.equalToSuperview().offset(20)
         }
         
         leaderboardLabel.snp.makeConstraints { (view) in
@@ -28,20 +29,34 @@ class LeaderBoardCollectionCell: BaseCell {
             view.width.equalToSuperview()
             view.height.equalTo(20)
         }
+        
+        rankNumLabel.snp.makeConstraints { (view) in
+            view.leading.equalToSuperview().offset(5)
+            view.trailing.equalTo(profileImageView.snp.leading).offset(8)
+            view.height.equalTo(profileImageView.snp.height)
+        }
     }
-    
     
     //MARK: - inits
     internal var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "question")
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     internal var leaderboardLabel: UILabel = {
         let label = UILabel()
         label.text = "User data here and some action, time"
+        return label
+    }()
+    
+    internal var rankNumLabel: UILabel = {
+        let label = UILabel()
+        label.text = "1"
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .white
+        label.font = UIFont(name: "Avenir Next", size: 22)
         return label
     }()
 }
