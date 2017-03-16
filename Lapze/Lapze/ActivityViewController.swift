@@ -70,17 +70,24 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private func updateInterface(){
         switch viewControllerState{
         case .events:
+            addButtonInfoLabel.text = "Tap to create an Event" //test
             addButton.backgroundColor = ColorPalette.purpleThemeColor
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
-            navigationItem.title = "Current Events"
+            navigationItem.title = "CURRENT EVENTS"
         case .challenges:
+            addButtonInfoLabel.text = "Tap to create a Challenge"
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
-            navigationItem.title = "Challenge!"
+            navigationItem.title = "CHALLENGES"
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
+    }
+    
+    //test : this hides the addbuttonInfo label
+    @objc private func handleInfoButtons() {
+        addButtonInfoLabel.isHidden = true
     }
     
     @objc private func createActivityHandle(){
@@ -142,6 +149,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private func setUpViews(){
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
+        self.view.addSubview(addButtonInfoLabel)
         self.view.addSubview(addButton)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
@@ -150,6 +158,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
+        }
+        
+        addButtonInfoLabel.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalTo(100)
+            view.height.equalTo(addButton.snp.height)
+            view.bottom.equalTo(addButton.snp.top)
         }
         
         topInfoView.snp.makeConstraints { (view) in
@@ -285,11 +300,20 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        segmentedControl.backgroundColor = ColorPalette.greenThemeColor
+        //segmentedControl.backgroundColor = ColorPalette.greenThemeColor
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
+        
+        //test
+   
+        segmentedControl.backgroundColor = .clear
+        segmentedControl.layer.borderColor = UIColor.white.cgColor
+        segmentedControl.layer.cornerRadius = 20
+    
+        
         return segmentedControl
     }()
+    
     
     private lazy var addButton: UIButton = {
         let button: UIButton = UIButton()
@@ -304,6 +328,18 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(createActivityHandle), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleInfoButtons), for: .touchUpInside)
         return button
+    }()
+    
+    
+    //test
+    private lazy var addButtonInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Tap to create an Event"
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 2
+        label.backgroundColor = .purple
+        return label
     }()
 }

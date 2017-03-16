@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
      
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let navAppearance = UINavigationBar.appearance()
-        navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Gill Sans", size: 20)!, NSForegroundColorAttributeName : UIColor.white]
+        navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir-Book", size: 20)!, NSForegroundColorAttributeName : UIColor.white]
         navAppearance.barTintColor = ColorPalette.darkPurple
         navAppearance.tintColor = .white
         
