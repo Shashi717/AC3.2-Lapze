@@ -55,6 +55,26 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         //setupDataChart(dataPoints: months, values: unitsSold)
     }
     
+    func addGradient() {
+        // 1
+        
+//        // 2
+//        gradientLayer.frame = self.view.bounds
+//        
+//        // 3
+//        let color1 = UIColor.yellowColor().CGColor as CGColorRef
+//        let color2 = UIColor(red: 1.0, green: 0, blue: 0, alpha: 1.0).CGColor as CGColorRef
+//        let color3 = UIColor.clearColor().CGColor as CGColorRef
+//        let color4 = UIColor(white: 0.0, alpha: 0.7).CGColor as CGColorRef
+//        gradientLayer.colors = [color1, color2, color3, color4]
+//        
+//        // 4
+//        gradientLayer.locations = [0.0, 0.25, 0.75, 1.0]
+//        
+//        // 5
+//        self.view.layer.addSublayer(gradientLayer)
+        
+    }
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
@@ -195,6 +215,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(topContainerView)
         self.topContainerView.addSubview(profileImageView)
         self.topContainerView.addSubview(usernameLabel)
+        self.topContainerView.layer.insertSublayer(gradient, at: 0)
         
         self.view.addSubview(badgesCollectionView)
         self.view.addSubview(pieChart)
@@ -297,15 +318,20 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let view = PieChartView()
         return view
     }()
-   
     
     internal var topContainerView: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
-        view.backgroundColor = ColorPalette.darkBlue
         return view
     }()
     
+    internal lazy var gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.black.cgColor, UIColor.purple.cgColor]
+        gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 200)
+        return gradient
+    }()
+
     internal var badgesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
@@ -320,7 +346,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         imageView.contentMode = .scaleAspectFill
         imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
-        imageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
+        imageView.layer.borderColor = UIColor.white.cgColor
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pickAvatar))
@@ -331,6 +357,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        //label.backgroundColor = .clear
         return label
     }()
     internal lazy var userRankLabel: UILabel = {
