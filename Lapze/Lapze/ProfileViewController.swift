@@ -70,6 +70,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
         }
+        
     }
     
     func determineRank(_ challenges: [Challenge]) {
@@ -85,6 +86,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let values = ["\(i)": "\(self.badgeTitles[i])"]
             self.userStore.updateUserData(id: uid!, values: values, child: "badges")
         }
+        //self.badgesCollectionView.reloadData()
     }
 
     func loadUser() {

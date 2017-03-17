@@ -25,7 +25,7 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var users: [User] = [] {
         didSet {
-            print("changed from \(oldValue) to \(users)")
+            print("changed from \(oldValue) to \(users.count)")
             self.leaderBoardCollectionView.reloadData()
         }
     }
@@ -80,7 +80,9 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! LeaderBoardCollectionCell
         
+        cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
         cell.nameLabel.text = "\(self.users[indexPath.row].name)"
+        cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
         return cell
     }
     

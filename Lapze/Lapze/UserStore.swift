@@ -59,6 +59,7 @@ class UserStore {
                                   name: name,
                                   profilePic: profilePic,
                                   badges: badges)
+              
                 
                 userObjects.append(user)
                 }

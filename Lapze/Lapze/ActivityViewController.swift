@@ -75,12 +75,15 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
             navigationItem.title = "CURRENT EVENTS"
+            animateAddbuttonInfoLabel()//test
+            
         case .challenges:
             addButtonInfoLabel.text = "Tap to create a Challenge"
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "CHALLENGES"
+            animateAddbuttonInfoLabel()//test
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
@@ -146,17 +149,18 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     private func animateAddbuttonInfoLabel() {
-        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1.5, dampingRatio: 0.9)
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
         
         animator.addAnimations({
-            self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 20)
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
         })
         
         animator.addAnimations({
-            self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 0)
-        }, delayFactor: 0.7)
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        }, delayFactor: 0.5)
         
         animator.startAnimation()
+        animator.addCompletion({_ in self.animateAddbuttonInfoLabel()})
     }
     
     //MARK:- Views
@@ -165,6 +169,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         self.view.addSubview(activitySegmentedControl)
         self.view.addSubview(addButtonInfoLabel)
         self.view.addSubview(addButton)
+        self.view.addSubview(infoThumbImageView)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
         
@@ -178,6 +183,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.centerX.equalToSuperview()
             view.width.equalTo(100)
             view.height.equalTo(addButton.snp.height)
+            view.bottom.equalTo(infoThumbImageView.snp.top)
+        }
+        
+        infoThumbImageView.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.size.equalTo(40)
             view.bottom.equalTo(addButton.snp.top)
         }
         
@@ -356,5 +367,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         label.numberOfLines = 2
         label.backgroundColor = .purple
         return label
+    }()
+    
+    private lazy var infoThumbImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "crownThumb")
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
     }()
 }

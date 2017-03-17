@@ -42,6 +42,7 @@ class LeaderBoardCollectionCell: BaseCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "question")
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 50
         return imageView
     }()
     
