@@ -48,7 +48,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     private var previousLocation: CLLocation?
     private var allChallenges: [Challenge] = []
-    private var allEvents: [Event] = []
+    private var allEvents: [Event] = []{
+        didSet{
+            self.showEventMarkers()
+        }
+    }
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
@@ -134,7 +138,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             self.showChallengeMarkers(allChallenges)
         case .event:
             print("event markers")
-            self.showEventMarkers()
+            self.getAllEvents()
         case .none:
             print("show no markers")
         }
@@ -170,18 +174,26 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+    //MARK: - Event Utilities
     private func getAllEvents(){
         EventStore.manager.getAllCurrentEvents { (events) in
-          self.allEvents = events
+            self.allEvents = events
         }
     }
     
     private func showEventMarkers(){
-        getAllEvents()
-        
         for event in allEvents{
             GoogleMapManager.shared.addMarker(event: event)
         }
+    }
+    
+    private func getEvent(id: String)->Event?{
+        for event in allEvents{
+            if event.id == id{
+                return event
+            }
+        }
+        return nil
     }
     
     //MARK:- Location manager delegate methods
@@ -268,7 +280,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch markerOption {
         case .event:
+            guard let markerId = marker.title else {return nil}
+            let event = getEvent(id: markerId)
+            thumbView.titleLabel.text = event?.type
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
+            
         case .challenge:
             thumbView.backgroundColor = ColorPalette.orangeThemeColor
             userPath.removePolyline()

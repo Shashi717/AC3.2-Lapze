@@ -50,12 +50,13 @@ class GoogleMapManager{
     }
     
     func addMarker(event: Event){
+        guard event.id != FirebaseManager.shared.uid else { return}
         let cllocation = CLLocationCoordinate2D(latitude: event.location.latitude, longitude: event.location.longitude)
         let marker = GMSMarker(position: cllocation)
         self.dict[event.id] = marker
         marker.map = map
         marker.icon = UIImage(named: "010-man")
-        marker.title = event.type
+        marker.title = event.id
     }
     
     func addMarker(id: String, marker:GMSMarker){

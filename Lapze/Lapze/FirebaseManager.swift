@@ -74,16 +74,6 @@ class FirebaseManager {
         
     }
     
-//    private func handleSnapshot(snap: FIRDataSnapshot, node: FirebaseNode){
-//        switch node{
-//        case .event:
-//            if let event = EventStore.manager.createEvent(snapshot: snap){
-//                
-//            }
-//        case .location:
-//        }
-//    }
-    
     private func getSnapshotValue(snapshot: FIRDataSnapshot)->[String:Double]?{
         return snapshot.value as? [String:Double]
     }
