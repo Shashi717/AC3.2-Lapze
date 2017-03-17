@@ -19,8 +19,13 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setup()
+        
+        self.navigationItem.leftBarButtonItem =  UIBarButtonItem(image: UIImage(named: "close"), style: .done, target: self, action: #selector(dismissme))
     }
-
+    
+    func dismissme() {
+        self.dismiss(animated: true, completion: nil)
+    }
     func setup() {
         mainBadgesCollectionView.delegate = self
         mainBadgesCollectionView.dataSource = self
@@ -32,13 +37,13 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         
         topContainerView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            view.height.equalToSuperview().multipliedBy(0.25)
+            view.height.equalToSuperview().multipliedBy(0.15)
             view.top.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints { (view) in
             view.center.equalToSuperview()
-            view.height.equalTo(25)
+            view.height.equalTo(40)
         }
         
         mainBadgesCollectionView.snp.makeConstraints { (view) in
@@ -57,13 +62,13 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
-        cell.badgeLabel.text = "\(badgeTitles[indexPath.row])"
+        //cell.badgeLabel.text = "\(badgeTitles[indexPath.row])"
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50)
+        return CGSize(width: 60, height: 60)
         
     }
     
@@ -72,17 +77,11 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         print(indexPath.row)
     }
     
-    func showLeaderboard() {
-        print("show leaderBoard")
-        self.navigationController?.pushViewController(LeaderBoardViewController(), animated: true)
-    }
-    
 
   //MARK: - views
-    
     internal var topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = ColorPalette.greenThemeColor
         return view
     }()
     

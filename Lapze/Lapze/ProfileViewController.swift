@@ -139,13 +139,17 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         print("indexpath : \(indexPath.row)")
         switch indexPath.row {
         case 1:
-            self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
-            cell.backgroundColor = .red
+            presentMainBadgeView()
         default: break
         }
         self.badgesCollectionView.reloadData()
     }
     
+    func presentMainBadgeView() {
+        //self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
+        let mbvc = MainBadgesViewController()
+        self.present(mbvc, animated: true)
+    }
    
    
     

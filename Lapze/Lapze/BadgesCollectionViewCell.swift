@@ -41,6 +41,7 @@ class BadgesCollectionViewCell: BaseCell {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
 }

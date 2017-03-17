@@ -47,7 +47,7 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         leaderBoardCollectionView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            view.height.equalTo(800)
+            view.height.equalTo(600)
             //view.top.equalTo(showBadgesButton.snp.bottom)
             view.bottom.equalToSuperview()
         }
