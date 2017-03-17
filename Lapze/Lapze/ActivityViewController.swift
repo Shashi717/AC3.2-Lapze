@@ -21,6 +21,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let timeInterval:TimeInterval = 1
     private let timerEnd:TimeInterval = 0.0
     private var counter = 0
+    private var didCreateActivity = false
+    private var currentChallenge: Challenge?
     private let challengeStore: ChallengeStore = ChallengeStore()
     fileprivate var viewControllerState: MapViewControllerState = .events{
         didSet{
@@ -56,6 +58,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
         //Default map state
         mapViewController.updateMapState(state: .events)
+        mapViewController.popVc.delegate = self
     }
     
     //MARK:- Map Utilties
@@ -74,14 +77,14 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
             navigationItem.title = "CURRENT EVENTS"
-            handleInfoInterface("events") //test
+            //handleInfoInterface("events") //test
             
         case .challenges:
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "CHALLENGES"
-            handleInfoInterface("challenges")
+            //handleInfoInterface("challenges")
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
@@ -242,6 +245,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     @objc private func endEvent() {
         print("End event infoview")
+        mapViewController.activityTime = Double(counter)
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
@@ -250,8 +254,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     //MARK:- Challenge Delegate Methods
 
     func challengeCreated(_ challenge: Challenge) {
-        //challengeStore.add(challenge)
-        showPopUpController(with: challenge.id)
+       showPopUpController(with: challenge)
+         popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        popVC.didCreateActivity = true
+        self.didCreateActivity = true
+        currentChallenge = challenge
+        mapViewController.didCreateActivity = true
+        mapViewController.challenge = challenge
         topInfoView.titleLabel.text = challenge.name
         
     }
@@ -259,17 +268,23 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     @objc private func endChallenge(){
         print("End challenge infoview")
+        mapViewController.activityTime = Double(counter)
         mapViewController.endActivity()
+        
         stopTimer()
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
             print("Challenge saved")
-            //challengeStore.add(challenge)
+
+            self.mapViewController.updateFirebase()
+
         }) { (_) in
             print("Challenge not saved")
             //self.challengeFirebaseRef?.child(challenge.id).removeValue()
             self.mapViewController.removeUserPath()
         }
+        
+        self.didCreateActivity = false
     }
     
     @objc private func startChallenge(){
@@ -280,28 +295,29 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         startTimer()
     }
     
-    private func showPopUpController(with id: String){
-        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+    private func showPopUpController(with challenge: Challenge){
         popVC.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        popVC.didCreateActivity = true
-        popVC.activityId = id
+        popVC.challenge = challenge
         popVC.modalTransitionStyle = .crossDissolve
         popVC.modalPresentationStyle = .overCurrentContext
         popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
+        popVC.delegate = self
         present(popVC, animated: true, completion: nil)
     }
     
     //MARK:- Join Challenge Delegate method
-    func joinChallenge(user: String, challengeId: String) {
-        challengeStore.getChallenge(id: challengeId) { (challenge) in
-            self.topInfoView.titleLabel.text = challenge.name
-        }
-        startChallenge()//test
+    func joinChallenge(_ challenge: Challenge) {
+//        self.mapViewController.didCreateActivity = false
+        self.didCreateActivity = false
+        currentChallenge = challenge
+        topInfoView.titleLabel.text = challenge.name
+        startChallenge()
+        
     }
     
     //MARK:- Timer Utilities
     private func startTimer(){
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
         timer.fire()
     }
     

@@ -29,7 +29,7 @@ class ChallengeStore {
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let champion = snap.childSnapshot(forPath: "champion").value as? String,
                     let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value as? String,
-                    let locationArray = snap.childSnapshot(forPath: "location").value as? [[String:Double]],
+                    let locationArray = snap.childSnapshot(forPath: "path").value as? [[String:Double]],
                     let type = snap.childSnapshot(forPath: "type").value as? String,
                     let lat = snap.childSnapshot(forPath: "lat").value as? Double,
                     let long = snap.childSnapshot(forPath: "long").value as? Double {
@@ -87,7 +87,7 @@ class ChallengeStore {
                 
                 if let latitude = snapshot.childSnapshot(forPath: "lat").value as? Double,
                     let longitude = snapshot.childSnapshot(forPath: "long").value as? Double,
-                    let locationArray = snapshot.childSnapshot(forPath: "location").value as? [[String:Double]]
+                    let locationArray = snapshot.childSnapshot(forPath: "path").value as? [[String:Double]]
                 {
                     lat = latitude
                     long = longitude
@@ -117,7 +117,6 @@ class ChallengeStore {
         
     }
     
-
     func getAllUserChallenges(userId: String, completion: @escaping ([Challenge]) -> Void) {
         
         var challengeArray: [Challenge] = []
@@ -133,7 +132,7 @@ class ChallengeStore {
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let champion = snap.childSnapshot(forPath: "champion").value as? String,
                     let lastUpdated = snap.childSnapshot(forPath: "lastUpdated").value as? String,
-                    let locationArray = snap.childSnapshot(forPath: "location").value as? [[String:Double]],
+                    let locationArray = snap.childSnapshot(forPath: "path").value as? [[String:Double]],
                     let type = snap.childSnapshot(forPath: "type").value as? String,
                     let lat = snap.childSnapshot(forPath: "lat").value as? Double,
                     let long = snap.childSnapshot(forPath: "long").value as? Double {
@@ -185,6 +184,4 @@ class ChallengeStore {
         }
     }
     
-    
-
 }

@@ -12,7 +12,7 @@ import FirebaseAuth
 import CoreLocation
 
 protocol JoinActivityDelegate {
-    func joinChallenge(user: String, challengeId: String)
+    func joinChallenge(_ challenge: Challenge)
 }
 
 class PopupViewController: UIViewController {
@@ -20,6 +20,7 @@ class PopupViewController: UIViewController {
     var segment: Int?
     var delegate: JoinActivityDelegate?
     var userId: String = ""
+    var challenge: Challenge?
     var activityId: String = ""
     var didCreateActivity = false
     var userLocation: CLLocation?
@@ -86,7 +87,6 @@ class PopupViewController: UIViewController {
                 self.userId = id
             }
             if didCreateActivity {
-               self.delegate?.joinChallenge(user: userId, challengeId: activityId)
                 dismissPopup()
             }
             else {
@@ -94,18 +94,18 @@ class PopupViewController: UIViewController {
                 let location = Location(lat: self.challengeLocation!.latitude, long: self.challengeLocation!.longitude)
                 if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
                     print("User is within the radius")
-                    self.delegate?.joinChallenge(user: userId, challengeId: activityId)
+                    if let challenge = challenge {
+                        self.delegate?.joinChallenge(challenge)
+                    }
                     dismissPopup()
                 }
                 else {
                     print("User is NOT within the radius")
                     let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge starting point!", useDefaultAction: true)
-                    
                     self.present(alertController, animated: true, completion: nil)
                 }
             }
         }
-        
     }
     
     func clearData() {
@@ -164,7 +164,7 @@ class PopupViewController: UIViewController {
         }
         
     }
- 
+    
     //MARK: - Views
     internal lazy var popupContainerView: UIView! = {
         let view = UIView()
@@ -194,7 +194,7 @@ class PopupViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
-        label.lineBreakMode = .byWordWrapping // or NSLineBreakMode.ByWordWrapping
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         return label
     }()
@@ -220,7 +220,6 @@ class PopupViewController: UIViewController {
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
         return button
     }()
-    
     
 }
 

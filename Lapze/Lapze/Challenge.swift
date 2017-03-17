@@ -11,8 +11,8 @@ import Foundation
 struct Challenge {
     let id: String
     let name: String
-    let champion: String
-    let lastUpdated: String
+    var champion: String
+    var lastUpdated: String
     let type: String
 
     var lat: Double?
@@ -58,6 +58,8 @@ struct Challenge {
     
     
     func toJson()->[String:Any]{
+        
+        var pathArray: [[String:Double]] = []
         var result: [String: Any] = [
             "name": name,
             "type": type,
@@ -78,7 +80,17 @@ struct Challenge {
             result["distance"] = distance
         }
         if let path = self.path {
-            result["path"] = path
+            for location in path {
+                let lat = location.latitude
+                let long = location.longitude
+                
+                let dict = ["lat": lat, "long": long]
+                pathArray.append(dict)
+            }
+        }
+        
+        if pathArray.count > 0 {
+            result["path"] = pathArray
         }
         
         return result

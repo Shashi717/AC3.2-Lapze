@@ -217,10 +217,11 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     //MARK: JoinActivity Delegate methods
     
-    func joinChallenge(user: String, challengeId: String) {
+    func joinChallenge(_ challenge: Challenge) {
         
         self.challengeOn = true
-        self.challengeId = challengeId
+        
+       // self.challengeId = challengeId
         self.challengeTime = 0
         self.state = .challenge
         updateViews(.challenge)
@@ -233,7 +234,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         
         self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
         
-        challengeStore.getChallenge(id: challengeId) { (challenge) in
+        challengeStore.getChallenge(id: challengeId!) { (challenge) in
             self.topStatusLabel.text = challenge.name
             
         }
@@ -634,9 +635,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "MMM dd, yyyy"
                             let date = dateFormatter.string(from: Date())
-                            
-                            
-                            
+                
                             let dict = ["timeToBeat": challengeTime, "champion": self.currentUser!.uid, "lastUpdated": date] as [String : Any]
                             self.challengeFirebaseRef?.updateChildValues(dict)
                             let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
