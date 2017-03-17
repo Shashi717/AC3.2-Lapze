@@ -15,7 +15,7 @@ class LeaderBoardCollectionCell: BaseCell {
         backgroundColor = .blue
         
         addSubview(profileImageView)
-        addSubview(leaderboardLabel)
+        addSubview(nameLabel)
         addSubview(rankNumLabel)
         
         profileImageView.snp.makeConstraints { (view) in
@@ -24,7 +24,7 @@ class LeaderBoardCollectionCell: BaseCell {
             view.leading.equalToSuperview().offset(20)
         }
         
-        leaderboardLabel.snp.makeConstraints { (view) in
+        nameLabel.snp.makeConstraints { (view) in
             view.leading.equalTo(profileImageView.snp.trailing).offset(8)
             view.width.equalToSuperview()
             view.height.equalTo(20)
@@ -45,7 +45,7 @@ class LeaderBoardCollectionCell: BaseCell {
         return imageView
     }()
     
-    internal var leaderboardLabel: UILabel = {
+    internal var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "User data here and some action, time"
         return label

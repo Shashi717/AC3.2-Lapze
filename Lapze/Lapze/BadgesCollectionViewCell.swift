@@ -13,7 +13,7 @@ import SnapKit
 class BadgesCollectionViewCell: BaseCell {
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .blue
+        backgroundColor = .clear
         
         addSubview(badgeImageView)
         addSubview(badgeLabel)
@@ -25,7 +25,7 @@ class BadgesCollectionViewCell: BaseCell {
         badgeLabel.snp.makeConstraints { (view) in
             view.top.equalTo(badgeImageView.snp.bottom).offset(5)
             view.width.equalTo(badgeImageView.snp.width)
-            view.height.equalTo(20)
+            view.height.equalTo(15)
         }
     }
     

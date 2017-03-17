@@ -7,16 +7,27 @@
 //
 
 import UIKit
+import Firebase
 
 class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     let cellId = "leaderCell"
+     let userStore = UserStore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
         self.navigationItem.title = "Leaderboard"
         setup()
+        loadUsers()
+    }
+    
+    var users: [User] = [] {
+        didSet {
+            print("changed from \(oldValue) to \(users)")
+            self.leaderBoardCollectionView.reloadData()
+        }
     }
 
     //MARK: - Utilities
@@ -49,6 +60,13 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         }
     }
     
+    func loadUsers() {
+        userStore.getAllUsers { (users) in
+            self.users = users
+            dump("users \(users)")
+        }
+    }
+    
     func showBadges() {
         print("show stickers")
         self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
@@ -56,12 +74,13 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return users.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! LeaderBoardCollectionCell
         
+        cell.nameLabel.text = "\(self.users[indexPath.row].name)"
         return cell
     }
     

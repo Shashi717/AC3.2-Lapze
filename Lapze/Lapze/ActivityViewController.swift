@@ -145,8 +145,22 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animator.startAnimation()
     }
     
+    private func animateAddbuttonInfoLabel() {
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1.5, dampingRatio: 0.9)
+        
+        animator.addAnimations({
+            self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 20)
+        })
+        
+        animator.addAnimations({
+            self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 0)
+        }, delayFactor: 0.7)
+        
+        animator.startAnimation()
+    }
+    
     //MARK:- Views
-    private func setUpViews(){
+    private func setUpViews() {
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
         self.view.addSubview(addButtonInfoLabel)
@@ -258,6 +272,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         challengeStore.getChallenge(id: challengeId) { (challenge) in
             self.topInfoView.titleLabel.text = challenge.name
         }
+        startChallenge()//test
     }
     
     //MARK:- Timer Utilities

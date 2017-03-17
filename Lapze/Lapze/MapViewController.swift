@@ -336,6 +336,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         return mapview
     }()
     
+    
+    
     private lazy var line: GMSPolyline = {
         let polyline: GMSPolyline = GMSPolyline()
         polyline.strokeColor = .green

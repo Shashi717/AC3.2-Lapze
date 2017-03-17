@@ -59,7 +59,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
-            self.userRankLabel.text = "\(self.userChallenges.count)"
+            self.determineRank(challenges)
+            //self.userRankLabel.text = "\(self.userChallenges.count)"
             
             //piechart data
             var activityDataDict = [String: Double]()
@@ -68,6 +69,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
+        }
+    }
+    
+    func determineRank(_ challenges: [Challenge]) {
+        if challenges.count > 0 {
+            self.userRankLabel.text = "Newbie Boobie"
         }
     }
     
@@ -161,6 +168,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.pieChart.chartDescription?.text = ""
         self.pieChart.usePercentValuesEnabled = true
         self.pieChart.sizeToFit()
+        
         
     }
     
@@ -309,7 +317,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var gradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.black.cgColor, UIColor.purple.cgColor]
-        gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 200)
+        gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 300)
         return gradient
     }()
 
@@ -338,12 +346,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        //label.backgroundColor = .clear
+        label.textColor = .white
         return label
     }()
     internal lazy var userRankLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     internal lazy var activitiesLabel: UILabel = {
