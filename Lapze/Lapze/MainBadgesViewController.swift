@@ -20,12 +20,14 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         self.view.backgroundColor = .white
         setup()
         
-        self.navigationItem.leftBarButtonItem =  UIBarButtonItem(image: UIImage(named: "close"), style: .done, target: self, action: #selector(dismissme))
+      
     }
     
     func dismissme() {
+        print("dismissme")
         self.dismiss(animated: true, completion: nil)
     }
+    
     func setup() {
         mainBadgesCollectionView.delegate = self
         mainBadgesCollectionView.dataSource = self
@@ -33,6 +35,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         
         self.view.addSubview(topContainerView)
         self.topContainerView.addSubview(titleLabel)
+        self.topContainerView.addSubview(closeButton)
         self.view.addSubview(mainBadgesCollectionView)
         
         topContainerView.snp.makeConstraints { (view) in
@@ -50,6 +53,11 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
             view.width.equalToSuperview()
             view.top.equalTo(topContainerView.snp.bottom)
             view.bottom.equalToSuperview()
+        }
+        
+        closeButton.snp.makeConstraints { (view) in
+            view.leading.equalToSuperview()
+            view.top.equalToSuperview().offset(10)
         }
     }
     
@@ -99,6 +107,18 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = ColorPalette.greenThemeColor
         return cv
+    }()
+    
+    internal lazy var closeButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "close"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ (view) in
+            view.size.equalTo(CGSize(width: 20, height: 20))
+        })
+        button.layer.cornerRadius = 20
+        button.addTarget(self, action: #selector(dismissme), for: .touchUpInside)
+        return button
     }()
     
     
