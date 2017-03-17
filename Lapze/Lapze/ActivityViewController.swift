@@ -38,6 +38,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         setUpController()
     }
     
+    override func viewDidLayoutSubviews() {
+        //self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+    }
+    
     private func setUpController(){
         addMapViewController()
         setUpViews()
@@ -112,6 +117,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     //test: almost done
     @objc private func handlePostInfoInterface() {
         print("tapped that")
+        //self.infoButtonAnimator.stopAnimation(true)
         animateAddbuttonInfo(false)
         addButtonInfoLabel.isHidden = true
         infoThumbImageView.isHidden = true
@@ -173,24 +179,51 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animator.startAnimation()
     }
     
+    //test
+      //let infoButtonAnimator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
     private func animateAddbuttonInfo(_ isAnimating: Bool) {
-        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
+        let infoButtonAnimator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
         
-        animator.addAnimations({
+        
+        infoButtonAnimator.addAnimations({
             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
         })
         
-        animator.addAnimations({
+        
+        infoButtonAnimator.addAnimations({
             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
         }, delayFactor: 0.5)
+            //dump("is animating? \(infoButtonAnimator.isRunning)")
         
+//        if isAnimating {
+//            infoButtonAnimator.addCompletion({ (_) in
+//                self.animateAddbuttonInfo(true)
+//            })
+//        } else {
+//            infoButtonAnimator.stopAnimation(true)
+//        }
+        
+//        UIView.animate(withDuration: 1, delay: 0.5, options: .repeat, animations: {
+//            infoButtonAnimator.startAnimation()
+//        }) { (_) in
+//            infoButtonAnimator.startAnimation()
+//        }
+        
+        UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: .repeat, animations: {
+           self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            
+             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        }, completion: nil)
+
         if isAnimating {
-        animator.startAnimation()
-        animator.addCompletion({_ in self.animateAddbuttonInfo(true)})
-        } else {
-            animator.stopAnimation(true)
+            dump("is animating? \(infoButtonAnimator.isRunning)")
         }
+        
+        self.view.layoutIfNeeded()
+        self.view.setNeedsLayout()
     }
+    
+    
     
     //MARK:- Views
     private func setUpViews() {
