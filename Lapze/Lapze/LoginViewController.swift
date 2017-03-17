@@ -12,7 +12,7 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,9 +40,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 }
                 else {
                     let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
-
+                    
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-   
+                        
                         self.dismiss(animated: true, completion: nil)
                     }))
                     
@@ -54,7 +54,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
-     
+        
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
     }
@@ -65,44 +65,51 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     fileprivate func observeKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardDidShow, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardDidHide, object: nil)
     }
     
     func showKeyboard() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        UIView.animate(withDuration: 0.5) {
+            self.scrollView.contentOffset = CGPoint(x: 0, y: 50)
+        }
     }
     
     func hideKeyboard(notification: NSNotification) {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.frame = CGRect(x: 0, y: 60, width: self.view.frame.width, height: self.view.frame.height)
-            }, completion: nil)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
+        }, completion: nil)
     }
-    
-
-    
-    
-    
     
     //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
-        
-        self.view.addSubview(logoImageView)
-        self.view.addSubview(emailTextField)
-        self.view.addSubview(passwordTextField)
-        self.view.addSubview(loginButton)
-        self.view.addSubview(gotoRegisterButton)
+        self.view.addSubview(scrollView)
+        self.scrollView.addSubview(container)
+        self.container.addSubview(logoImageView)
+        self.container.addSubview(emailTextField)
+        self.container.addSubview(passwordTextField)
+        self.container.addSubview(loginButton)
+        self.container.addSubview(gotoRegisterButton)
     }
     
     func configureConstraints() {
         
+        scrollView.snp.makeConstraints { (view) in
+            view.leading.trailing.top.bottom.equalToSuperview()
+        }
+        
+        container.snp.makeConstraints { (view) in
+            view.leading.trailing.top.bottom.equalToSuperview()
+            view.height.equalTo(self.view.snp.height)
+            view.width.equalTo(self.view.snp.width)
+        }
+        
         logoImageView.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.height.width.equalTo(225.0)
-            view.top.equalToSuperview().offset(20.0)
+            view.top.equalToSuperview().offset(40.0)
         }
         emailTextField.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -129,7 +136,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             view.width.equalTo(200.0)
             view.height.equalTo(30.0)
         }
-        
     }
     
     func clearTextFields() {
@@ -137,6 +143,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.text = nil
     }
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private let container: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = ColorPalette.logoGreenColor
+        return view
+    }()
     //MARK: - View init
     internal lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -173,5 +189,4 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         button.addTarget(self, action: #selector(gotoRegisterTapped(sender:)), for: .touchUpInside)
         return button
     }()
-
 }
