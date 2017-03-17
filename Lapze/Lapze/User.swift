@@ -13,5 +13,6 @@ struct User {
     let name: String
     let profilePic: String
     let badges: [String]
+  
 }
 

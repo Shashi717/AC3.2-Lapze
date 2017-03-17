@@ -89,7 +89,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         locateMeButton.snp.makeConstraints { (view) in
             view.trailing.equalToSuperview().inset(10)
-            view.width.height.equalTo(50)
+            view.width.height.equalTo(40)
             view.bottom.equalToSuperview().inset(10)
         }
     }
@@ -456,6 +456,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
         return mapview
     }()
+    
+    
     
     private lazy var line: GMSPolyline = {
         let polyline: GMSPolyline = GMSPolyline()

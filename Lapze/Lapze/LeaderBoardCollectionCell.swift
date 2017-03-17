@@ -12,10 +12,10 @@ import UIKit
 class LeaderBoardCollectionCell: BaseCell {
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .blue
+        //backgroundColor = .gray
         
         addSubview(profileImageView)
-        addSubview(leaderboardLabel)
+        addSubview(nameLabel)
         addSubview(rankNumLabel)
         
         profileImageView.snp.makeConstraints { (view) in
@@ -24,7 +24,7 @@ class LeaderBoardCollectionCell: BaseCell {
             view.leading.equalToSuperview().offset(20)
         }
         
-        leaderboardLabel.snp.makeConstraints { (view) in
+        nameLabel.snp.makeConstraints { (view) in
             view.leading.equalTo(profileImageView.snp.trailing).offset(8)
             view.width.equalToSuperview()
             view.height.equalTo(20)
@@ -42,10 +42,11 @@ class LeaderBoardCollectionCell: BaseCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "question")
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 50
         return imageView
     }()
     
-    internal var leaderboardLabel: UILabel = {
+    internal var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "User data here and some action, time"
         return label
@@ -55,7 +56,7 @@ class LeaderBoardCollectionCell: BaseCell {
         let label = UILabel()
         label.text = "1"
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .white
+        label.textColor = .orange
         label.font = UIFont(name: "Avenir Next", size: 22)
         return label
     }()

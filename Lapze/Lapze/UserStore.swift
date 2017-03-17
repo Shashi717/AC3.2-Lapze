@@ -43,4 +43,29 @@ class UserStore {
         }
     }
     
+    func getAllUsers(completion: @escaping ([User]) -> Void) {
+        var userObjects: [User] = []
+        
+        self.databaseRef.child("users").observe(.value, with: {(snapshot) in
+            
+            let enumerator = snapshot.children
+            while let snap = enumerator.nextObject() as? FIRDataSnapshot {
+                
+            let id = snap.key
+            if let name = snap.childSnapshot(forPath: "name").value as? String,
+                let profilePic = snap.childSnapshot(forPath: "profilePic").value as? String,
+                let badges = snap.childSnapshot(forPath: "badges").value as? [String] {
+                let user = User(id: id,
+                                  name: name,
+                                  profilePic: profilePic,
+                                  badges: badges)
+              
+                
+                userObjects.append(user)
+                }
+            }
+            completion(userObjects)
+        })
+    }
+    
 }
