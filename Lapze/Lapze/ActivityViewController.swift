@@ -177,18 +177,21 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Event Delegate methods
-    func startEvent(name: String){
+    func startEvent(name: String, showUserLocation: Bool){
         topInfoView.titleLabel.text = "Your \(name) session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
+        mapViewController.trackUserLocation = showUserLocation
         startTimer()
         animateInfoWindow()
     }
     
     @objc private func endEvent() {
         FirebaseManager.shared.removeEvent()
+        FirebaseManager.shared.removeUserLocation()
         mapViewController.endActivity()
+        mapViewController.trackUserLocation = false
         stopTimer()
         animateInfoWindow()
     }

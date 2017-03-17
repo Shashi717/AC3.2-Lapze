@@ -31,7 +31,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case event
         case none
     }
-    
+
     fileprivate var markerOption: MarkerOption = .event{
         didSet{
             updateMarkers()
@@ -62,6 +62,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     let userPath = Path()
     var userPathArray: [Location] = []
     var distance: Double = 0.0
+    var trackUserLocation: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -206,6 +207,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             addPolyline(newLocation)
         case .limitedFollow:
             trackDistance()
+            addUserLocationToFirebase(location: newLocation)
         case .none:
             print(trackingBehavior)
         }
@@ -244,7 +246,16 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
         previousLocation = currentLocation
     }
-    
+  
+    private func addUserLocationToFirebase(location: CLLocation){
+        let location = Location(location: location)
+        switch trackUserLocation{
+        case true:
+            FirebaseManager.shared.addToFirebase(location: location)
+        case false:
+            break
+        }
+    }
     //MARK:- Polyline Utilities
     private func addPolyline(_ location: CLLocation){
         let cllcorddinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)

@@ -62,12 +62,24 @@ class FirebaseManager {
         childRef.removeValue()
     }
     
+    func removeUserLocation(){
+        let childRef = databaseReference.child("Location").child(uid!)
+        childRef.removeValue()
+    }
+    
     func updateFirebase(closure: (FIRDatabaseReference) -> Void) {
         closure(databaseReference)
     }
     
     func addToFirebase(location: Location){
-        
+        let childRef = databaseReference.child("Location").child(uid!)
+        childRef.updateChildValues(location.toJson()) { (error, ref) in
+            if error != nil{
+                print(error?.localizedDescription)
+            }else{
+                print("Success posting location")
+            }
+        }
     }
     
     func addToFirebase(challenge: Challenge){
