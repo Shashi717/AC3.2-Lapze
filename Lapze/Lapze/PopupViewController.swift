@@ -162,7 +162,7 @@ class PopupViewController: UIViewController {
     private func animateButton(){
         let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.5)
         animator.addAnimations {
-            self.actionButton.transform = CGAffineTransform(translationX: 0, y: -60)
+            self.actionButton.transform = CGAffineTransform(translationX: 0, y: -120)
         }
         animator.startAnimation()
     }
