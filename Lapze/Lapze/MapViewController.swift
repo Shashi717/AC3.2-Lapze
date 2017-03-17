@@ -124,7 +124,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
-        
+        removeUserPath()
     }
     
     public func updateFirebase() {
@@ -312,6 +312,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case .challenge:
             thumbView.backgroundColor = ColorPalette.orangeThemeColor
             userPath.removePolyline()
+            removeUserPath()
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
