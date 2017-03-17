@@ -50,7 +50,7 @@ class FirebaseManager {
         let childRef = databaseReference.child("Event").child(uid!)
         childRef.updateChildValues(event.toJson()) { (error, ref) in
             if error != nil{
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
             }else{
                 print("Success posting event")
             }
