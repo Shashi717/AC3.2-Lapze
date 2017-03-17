@@ -43,24 +43,23 @@ class GoogleMapThumbView: UIView {
             view.top.equalTo(profileImageView.snp.bottom).offset(padding)
             view.left.equalToSuperview().offset(padding)
             view.right.equalToSuperview().inset(padding)
-            view.height.equalTo(40.0)
+            view.height.equalTo(35.0)
         }
         
         self.currentChampionNameLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(titleLabel.snp.bottom).offset(padding)
+            view.top.equalTo(titleLabel.snp.bottom)
             view.left.equalToSuperview().offset(padding)
             view.right.equalToSuperview().inset(padding)
-            view.height.equalTo(20.0)
+            view.height.equalTo(35.0)
         }
         
         self.descriptionLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(currentChampionNameLabel.snp.bottom).offset(padding)
+            view.top.equalTo(currentChampionNameLabel.snp.bottom)
             view.leading.equalToSuperview().offset(padding)
             view.trailing.equalToSuperview().inset(padding)
             view.bottom.equalToSuperview().inset(padding)
         }
     }
-    
     
     func fillData(name: String) {
         titleLabel.text = name
@@ -87,6 +86,7 @@ class GoogleMapThumbView: UIView {
     var currentChampionNameLabel: UILabel = {
         let label: UILabel = UILabel()
         label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white
@@ -97,6 +97,7 @@ class GoogleMapThumbView: UIView {
         let label: UILabel = UILabel()
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.textColor = .white
         label.textAlignment = .center

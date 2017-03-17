@@ -83,8 +83,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
+<<<<<<< HEAD
             navigationItem.title = "CHALLENGES"
             //handleInfoInterface("challenges")
+=======
+            navigationItem.title = "Challenges"
+>>>>>>> 7193c60be0f3ac6fc5153c4a7e1c6f9d440a3347
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
@@ -285,6 +289,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
         
         self.didCreateActivity = false
+       
     }
     
     @objc private func startChallenge(){
