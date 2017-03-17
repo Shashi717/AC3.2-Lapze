@@ -12,7 +12,7 @@ import FirebaseAuth
 import CoreLocation
 
 protocol JoinActivityDelegate {
-    func joinChallenge(user: String, challengeId: String)
+    func joinChallenge(_ challenge: Challenge)
 }
 
 class PopupViewController: UIViewController {
@@ -20,6 +20,7 @@ class PopupViewController: UIViewController {
     var mapViewControllerState: MapViewControllerState = .events
     var delegate: JoinActivityDelegate?
     var userId: String = ""
+    var challenge: Challenge?
     var activityId: String = ""
     var didCreateActivity = false
     var userLocation: CLLocation?
@@ -79,14 +80,16 @@ class PopupViewController: UIViewController {
                 self.userId = id
             }
             if didCreateActivity {
-                self.delegate?.joinChallenge(user: userId, challengeId: activityId)
+
                 dismissPopup()
             }
             else {
                 let location = Location(lat: self.challengeLocation!.latitude, long: self.challengeLocation!.longitude)
                 if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
                     print("User is within the radius")
-                    self.delegate?.joinChallenge(user: userId, challengeId: activityId)
+                    if let challenge = challenge {
+                        self.delegate?.joinChallenge(challenge)
+                    }
                     dismissPopup()
                 }
                 else {
@@ -154,7 +157,6 @@ class PopupViewController: UIViewController {
             view.width.equalToSuperview()
             view.height.equalToSuperview().multipliedBy(0.11)
         }
-        
     }
     
     private func animateButton(){
@@ -194,7 +196,7 @@ class PopupViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
-        label.lineBreakMode = .byWordWrapping // or NSLineBreakMode.ByWordWrapping
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         return label
     }()

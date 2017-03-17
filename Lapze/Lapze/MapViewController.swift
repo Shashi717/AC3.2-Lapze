@@ -56,13 +56,16 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
-    private let popVc: PopupViewController = PopupViewController()
+    let popVc: PopupViewController = PopupViewController()
     private let path: GMSMutablePath = GMSMutablePath()
     let challengePath = Path()
     let userPath = Path()
     var userPathArray: [Location] = []
     var distance: Double = 0.0
     var trackUserLocation: Bool = false
+    var activityTime: Double = 0.0
+    var challenge: Challenge?
+    var didCreateActivity = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,7 +132,60 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
+
         distance = 0.0
+        removeUserPath()
+    }
+    
+    public func updateFirebase() {
+        
+        guard userPathArray.count > 0 else {
+            let alertController = showAlert(title: "OOPS", message: "Sorry, we coudn't locate you! Please try again!", useDefaultAction: true)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        
+        if didCreateActivity == true {
+            challenge?.lat = userPathArray.first!.latitude
+            challenge?.long = userPathArray.first!.longitude
+            challenge?.path = userPathArray
+            challenge?.timeToBeat = activityTime
+            challenge?.distance = (distance/1609.34).roundTo(places: 2)
+            challengeStore.add(challenge!)
+        }
+            
+        else {
+            let locationStore = LocationStore()
+            if let path = challenge?.path, let endLocation = path.last {
+                if locationStore.isUserWithinRadius(userLocation: self.userCurrentLocation!, challengeLocation: endLocation) {
+                    let currentDistance = (self.distance/1609.34).roundTo(places: 2)
+                    if activityTime < (challenge?.timeToBeat!)! && (abs(currentDistance - (challenge?.distance!)!) < 0.05) {
+                        
+                        let currentDate = getCurrentDateString()
+                        
+                        challenge?.lastUpdated = currentDate
+                        challenge?.champion = FirebaseManager.shared.uid!
+                        challenge?.timeToBeat = activityTime
+                        challenge?.distance = (distance/1609.34).roundTo(places: 2)
+                        
+                        challengeStore.add(challenge!)
+                        let alertController = showAlert(title: "Great Job!", message: "You beat current champion. You hold the crown now!", useDefaultAction: true)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    else {
+                        let alertController = showAlert(title: "Nice Try!", message: "Sorry, your time didn't beat the current champion.", useDefaultAction: true)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                }
+                else {
+                    let alertController = showAlert(title: "Unsuccessful!", message: "You're not at the challenge ending point!", useDefaultAction: true)
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+        
+        distance = 0.0
+        activityTime = 0.0
     }
     
     private func updateMarkers(){
@@ -299,6 +355,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case .challenge:
             thumbView.backgroundColor = ColorPalette.orangeThemeColor
             userPath.removePolyline()
+            removeUserPath()
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
@@ -352,6 +409,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
                     if let lat = challenge.lat, let long = challenge.long {
                         self.popVc.challengeLocation = Location(lat: lat , long: long)
                     }
+                    self.didCreateActivity = false
+                    self.popVc.didCreateActivity = false
+                    self.challenge = challenge
+                    self.popVc.challenge = challenge
                 }
             }
             self.present(popVc, animated: true, completion: nil)
@@ -401,4 +462,12 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         button.addTarget(self, action: #selector(goToUserLocation), for: .touchUpInside)
         return button
     }()
+}
+
+func getCurrentDateString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "MMM dd, yyyy"
+    let date = dateFormatter.string(from: Date())
+    
+    return date
 }

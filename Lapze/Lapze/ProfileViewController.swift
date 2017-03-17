@@ -55,6 +55,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         //setupDataChart(dataPoints: months, values: unitsSold)
     }
     
+
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
@@ -195,6 +196,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(topContainerView)
         self.topContainerView.addSubview(profileImageView)
         self.topContainerView.addSubview(usernameLabel)
+        self.topContainerView.layer.insertSublayer(gradient, at: 0)
         
         self.view.addSubview(badgesCollectionView)
         self.view.addSubview(pieChart)
@@ -297,15 +299,20 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let view = PieChartView()
         return view
     }()
-   
     
     internal var topContainerView: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
-        view.backgroundColor = ColorPalette.darkBlue
         return view
     }()
     
+    internal lazy var gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.black.cgColor, UIColor.purple.cgColor]
+        gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 200)
+        return gradient
+    }()
+
     internal var badgesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
@@ -320,7 +327,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         imageView.contentMode = .scaleAspectFill
         imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
-        imageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
+        imageView.layer.borderColor = UIColor.white.cgColor
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pickAvatar))
@@ -331,6 +338,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        //label.backgroundColor = .clear
         return label
     }()
     internal lazy var userRankLabel: UILabel = {
