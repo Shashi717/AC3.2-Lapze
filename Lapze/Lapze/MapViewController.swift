@@ -358,7 +358,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
         
-        
         let thumbView: GoogleMapThumbView = GoogleMapThumbView()
         thumbView.profileImageView.image = marker.icon
         marker.tracksInfoWindowChanges = true
@@ -418,7 +417,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
                         self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
-                        
                     })
                     self.popVc.activityId = challenge.id
                     self.popVc.userLocation = LocationManager.sharedManager.currentLocation
@@ -456,9 +454,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
         return mapview
     }()
-    
-    
-    
+  
     private lazy var line: GMSPolyline = {
         let polyline: GMSPolyline = GMSPolyline()
         polyline.strokeColor = .green
