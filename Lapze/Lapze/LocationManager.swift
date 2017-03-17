@@ -7,6 +7,8 @@ protocol LocationConsuming: class {
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
     
+    static let locationStatusDidChange = "LocationStatusDidChange"
+    
     static let sharedManager = LocationManager()
     private(set) var currentLocation: CLLocation?
     private let locManager = CLLocationManager()
@@ -30,5 +32,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func requestWhenInUse(){
         locManager.requestWhenInUseAuthorization()
+    }
+    
+    func getLocationManager()->CLLocationManager{
+        return locManager
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: LocationManager.locationStatusDidChange), object: status)
     }
 }

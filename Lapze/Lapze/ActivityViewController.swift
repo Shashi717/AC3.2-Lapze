@@ -67,6 +67,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
         viewControllerState = activity
         mapViewController.updateMapState(state: activity)
+        popVC.mapViewControllerState = activity
     }
     
     //MARK:- User Interface Utilities
@@ -248,19 +249,23 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Event Delegate methods
-    func startEvent(name: String){
+    func startEvent(name: String, showUserLocation: Bool){
         topInfoView.titleLabel.text = "Your \(name) session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
+        mapViewController.trackUserLocation = showUserLocation
         startTimer()
         animateInfoWindow()
     }
     
     @objc private func endEvent() {
+        FirebaseManager.shared.removeEvent()
+        FirebaseManager.shared.removeUserLocation()
         print("End event infoview")
         mapViewController.activityTime = Double(counter)
         mapViewController.endActivity()
+        mapViewController.trackUserLocation = false
         stopTimer()
         animateInfoWindow()
     }
@@ -355,8 +360,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     private func showAlertSheet(title:String, message: String?, acceptClosure: ((UIAlertAction)->Void)?, reject: ((UIAlertAction)->Void)?){
         let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        let noAction: UIAlertAction = UIAlertAction(title: "no", style: .cancel, handler: reject)
-        let yesAction: UIAlertAction = UIAlertAction(title: "yes", style: .default, handler: acceptClosure)
+        let noAction: UIAlertAction = UIAlertAction(title: "No", style: .cancel, handler: reject)
+        let yesAction: UIAlertAction = UIAlertAction(title: "Yes", style: .default, handler: acceptClosure)
         alert.addAction(noAction)
         alert.addAction(yesAction)
         present(alert, animated: true, completion: nil)

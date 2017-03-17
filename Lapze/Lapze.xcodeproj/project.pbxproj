@@ -14,6 +14,7 @@
 		1A9767F71E6789EB00F6B28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9767F61E6789EB00F6B28C /* AppDelegate.swift */; };
 		1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FD1E6789EB00F6B28C /* Assets.xcassets */; };
 		1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9767FF1E6789EB00F6B28C /* LaunchScreen.storyboard */; };
+		1AA17A761E7B806800286706 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA17A751E7B806800286706 /* EventStore.swift */; };
 		1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */; };
 		1AB0E91E1E6F22EC00C7490B /* GoogleMapThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */; };
 		1AB0E9201E6FD7E700C7490B /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */; };
@@ -23,11 +24,13 @@
 		1AEF10961E764F850086C8E6 /* BottomActivityInfoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */; };
 		1AEF10981E766B690086C8E6 /* PulseLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10971E766B690086C8E6 /* PulseLayer.swift */; };
 		1AEF109A1E78CBED0086C8E6 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */; };
+		1AEF109C1E7B15180086C8E6 /* LocationNeededViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEF109B1E7B15180086C8E6 /* LocationNeededViewController.swift */; };
 		1AFF36CE1E6DCA6800624AAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */; };
 		1AFF36D01E6DCBD500624AAA /* GoogleMapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */; };
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B0767991E738A8C005AA3B8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0767981E738A8C005AA3B8 /* Location.swift */; };
 		9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B07679A1E73902F005AA3B8 /* LocationStore.swift */; };
+		9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B1316A11E7BB8AB004430AD /* 17mph.gpx */; };
 		9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */; };
 		9B13480F1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */; };
 		9B1531531E72251C00853B2E /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531521E72251C00853B2E /* Challenge.swift */; };
@@ -69,6 +72,7 @@
 		1A9767FD1E6789EB00F6B28C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A9768001E6789EB00F6B28C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A9768021E6789EB00F6B28C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AA17A751E7B806800286706 /* EventStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
 		1AA518CE1E6E17BD00CB830D /* darkBlueStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkBlueStyle.json; sourceTree = "<group>"; };
 		1AB0E91D1E6F22EC00C7490B /* GoogleMapThumbView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapThumbView.swift; sourceTree = "<group>"; };
 		1AB0E91F1E6FD7E700C7490B /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
@@ -78,12 +82,14 @@
 		1AEF10951E764F850086C8E6 /* BottomActivityInfoScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomActivityInfoScrollView.swift; sourceTree = "<group>"; };
 		1AEF10971E766B690086C8E6 /* PulseLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulseLayer.swift; sourceTree = "<group>"; };
 		1AEF10991E78CBED0086C8E6 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		1AEF109B1E7B15180086C8E6 /* LocationNeededViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationNeededViewController.swift; sourceTree = "<group>"; };
 		1AFF36CD1E6DCA6800624AAA /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		1AFF36CF1E6DCBD500624AAA /* GoogleMapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapManager.swift; sourceTree = "<group>"; };
 		3306D834986CC67455EA3764 /* Pods_Lapze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lapze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
 		9B0767981E738A8C005AA3B8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		9B07679A1E73902F005AA3B8 /* LocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
+		9B1316A11E7BB8AB004430AD /* 17mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = 17mph.gpx; sourceTree = "<group>"; };
 		9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_15mph.gpx; sourceTree = "<group>"; };
 		9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_10mph.gpx; sourceTree = "<group>"; };
 		9B1531521E72251C00853B2E /* Challenge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
@@ -139,8 +145,13 @@
 				9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */,
 				E363F2F91E6F41B2005BE3B8 /* dayStyle.json */,
 				E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */,
+
 				E330B0051E7BB2A700580551 /* block20mph.gpx */,
 				E330B0071E7BB33D00580551 /* line25.gpx */,
+
+				9B1316A11E7BB8AB004430AD /* 17mph.gpx */,
+				E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */,
+
 				E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */,
 				E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */,
 			);
@@ -160,6 +171,7 @@
 				9B19204E1E6DED8400868AB2 /* LoginViewController.swift */,
 				9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */,
 				1A95528D1E72460500E37E50 /* MapViewController.swift */,
+				1AEF109B1E7B15180086C8E6 /* LocationNeededViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -202,11 +214,12 @@
 		1A4AA7C61E678BFC006EC158 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1AA17A751E7B806800286706 /* EventStore.swift */,
 				9B1684951E70911B00377543 /* Path.swift */,
-				9B1531561E7281E700853B2E /* User.swift */,
+				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
 				9B1531521E72251C00853B2E /* Challenge.swift */,
 				9B1531541E72276A00853B2E /* ChallengeStore.swift */,
-				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
+				9B1531561E7281E700853B2E /* User.swift */,
 				9B1531581E72820900853B2E /* UserStore.swift */,
 				9B0767981E738A8C005AA3B8 /* Location.swift */,
 				9B07679A1E73902F005AA3B8 /* LocationStore.swift */,
@@ -316,7 +329,7 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 9QMWUGNK5F;
+						DevelopmentTeam = ZSE2A75FGT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -347,6 +360,7 @@
 				E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */,
 				9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */,
 				E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */,
+				9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */,
 				9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */,
 				E330B0061E7BB2A700580551 /* block20mph.gpx in Resources */,
 				1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */,
@@ -449,7 +463,9 @@
 				1AEF108E1E7583EC0086C8E6 /* Event.swift in Sources */,
 				1AEF109A1E78CBED0086C8E6 /* ProfileViewController.swift in Sources */,
 				E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */,
+				1AEF109C1E7B15180086C8E6 /* LocationNeededViewController.swift in Sources */,
 				9B1531571E7281E700853B2E /* User.swift in Sources */,
+				1AA17A761E7B806800286706 /* EventStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,10 +583,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9QMWUGNK5F;
+				DEVELOPMENT_TEAM = ZSE2A75FGT;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.mira;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -583,10 +599,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9QMWUGNK5F;
+				DEVELOPMENT_TEAM = ZSE2A75FGT;
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.mira;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

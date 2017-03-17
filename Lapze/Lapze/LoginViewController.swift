@@ -12,7 +12,6 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,7 +26,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func loginTapped(sender: UIButton) {
-        print("Login")
         
         if let email = emailTextField.text, let password = passwordTextField.text {
             
@@ -53,7 +51,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func gotoRegisterTapped(sender: UIButton) {
-        print("signup")
      
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
@@ -80,12 +77,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.view.frame = CGRect(x: 0, y: 60, width: self.view.frame.width, height: self.view.frame.height)
             }, completion: nil)
     }
-    
 
-    
-    
-    
-    
     //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []

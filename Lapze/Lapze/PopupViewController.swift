@@ -16,15 +16,14 @@ protocol JoinActivityDelegate {
 }
 
 class PopupViewController: UIViewController {
-    
     var segment: Int?
+    var mapViewControllerState: MapViewControllerState = .events
     var delegate: JoinActivityDelegate?
     var userId: String = ""
     var challenge: Challenge?
     var activityId: String = ""
     var didCreateActivity = false
     var userLocation: CLLocation?
-    
     var challengeLocation: Location?
     let locationStore = LocationStore()
     
@@ -38,17 +37,7 @@ class PopupViewController: UIViewController {
         view.addGestureRecognizer(tap)
         setupViewHierarchy()
         configureConstraints()
-        
-        fillPopupForChallenge()
-        
-        //switch
-        if segment == 0 {
-            self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
-            self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
-        } else {
-            self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
-            self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        }
+        setUpViewController()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -56,41 +45,45 @@ class PopupViewController: UIViewController {
         if self.isBeingDismissed {
             self.clearData()
         }
-        
     }
     
     func dissmissView() {
         if didCreateActivity == false {
             dismissPopup()
-            
         }
     }
     
-    //MARK: - Utilities
-    func fillPopupForChallenge() {
-        popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        profileImageView.layer.borderColor = ColorPalette.purpleThemeColor.cgColor
+    override func viewDidAppear(_ animated: Bool) {
+        animateButton()
     }
     
+    //MARK: Interface Utilities
+    private func setUpViewController(){
+        switch mapViewControllerState{
+        case .events:
+            self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
+            self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
+        case .challenges:
+            self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
+            self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
+        }
+    }
     
     func dismissPopup() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func startActivity() {
-        
-        if segment == 0 {
-            
-        }
-        else {
+        switch mapViewControllerState{
+        case .challenges:
             if let id = FIRAuth.auth()?.currentUser?.uid {
                 self.userId = id
             }
             if didCreateActivity {
+
                 dismissPopup()
             }
             else {
-                
                 let location = Location(lat: self.challengeLocation!.latitude, long: self.challengeLocation!.longitude)
                 if self.locationStore.isUserWithinRadius(userLocation:userLocation!, challengeLocation:location) {
                     print("User is within the radius")
@@ -105,6 +98,8 @@ class PopupViewController: UIViewController {
                     self.present(alertController, animated: true, completion: nil)
                 }
             }
+        case .events:
+            print("Start event")
         }
     }
     
@@ -115,7 +110,7 @@ class PopupViewController: UIViewController {
     }
     
     //MARK: - setup
-    func setupViewHierarchy() {
+    private func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(blurView)
         self.blurView.addSubview(popupContainerView)
@@ -126,7 +121,7 @@ class PopupViewController: UIViewController {
         self.popupContainerView.addSubview(challengeStatsLabel)
     }
     
-    func configureConstraints() {
+    private func configureConstraints() {
         popupContainerView.snp.makeConstraints { (view) in
             view.center.equalToSuperview()
             view.height.equalToSuperview().multipliedBy(0.35)
@@ -158,22 +153,29 @@ class PopupViewController: UIViewController {
         }
         
         actionButton.snp.makeConstraints { (view) in
-            view.bottom.equalToSuperview().inset(50)
+            view.top.equalTo(self.view.snp.bottom)
             view.width.equalToSuperview()
-            view.height.equalTo(50)
+            view.height.equalToSuperview().multipliedBy(0.11)
         }
-        
+    }
+    
+    private func animateButton(){
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.5)
+        animator.addAnimations {
+            self.actionButton.transform = CGAffineTransform(translationX: 0, y: -120)
+        }
+        animator.startAnimation()
     }
     
     //MARK: - Views
-    internal lazy var popupContainerView: UIView! = {
+    lazy var popupContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 15.0
         view.layer.masksToBounds = false
         return view
     }()
     
-    internal lazy var profileImageView: UIImageView! = {
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 40.0
         imageView.contentMode = .scaleAspectFill
@@ -183,14 +185,14 @@ class PopupViewController: UIViewController {
         return imageView
     }()
     
-    internal lazy var challengeNameLabel: UILabel! = {
+    lazy var challengeNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
     
-    internal lazy var challengeDescriptionLabel: UILabel! = {
+    lazy var challengeDescriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
@@ -199,14 +201,14 @@ class PopupViewController: UIViewController {
         return label
     }()
     
-    internal lazy var challengeStatsLabel: UILabel! = {
+    lazy var challengeStatsLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
     
-    internal lazy var blurView: UIVisualEffectView = {
+    lazy var blurView: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .light)
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = self.view.bounds
@@ -214,12 +216,11 @@ class PopupViewController: UIViewController {
         return blurView
     }()
     
-    internal lazy var actionButton: UIButton = {
+    lazy var actionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Start", for: .normal)
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
         return button
     }()
-    
 }
 
