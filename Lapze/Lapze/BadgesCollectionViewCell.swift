@@ -13,7 +13,6 @@ import SnapKit
 class BadgesCollectionViewCell: BaseCell {
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .clear
         
         addSubview(badgeImageView)
         addSubview(badgeLabel)

@@ -47,7 +47,7 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         leaderBoardCollectionView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            view.height.equalTo(300)
+            view.height.equalTo(200)
             //view.top.equalTo(showBadgesButton.snp.bottom)
             view.bottom.equalToSuperview()
         }
@@ -94,13 +94,13 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     internal var leaderBoardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .purple
+        cv.backgroundColor = .white
         return cv
     }()
     
     internal let topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
         return view
     }()
 

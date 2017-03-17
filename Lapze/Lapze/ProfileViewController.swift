@@ -50,9 +50,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         configureConstraints()
         loadUser()
         
-        //test
+        
         getUserChallenges()
-        //setupDataChart(dataPoints: months, values: unitsSold)
     }
     
 
@@ -128,8 +127,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
-        cell.layer.borderWidth = 2.0
-        cell.layer.borderColor = UIColor.gray.cgColor
         return cell
     }
     
@@ -138,17 +135,18 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         print("indexpath : \(indexPath.row)")
         switch indexPath.row {
         case 1:
             self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
+            cell.backgroundColor = .red
         default: break
         }
+        self.badgesCollectionView.reloadData()
     }
     
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        
-    }
+   
    
     
     //MARK: - pie data
@@ -269,8 +267,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.6)
-            //view.centerX.equalToSuperview()
-            view.leading.equalToSuperview()
+            view.centerX.equalToSuperview()
+            //view.leading.equalToSuperview()
         }
     }
 

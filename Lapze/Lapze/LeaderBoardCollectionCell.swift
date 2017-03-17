@@ -56,7 +56,7 @@ class LeaderBoardCollectionCell: BaseCell {
         let label = UILabel()
         label.text = "1"
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .white
+        label.textColor = .orange
         label.font = UIFont(name: "Avenir Next", size: 22)
         return label
     }()
