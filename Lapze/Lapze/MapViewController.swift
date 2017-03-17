@@ -109,7 +109,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
         userLocationMarker?.iconView = nil
-        userLocationMarker?.icon = UIImage(named: "7")
+        userStore.getUser(id: FirebaseManager.shared.uid!) { (user) in
+       
+            if let profileImage = self.resizeImage(user.profilePic) {
+                self.userLocationMarker?.icon = profileImage
+            }
+        }
+        
         markerOption = .none
     }
     
@@ -125,6 +131,19 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.icon = nil
         trackingBehavior = .none
         removeUserPath()
+    }
+    
+    func resizeImage(_ profilePic: String) -> UIImage? {
+        let image = UIImage(named: profilePic)
+        let width = 50.0
+        let height = 50.0
+        UIGraphicsBeginImageContext(CGSize(width: width, height: height))
+        
+        image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
     
     public func updateFirebase() {

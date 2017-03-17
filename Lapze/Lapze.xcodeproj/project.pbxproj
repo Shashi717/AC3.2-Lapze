@@ -28,6 +28,7 @@
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B0767991E738A8C005AA3B8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0767981E738A8C005AA3B8 /* Location.swift */; };
 		9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B07679A1E73902F005AA3B8 /* LocationStore.swift */; };
+		9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B1316A11E7BB8AB004430AD /* 17mph.gpx */; };
 		9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */; };
 		9B13480F1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */; };
 		9B1531531E72251C00853B2E /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531521E72251C00853B2E /* Challenge.swift */; };
@@ -82,6 +83,7 @@
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
 		9B0767981E738A8C005AA3B8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		9B07679A1E73902F005AA3B8 /* LocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
+		9B1316A11E7BB8AB004430AD /* 17mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = 17mph.gpx; sourceTree = "<group>"; };
 		9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_15mph.gpx; sourceTree = "<group>"; };
 		9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_10mph.gpx; sourceTree = "<group>"; };
 		9B1531521E72251C00853B2E /* Challenge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */,
 				E363F2F91E6F41B2005BE3B8 /* dayStyle.json */,
 				E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */,
+				9B1316A11E7BB8AB004430AD /* 17mph.gpx */,
 				E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */,
 				E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */,
 				E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */,
@@ -198,10 +201,10 @@
 			isa = PBXGroup;
 			children = (
 				9B1684951E70911B00377543 /* Path.swift */,
-				9B1531561E7281E700853B2E /* User.swift */,
+				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
 				9B1531521E72251C00853B2E /* Challenge.swift */,
 				9B1531541E72276A00853B2E /* ChallengeStore.swift */,
-				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
+				9B1531561E7281E700853B2E /* User.swift */,
 				9B1531581E72820900853B2E /* UserStore.swift */,
 				9B0767981E738A8C005AA3B8 /* Location.swift */,
 				9B07679A1E73902F005AA3B8 /* LocationStore.swift */,
@@ -341,6 +344,7 @@
 				E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */,
 				9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */,
 				E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */,
+				9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */,
 				9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */,
 				1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */,
 				1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */,

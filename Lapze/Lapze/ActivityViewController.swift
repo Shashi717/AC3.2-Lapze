@@ -289,8 +289,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     private func showAlertSheet(title:String, message: String?, acceptClosure: ((UIAlertAction)->Void)?, reject: ((UIAlertAction)->Void)?){
         let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        let noAction: UIAlertAction = UIAlertAction(title: "no", style: .cancel, handler: reject)
-        let yesAction: UIAlertAction = UIAlertAction(title: "yes", style: .default, handler: acceptClosure)
+        let noAction: UIAlertAction = UIAlertAction(title: "No", style: .cancel, handler: reject)
+        let yesAction: UIAlertAction = UIAlertAction(title: "Yes", style: .default, handler: acceptClosure)
         alert.addAction(noAction)
         alert.addAction(yesAction)
         present(alert, animated: true, completion: nil)
