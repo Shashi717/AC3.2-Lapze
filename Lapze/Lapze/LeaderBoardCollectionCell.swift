@@ -12,7 +12,7 @@ import UIKit
 class LeaderBoardCollectionCell: BaseCell {
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .blue
+        backgroundColor = .gray
         
         addSubview(profileImageView)
         addSubview(nameLabel)

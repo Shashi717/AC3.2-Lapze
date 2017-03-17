@@ -34,7 +34,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     func setup() {
         self.view.addSubview(topContainerView)
         self.view.addSubview(leaderBoardCollectionView)
-        self.topContainerView.addSubview(showBadgesButton)
         
         leaderBoardCollectionView.delegate = self
         leaderBoardCollectionView.dataSource = self
@@ -46,16 +45,10 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
             view.height.equalTo(100)
         }
         
-        showBadgesButton.snp.makeConstraints { (view) in
-            view.height.equalTo(150)
-            view.width.equalTo(60)
-            view.center.equalToSuperview()
-        }
-        
         leaderBoardCollectionView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            //view.height.equalTo(300)
-            view.top.equalTo(showBadgesButton.snp.bottom)
+            view.height.equalTo(300)
+            //view.top.equalTo(showBadgesButton.snp.bottom)
             view.bottom.equalToSuperview()
         }
     }
@@ -109,14 +102,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         let view = UIView()
         view.backgroundColor = .orange
         return view
-    }()
-    
-    internal var showBadgesButton: UIButton = {
-        var button = UIButton()
-        button.setTitle("show badges", for: .normal)
-        button.backgroundColor = .red
-        button.addTarget(self, action: #selector(showBadges), for: .touchUpInside)
-        return button
     }()
 
 }

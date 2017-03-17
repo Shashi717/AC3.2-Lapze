@@ -117,28 +117,39 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         print("picking pic")
         profileSetting.showAvatars()
     }
-    
-    //MARK: - Collection data flow
+    //TEST
+    let views = ["1", "2", "3"]
+    //MARK: - Collection data flow badges
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return userChallenges.count
+        return views.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
+        cell.layer.borderWidth = 2.0
+        cell.layer.borderColor = UIColor.gray.cgColor
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50)
+        return CGSize(width: 45, height: 50)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        print(indexPath.row)
+        print("indexpath : \(indexPath.row)")
+        switch indexPath.row {
+        case 1:
+            self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
+        default: break
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         
     }
+   
     
     //MARK: - pie data
     func setChart(userData: [String: Double]) {
@@ -258,7 +269,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.6)
-            view.centerX.equalToSuperview()
+            //view.centerX.equalToSuperview()
+            view.leading.equalToSuperview()
         }
     }
 
@@ -281,7 +293,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.backgroundColor = .green
         return view
     }()
-    //test^^
     
     internal var pieChart: PieChartView = {
         let view = PieChartView()
@@ -305,7 +316,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .purple
+        cv.backgroundColor = .white
         return cv
     }()
     
