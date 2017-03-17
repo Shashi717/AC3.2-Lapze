@@ -48,6 +48,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     private var previousLocation: CLLocation?
     private var allChallenges: [Challenge] = []
+    private var allEvents: [Event] = []
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
@@ -67,7 +68,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         FirebaseManager.shared.startObserving(node: .event)
         GoogleMapManager.shared.manage(map: self.googleMapView)
         getAllChallenges()
-        
+        getAllEvents()
     }
     
     private func setUpViewController(){
@@ -133,6 +134,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             self.showChallengeMarkers(allChallenges)
         case .event:
             print("event markers")
+            self.showEventMarkers()
         case .none:
             print("show no markers")
         }
@@ -168,6 +170,19 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+    private func getAllEvents(){
+        EventStore.manager.getAllCurrentEvents { (events) in
+          self.allEvents = events
+        }
+    }
+    
+    private func showEventMarkers(){
+        getAllEvents()
+        
+        for event in allEvents{
+            GoogleMapManager.shared.addMarker(event: event)
+        }
+    }
     
     //MARK:- Location manager delegate methods
     func locationDidUpdate(newLocation: CLLocation) {

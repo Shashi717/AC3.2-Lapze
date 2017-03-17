@@ -72,13 +72,11 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             self.dismissViewcontroller()
-            self.delegate?.startEvent(name: "Bike")
+            self.addEventToFirebase()
         }))
-
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
-
     }
     
     func dismissViewcontroller(){
@@ -90,6 +88,12 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         //let event = Event(type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
         let event = Event(id:FirebaseManager.shared.uid! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
         return event
+    }
+    
+    private func addEventToFirebase(){
+        let eventObj = self.createEventObject()
+        FirebaseManager.shared.addToFirebase(event: eventObj)
+        self.delegate?.startEvent(name: eventObj.type)
     }
     
     func showDatePicker() {

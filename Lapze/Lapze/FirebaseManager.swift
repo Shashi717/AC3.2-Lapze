@@ -26,8 +26,8 @@ class FirebaseManager {
         let childRef = databaseReference.child(node.rawValue.capitalized)
         
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
-            if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.addMarker(id: snapshot.key, with: dict)
+            if let event = EventStore.manager.createEvent(snapshot: snapshot){
+                GoogleMapManager.shared.addMarker(event: event)
             }
         })
         
@@ -38,7 +38,7 @@ class FirebaseManager {
         })
         
         childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-                GoogleMapManager.shared.removeMarker(id: snapshot.key)
+            GoogleMapManager.shared.removeMarker(id: snapshot.key)
         })
     }
     
@@ -57,6 +57,11 @@ class FirebaseManager {
         }
     }
     
+    func removeEvent(){
+        let childRef = databaseReference.child("Event").child(uid!)
+        childRef.removeValue()
+    }
+    
     func updateFirebase(closure: (FIRDatabaseReference) -> Void) {
         closure(databaseReference)
     }
@@ -69,8 +74,18 @@ class FirebaseManager {
         
     }
     
+//    private func handleSnapshot(snap: FIRDataSnapshot, node: FirebaseNode){
+//        switch node{
+//        case .event:
+//            if let event = EventStore.manager.createEvent(snapshot: snap){
+//                
+//            }
+//        case .location:
+//        }
+//    }
+    
     private func getSnapshotValue(snapshot: FIRDataSnapshot)->[String:Double]?{
         return snapshot.value as? [String:Double]
     }
-
+    
 }

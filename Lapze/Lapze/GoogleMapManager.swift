@@ -47,7 +47,15 @@ class GoogleMapManager{
             markerTest?.position.latitude = lat
             markerTest?.position.longitude = long
         }
-        
+    }
+    
+    func addMarker(event: Event){
+        let cllocation = CLLocationCoordinate2D(latitude: event.location.latitude, longitude: event.location.longitude)
+        let marker = GMSMarker(position: cllocation)
+        self.dict[event.id] = marker
+        marker.map = map
+        marker.icon = UIImage(named: "010-man")
+        marker.title = event.type
     }
     
     func addMarker(id: String, marker:GMSMarker){

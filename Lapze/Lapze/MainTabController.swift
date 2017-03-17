@@ -16,16 +16,13 @@ class MainTabController: UITabBarController{
     private let activityVC = UINavigationController(rootViewController: ActivityViewController())
     private let leaderBoardVc = UINavigationController(rootViewController: LeaderBoardViewController())
     private let eventVC = UINavigationController(rootViewController: EventsViewController())
+    private lazy var dummyViewController: UIViewController = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        let dummyViewController: UIViewController = UIViewController()
-        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
-        self.viewControllers = [dummyViewController]
-        
         checkForUserStatus()
+        setDefaultViewController()
     }
     
     private func checkForUserStatus(){
@@ -44,25 +41,26 @@ class MainTabController: UITabBarController{
             }
         })
     }
-
+    
     fileprivate var userLocationPermissionGranted: Bool {
         let authorizationStatus = CLLocationManager.authorizationStatus()
         return authorizationStatus == .authorizedWhenInUse
     }
-
+    
     @objc private func showLogin(){
         let loginVC = UINavigationController(rootViewController: LoginViewController())
+        setDefaultViewController()
         present(loginVC, animated: true, completion: nil)
     }
     
     private func setUpTabBar(){
-
+        
         self.viewControllers = [activityVC, profileVC, leaderBoardVc]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         profileVC.tabBarItem = profileTab
-
+        
         let leaderBoardTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "011-crown"), selectedImage: #imageLiteral(resourceName: "011-crown"))
         leaderBoardTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         leaderBoardVc.tabBarItem = leaderBoardTab
@@ -77,5 +75,9 @@ class MainTabController: UITabBarController{
         
         self.selectedIndex = 0
     }
-
+    
+    private func setDefaultViewController(){
+        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
+        self.viewControllers = [dummyViewController]
+    }
 }

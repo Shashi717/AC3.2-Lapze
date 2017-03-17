@@ -187,7 +187,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     @objc private func endEvent() {
-        print("End event infoview")
+        FirebaseManager.shared.removeEvent()
         mapViewController.endActivity()
         stopTimer()
         animateInfoWindow()
