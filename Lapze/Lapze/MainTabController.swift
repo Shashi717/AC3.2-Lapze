@@ -23,6 +23,7 @@ class MainTabController: UITabBarController{
         
         checkForUserStatus()
         setDefaultViewController()
+        
     }
     
     private func checkForUserStatus(){

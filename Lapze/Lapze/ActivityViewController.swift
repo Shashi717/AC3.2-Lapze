@@ -36,11 +36,23 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         super.viewDidLoad()
         updateInterface()
         setUpController()
+        configureUserDefaults()
     }
     
     private func setUpController(){
         addMapViewController()
         setUpViews()
+    }
+    
+    private func configureUserDefaults() {
+        let userDefaults = UserDefaults.standard
+        let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
+        
+        if isFirstTime == false {
+            userDefaults.set(true, forKey: "isNotFirstTime")
+            createAnimationView()
+            animateAddbuttonInfo(true)
+        }
     }
     
     private func addMapViewController(){
@@ -86,7 +98,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "Challenges"
             handleInfoInterface("challenges")
-
+            
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
@@ -98,12 +110,10 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             addButtonInfoLabel.text = "Tap to create an EVENT" //test
             addButtonInfoLabel.backgroundColor = .purple
             infoThumbImageView.image = UIImage(named: "tap")
-            animateAddbuttonInfo(true)
         case "challenges":
             addButtonInfoLabel.text = "Tap to create a CHALLENGE"
             addButtonInfoLabel.backgroundColor = .orange
             infoThumbImageView.image = UIImage(named: "crown")
-            animateAddbuttonInfo(true)
         default:
             break
         }
@@ -111,10 +121,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //test: almost done
     @objc private func handlePostInfoInterface() {
-        print("tapped that")
         animateAddbuttonInfo(false)
-        addButtonInfoLabel.isHidden = true
-        infoThumbImageView.isHidden = true
+        addButtonInfoLabel.removeFromSuperview()
+        infoThumbImageView.removeFromSuperview()
         
     }
     
@@ -156,7 +165,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
                 }
             })
         }
+        
         animator.startAnimation()
+        
     }
     
     private func animateBottomScrollInfoView(){
@@ -170,34 +181,33 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 0)
         }, delayFactor: 0.7)
         
-        animator.startAnimation()
     }
     
-    private func animateAddbuttonInfo(_ isAnimating: Bool) {
-        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
+    func animateAddbuttonInfo(_ isAnimating: Bool) {
         
-        animator.addAnimations({
+        let infoButtonAnimator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
+        
+        infoButtonAnimator.addAnimations({
             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            
         })
         
-        animator.addAnimations({
+        infoButtonAnimator.addAnimations({
             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
         }, delayFactor: 0.5)
         
-        if isAnimating {
-        animator.startAnimation()
-        animator.addCompletion({_ in self.animateAddbuttonInfo(true)})
-        } else {
-            animator.stopAnimation(true)
-        }
+        UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: .repeat, animations: {
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        }, completion: nil)
+        
     }
     
     //MARK:- Views
     private func setUpViews() {
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
-        self.view.addSubview(infoThumbImageView)
-        self.view.addSubview(addButtonInfoLabel)
         self.view.addSubview(addButton)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
@@ -208,19 +218,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.centerX.equalToSuperview()
             view.width.height.equalTo(50)
             view.bottom.equalToSuperview().inset(10)
-        }
-        
-        addButtonInfoLabel.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.width.equalTo(100)
-            view.height.equalTo(addButton.snp.height)
-            view.bottom.equalTo(addButton.snp.top).offset(-60)
-        }
-        
-        infoThumbImageView.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.size.equalTo(40)
-            view.bottom.equalTo(addButton.snp.top).offset(-5)
         }
         
         topInfoView.snp.makeConstraints { (view) in
@@ -246,6 +243,30 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.height.equalTo(30.0)
             view.centerX.equalToSuperview()
         }
+        
+        
+    }
+    
+    func createAnimationView() {
+        
+        edgesForExtendedLayout = []
+        
+        self.view.addSubview(infoThumbImageView)
+        self.view.addSubview(addButtonInfoLabel)
+        
+        infoThumbImageView.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.size.equalTo(40)
+            view.bottom.equalTo(addButton.snp.top).offset(5.0)
+        }
+        addButtonInfoLabel.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalTo(100.0)
+            view.height.equalTo(50.0)
+            view.bottom.equalToSuperview().inset(110.0)
+        }
+        self.view.layoutIfNeeded()
+        
     }
     
     //MARK:- Event Delegate methods
@@ -271,10 +292,10 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Challenge Delegate Methods
-
+    
     func challengeCreated(_ challenge: Challenge) {
-       showPopUpController(with: challenge)
-         popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        showPopUpController(with: challenge)
+        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
         popVC.didCreateActivity = true
         self.didCreateActivity = true
         currentChallenge = challenge
@@ -294,16 +315,16 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
             print("Challenge saved")
-
+            
             self.mapViewController.updateFirebase()
-
+            
         }) { (_) in
             print("Challenge not saved")
             self.mapViewController.removeUserPath()
         }
         
         self.didCreateActivity = false
-       
+        
     }
     
     @objc private func startChallenge(){
@@ -326,7 +347,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Join Challenge Delegate method
     func joinChallenge(_ challenge: Challenge) {
-//        self.mapViewController.didCreateActivity = false
+        //        self.mapViewController.didCreateActivity = false
         self.didCreateActivity = false
         currentChallenge = challenge
         topInfoView.titleLabel.text = challenge.name
@@ -379,11 +400,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         segmentedControl.selectedSegmentIndex = 0
         
         //test
-   
+        
         segmentedControl.backgroundColor = .clear
         segmentedControl.layer.borderColor = UIColor.white.cgColor
         segmentedControl.layer.cornerRadius = 20
-    
+        
         
         return segmentedControl
     }()
