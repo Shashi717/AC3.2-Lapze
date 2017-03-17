@@ -26,7 +26,6 @@ enum DatePickerType {
 
 protocol EventViewControllerDelegate{
     func startEvent(name: String)
-    //func endEvent()
 }
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -40,7 +39,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,9 +49,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         configureConstraints()
     }
 
-    
-    //MARK: - Utilities
-    
+    //MARK: - Utilities    
     func locationSwitchValueChanged(sender: UISwitch) {
         print("Before status: \(shareLocation)")
         shareLocation = !shareLocation

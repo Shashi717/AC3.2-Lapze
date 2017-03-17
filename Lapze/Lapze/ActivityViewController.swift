@@ -62,6 +62,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
         viewControllerState = activity
         mapViewController.updateMapState(state: activity)
+        popVC.mapViewControllerState = activity
     }
     
     //MARK:- User Interface Utilities
