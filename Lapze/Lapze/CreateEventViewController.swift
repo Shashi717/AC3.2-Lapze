@@ -25,8 +25,7 @@ enum DatePickerType {
 }
 
 protocol EventViewControllerDelegate{
-    func startEvent(name: String)
-    //func endEvent()
+    func startEvent(name: String, showUserLocation: Bool)
 }
 
 class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -40,7 +39,6 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     var shareProfile = false
     private var userEventInfo: [String:String] = ["type":"","date":"","start":"","end":""]
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,12 +49,19 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         configureConstraints()
     }
 
-    
-    //MARK: - Utilities
-    
+    //MARK: - Utilities    
     func locationSwitchValueChanged(sender: UISwitch) {
         print("Before status: \(shareLocation)")
         shareLocation = !shareLocation
+        
+        switch shareLocation{
+        case true:
+            infoView.titleLabel.text = "Your location is now public"
+        case false:
+            infoView.titleLabel.text = "Your location is now private"
+        }
+        
+        animateInfoView()
         print("Now status: \(shareLocation)")
     }
     
@@ -76,13 +81,11 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             self.dismissViewcontroller()
-            self.delegate?.startEvent(name: "Bike")
+            self.addEventToFirebase()
         }))
-
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
-
     }
     
     func dismissViewcontroller(){
@@ -94,6 +97,12 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         //let event = Event(type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
         let event = Event(id:FirebaseManager.shared.uid! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
         return event
+    }
+    
+    private func addEventToFirebase(){
+        let eventObj = self.createEventObject()
+        FirebaseManager.shared.addToFirebase(event: eventObj)
+        self.delegate?.startEvent(name: eventObj.type, showUserLocation: shareLocation)
     }
     
     func showDatePicker() {
@@ -189,8 +198,21 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         userEventInfo["type"] = pickedActivity.rawValue
      
     }
-    //MARK: - Setup
     
+    private func animateInfoView(){
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 2, curve: .easeIn)
+        
+        animator.addAnimations {
+            self.infoView.transform = CGAffineTransform(translationX: 0, y: -60)
+        }
+        
+        animator.addAnimations({ 
+            self.infoView.transform = CGAffineTransform.identity
+        }, delayFactor: 0.8)
+        
+        animator.startAnimation()
+    }
+    //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         
@@ -204,6 +226,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         self.view.addSubview(locationContainer)
         self.view.addSubview(privacyContainer)
         self.view.addSubview(pickerContainer)
+        self.view.addSubview(infoView)
         self.activityContainer.addSubview(activityLabel)
         self.activityContainer.addSubview(pickedActivityLabel)
         self.dateContainer.addSubview(dateLabel)
@@ -219,6 +242,11 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
     
     func configureConstraints() {
+        infoView.snp.makeConstraints { (view) in
+            view.top.equalTo(self.view.snp.bottom)
+            view.height.equalToSuperview().multipliedBy(0.08)
+            view.leading.trailing.equalToSuperview()
+        }
         activityContainer.snp.makeConstraints { (view) in
             view.top.equalToSuperview().offset(22.0)
             view.left.right.equalToSuperview()
@@ -433,7 +461,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var sharingStatusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Public Mode"
+        label.text = "Share Your Location"
         return label
     }()
     internal lazy var locationSwitch: UISwitch = {
@@ -466,5 +494,10 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         return barButton
     }()
     
+    private let infoView: TopActivityInfoView = {
+        let infoView = TopActivityInfoView()
+        infoView.backgroundColor = .red
+        return infoView
+    }()
     
 }

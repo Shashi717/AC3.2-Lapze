@@ -16,14 +16,13 @@ class MainTabController: UITabBarController{
     private let activityVC = UINavigationController(rootViewController: ActivityViewController())
     private let leaderBoardVc = UINavigationController(rootViewController: LeaderBoardViewController())
     private let eventVC = UINavigationController(rootViewController: EventsViewController())
+    private lazy var dummyViewController: UIViewController = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let dummyViewController: UIViewController = UIViewController()
-        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
-        self.viewControllers = [dummyViewController]
         checkForUserStatus()
+        setDefaultViewController()
     }
     
     private func checkForUserStatus(){
@@ -31,55 +30,37 @@ class MainTabController: UITabBarController{
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
-            }else if self.userLocationPermissonGranted(){
-                DispatchQueue.main.async {
-                    self.setUpTabBar()
+            }else if !self.userLocationPermissionGranted {
+                let locationNeededVC = LocationNeededViewController()
+                self.present(locationNeededVC, animated: true, completion: nil)
+                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
+                    self?.setUpTabBar()
                 }
+            }else{
+                self.setUpTabBar()
             }
         })
-        
-        //        if FIRAuth.auth()?.currentUser != nil{
-        //            self.setUpTabBar()
-        //        }else{
-        //            self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.0001)
-        //        }
     }
     
-    private func userLocationPermissonGranted() -> Bool{
-        LocationManager.sharedManager.requestWhenInUse()
-        switch CLLocationManager.authorizationStatus(){
-        case .authorizedWhenInUse:
-            print("Authorized when in use")
-            return true
-        case .authorizedAlways:
-            print("Authorized always")
-            return true
-        case .denied:
-            print("Denied")
-            return false
-        default:
-            print("Default")
-            return false
-        }
+    fileprivate var userLocationPermissionGranted: Bool {
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        return authorizationStatus == .authorizedWhenInUse
     }
     
     @objc private func showLogin(){
         let loginVC = UINavigationController(rootViewController: LoginViewController())
-        let dummyViewController: UIViewController = UIViewController()
-        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
-        loginVC.modalTransitionStyle = .coverVertical
-        self.viewControllers = [dummyViewController]
+        setDefaultViewController()
         present(loginVC, animated: true, completion: nil)
     }
     
     private func setUpTabBar(){
-
+        
         self.viewControllers = [activityVC, profileVC, leaderBoardVc]
         
         let profileTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "Profile"), selectedImage: #imageLiteral(resourceName: "Profile"))
         profileTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         profileVC.tabBarItem = profileTab
-
+        
         let leaderBoardTab = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "011-crown"), selectedImage: #imageLiteral(resourceName: "011-crown"))
         leaderBoardTab.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         leaderBoardVc.tabBarItem = leaderBoardTab
@@ -93,5 +74,10 @@ class MainTabController: UITabBarController{
         self.tabBar.tintColor = ColorPalette.greenThemeColor
         
         self.selectedIndex = 0
+    }
+    
+    private func setDefaultViewController(){
+        dummyViewController.view.backgroundColor = ColorPalette.greenThemeColor
+        self.viewControllers = [dummyViewController]
     }
 }

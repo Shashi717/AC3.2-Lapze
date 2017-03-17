@@ -26,8 +26,8 @@ class FirebaseManager {
         let childRef = databaseReference.child(node.rawValue.capitalized)
         
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
-            if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.addMarker(id: snapshot.key, with: dict)
+            if let event = EventStore.manager.createEvent(snapshot: snapshot){
+                GoogleMapManager.shared.addMarker(event: event)
             }
         })
         
@@ -38,7 +38,7 @@ class FirebaseManager {
         })
         
         childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-                GoogleMapManager.shared.removeMarker(id: snapshot.key)
+            GoogleMapManager.shared.removeMarker(id: snapshot.key)
         })
     }
     
@@ -57,12 +57,29 @@ class FirebaseManager {
         }
     }
     
+    func removeEvent(){
+        let childRef = databaseReference.child("Event").child(uid!)
+        childRef.removeValue()
+    }
+    
+    func removeUserLocation(){
+        let childRef = databaseReference.child("Location").child(uid!)
+        childRef.removeValue()
+    }
+    
     func updateFirebase(closure: (FIRDatabaseReference) -> Void) {
         closure(databaseReference)
     }
     
     func addToFirebase(location: Location){
-        
+        let childRef = databaseReference.child("Location").child(uid!)
+        childRef.updateChildValues(location.toJson()) { (error, ref) in
+            if error != nil{
+                print(error?.localizedDescription)
+            }else{
+                print("Success posting location")
+            }
+        }
     }
     
     func addToFirebase(challenge: Challenge){
@@ -72,5 +89,5 @@ class FirebaseManager {
     private func getSnapshotValue(snapshot: FIRDataSnapshot)->[String:Double]?{
         return snapshot.value as? [String:Double]
     }
-
+    
 }

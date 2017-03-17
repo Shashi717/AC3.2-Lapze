@@ -67,6 +67,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
         viewControllerState = activity
         mapViewController.updateMapState(state: activity)
+        popVC.mapViewControllerState = activity
     }
     
     //MARK:- User Interface Utilities
@@ -181,19 +182,23 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Event Delegate methods
-    func startEvent(name: String){
+    func startEvent(name: String, showUserLocation: Bool){
         topInfoView.titleLabel.text = "Your \(name) session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
+        mapViewController.trackUserLocation = showUserLocation
         startTimer()
         animateInfoWindow()
     }
     
     @objc private func endEvent() {
+        FirebaseManager.shared.removeEvent()
+        FirebaseManager.shared.removeUserLocation()
         print("End event infoview")
         mapViewController.activityTime = Double(counter)
         mapViewController.endActivity()
+        mapViewController.trackUserLocation = false
         stopTimer()
         animateInfoWindow()
     }

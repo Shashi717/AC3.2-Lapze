@@ -16,7 +16,7 @@ struct Event{
     
     func toJson()->[String:Any]{
         let locDic = ["lat":location.latitude,"long": location.longitude]
-        return ["name":self.type,"date":DateFormatter().string(from: date),"location":locDic]
+        return ["type":self.type,"date":DateFormatter().string(from: date),"location":locDic]
     }
     
     init(type: String,date:Date, location:Location){

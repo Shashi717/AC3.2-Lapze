@@ -19,7 +19,6 @@ public enum MapViewControllerState:Int{
 }
 
 class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
-    
     fileprivate enum TrackingBehavior {
         case followWithPathMarking
         // case limitedFollow(radius:Int)
@@ -32,7 +31,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case event
         case none
     }
-    
+
     fileprivate var markerOption: MarkerOption = .event{
         didSet{
             updateMarkers()
@@ -49,6 +48,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     private var previousLocation: CLLocation?
     private var allChallenges: [Challenge] = []
+    private var allEvents: [Event] = []{
+        didSet{
+            self.showEventMarkers()
+        }
+    }
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore()
@@ -58,6 +62,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     let userPath = Path()
     var userPathArray: [Location] = []
     var distance: Double = 0.0
+    var trackUserLocation: Bool = false
     var activityTime: Double = 0.0
     var challenge: Challenge?
     var didCreateActivity = true
@@ -69,10 +74,9 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         googleMapView.delegate = self
         line.map = googleMapView
         FirebaseManager.shared.startObserving(node: .event)
-        
         GoogleMapManager.shared.manage(map: self.googleMapView)
         getAllChallenges()
-        
+        getAllEvents()
     }
     
     private func setUpViewController(){
@@ -100,6 +104,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+    public func hideAllMarkers(){
+        GoogleMapManager.shared.hideAllMarkers()
+    }
+    
     //MARK:- Activity update
     public func startActivity(){
         switch viewControllerState{
@@ -109,7 +117,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
         userLocationMarker?.iconView = nil
-        userLocationMarker?.icon = UIImage(named: "7")
+        userLocationMarker?.icon = UIImage(named: "010-man-1")
         markerOption = .none
     }
     
@@ -124,6 +132,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
+
+        distance = 0.0
         removeUserPath()
     }
     
@@ -176,17 +186,16 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         distance = 0.0
         activityTime = 0.0
-        
     }
     
     private func updateMarkers(){
+        hideAllMarkers()
         switch markerOption {
         case .challenge:
-            
-            self.markChallenges(allChallenges)
-            
+            self.showChallengeMarkers(allChallenges)
         case .event:
             print("event markers")
+            self.getAllEvents()
         case .none:
             print("show no markers")
         }
@@ -211,7 +220,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         return challengeIds
     }
     
-    private func markChallenges(_ challenges: [Challenge]) {
+    private func showChallengeMarkers(_ challenges: [Challenge]) {
         for challenge in challenges {
             if self.userChampionshipChallenges.contains(challenge.id) {
                 GoogleMapManager.shared.addMarker(id: challenge.id, lat: challenge.lat!, long: challenge.long!, imageName: "crown")
@@ -222,11 +231,31 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
+    //MARK: - Event Utilities
+    private func getAllEvents(){
+        EventStore.manager.getAllCurrentEvents { (events) in
+            self.allEvents = events
+        }
+    }
+    
+    private func showEventMarkers(){
+        for event in allEvents{
+            GoogleMapManager.shared.addMarker(event: event)
+        }
+    }
+    
+    private func getEvent(id: String)->Event?{
+        for event in allEvents{
+            if event.id == id{
+                return event
+            }
+        }
+        return nil
+    }
     
     //MARK:- Location manager delegate methods
     func locationDidUpdate(newLocation: CLLocation) {
         userCurrentLocation = newLocation
-        
         switch trackingBehavior{
         case .followWithPathMarking:
             trackDistance()
@@ -234,6 +263,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             addPolyline(newLocation)
         case .limitedFollow:
             trackDistance()
+            addUserLocationToFirebase(location: newLocation)
         case .none:
             print(trackingBehavior)
         }
@@ -270,10 +300,18 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             let lastDistance = currentLocation?.distance(from: previousLocation as CLLocation!)
             distance += lastDistance!
         }
-        
         previousLocation = currentLocation
     }
-    
+  
+    private func addUserLocationToFirebase(location: CLLocation){
+        let location = Location(location: location)
+        switch trackUserLocation{
+        case true:
+            FirebaseManager.shared.addToFirebase(location: location)
+        case false:
+            break
+        }
+    }
     //MARK:- Polyline Utilities
     private func addPolyline(_ location: CLLocation){
         let cllcorddinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -297,6 +335,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         line.map = nil
         line.map = googleMapView
     }
+    
     //MARK:- Google map delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
@@ -308,7 +347,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         switch markerOption {
         case .event:
+            guard let markerId = marker.title else {return nil}
+            let event = getEvent(id: markerId)
+            thumbView.titleLabel.text = event?.type
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
+            
         case .challenge:
             thumbView.backgroundColor = ColorPalette.orangeThemeColor
             userPath.removePolyline()
@@ -348,9 +391,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        popVc.modalTransitionStyle = .crossDissolve
+        popVc.modalPresentationStyle = .overCurrentContext
+        
         switch viewControllerState{
         case .challenges:
-            popVc.segment = 1
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
