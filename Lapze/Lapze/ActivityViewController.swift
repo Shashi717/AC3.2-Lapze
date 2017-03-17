@@ -30,6 +30,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
+    private var challengeFirebaseRef: FIRDatabaseReference? //test
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateInterface()
@@ -197,6 +199,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Challenge Delegate Methods
+
     func challengeCreated(_ challenge: Challenge) {
        showPopUpController(with: challenge)
          popVC.challengeDescriptionLabel.text = "You just created a challenge!"
@@ -206,8 +209,10 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         mapViewController.didCreateActivity = true
         mapViewController.challenge = challenge
         topInfoView.titleLabel.text = challenge.name
+        
     }
     
+    //test
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.activityTime = Double(counter)
@@ -217,9 +222,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
             print("Challenge saved")
+
             self.mapViewController.updateFirebase()
-            
+
         }) { (_) in
+            print("Challenge not saved")
+            //self.challengeFirebaseRef?.child(challenge.id).removeValue()
             self.mapViewController.removeUserPath()
         }
         
