@@ -38,7 +38,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         
         titleLabel.snp.makeConstraints { (view) in
             view.center.equalToSuperview()
-            view.height.equalTo(40)
+            view.height.equalTo(25)
         }
         
         mainBadgesCollectionView.snp.makeConstraints { (view) in
@@ -63,7 +63,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        return CGSize(width: 50, height: 50)
         
     }
     
@@ -82,7 +82,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
     
     internal var topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
         return view
     }()
     
@@ -90,6 +90,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let label = UILabel()
         label.text = "Badge Collection"
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -97,7 +98,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let layout = UICollectionViewFlowLayout()
         //layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .purple
+        cv.backgroundColor = ColorPalette.greenThemeColor
         return cv
     }()
     

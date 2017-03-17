@@ -74,7 +74,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func determineRank(_ challenges: [Challenge]) {
         if challenges.count > 0 {
-            self.userRankLabel.text = "\"Rank: Newbie Boobie\""
+            self.userRankLabel.text = "\"Rank: Newbie \""
         }
     }
     

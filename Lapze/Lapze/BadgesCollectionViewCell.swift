@@ -39,6 +39,8 @@ class BadgesCollectionViewCell: BaseCell {
     
     internal var badgeLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
 }
