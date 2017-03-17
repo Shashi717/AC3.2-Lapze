@@ -63,7 +63,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     private var showUserLocation: Bool = true
     private var distance: Double = 0.0
     private var allChallenges: [Challenge] = []
-
+    
     private var userChampionshipChallenges: [String] = []
     
     let popVc = PopupViewController()
