@@ -30,7 +30,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-    private var challengeFirebaseRef: FIRDatabaseReference? //test
+    //private var challengeFirebaseRef: FIRDatabaseReference?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,41 +76,45 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             addButton.backgroundColor = ColorPalette.purpleThemeColor
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
-            navigationItem.title = "CURRENT EVENTS"
-            //handleInfoInterface("events") //test
+            navigationItem.title = "Current Events"
+            handleInfoInterface("events")
             
         case .challenges:
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
-<<<<<<< HEAD
-            navigationItem.title = "CHALLENGES"
-            //handleInfoInterface("challenges")
-=======
             navigationItem.title = "Challenges"
->>>>>>> 7193c60be0f3ac6fc5153c4a7e1c6f9d440a3347
+            handleInfoInterface("challenges")
+
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
     //test : this hides the addbuttonInfo label
     @objc private func handleInfoInterface(_ state: String) {
-        //addButtonInfoLabel.isHidden = true
-        
         switch state {
         case "events":
             addButtonInfoLabel.text = "Tap to create an EVENT" //test
             addButtonInfoLabel.backgroundColor = .purple
             infoThumbImageView.image = UIImage(named: "tap")
-            animateAddbuttonInfo()
+            animateAddbuttonInfo(true)
         case "challenges":
             addButtonInfoLabel.text = "Tap to create a CHALLENGE"
             addButtonInfoLabel.backgroundColor = .orange
             infoThumbImageView.image = UIImage(named: "crown")
-            animateAddbuttonInfo()
+            animateAddbuttonInfo(true)
         default:
             break
         }
+    }
+    
+    //test: almost done
+    @objc private func handlePostInfoInterface() {
+        print("tapped that")
+        animateAddbuttonInfo(false)
+        addButtonInfoLabel.isHidden = true
+        infoThumbImageView.isHidden = true
+        
     }
     
     @objc private func createActivityHandle(){
@@ -168,7 +172,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animator.startAnimation()
     }
     
-    private func animateAddbuttonInfo() {
+    private func animateAddbuttonInfo(_ isAnimating: Bool) {
         let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
         
         animator.addAnimations({
@@ -179,19 +183,25 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
         }, delayFactor: 0.5)
         
+        if isAnimating {
         animator.startAnimation()
-        animator.addCompletion({_ in self.animateAddbuttonInfo()})
+        animator.addCompletion({_ in self.animateAddbuttonInfo(true)})
+        } else {
+            animator.stopAnimation(true)
+        }
     }
     
     //MARK:- Views
     private func setUpViews() {
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
-        self.view.addSubview(addButtonInfoLabel)
         self.view.addSubview(infoThumbImageView)
+        self.view.addSubview(addButtonInfoLabel)
         self.view.addSubview(addButton)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handlePostInfoInterface))
+        self.view.addGestureRecognizer(tap)
         
         addButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -284,7 +294,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
 
         }) { (_) in
             print("Challenge not saved")
-            //self.challengeFirebaseRef?.child(challenge.id).removeValue()
             self.mapViewController.removeUserPath()
         }
         
@@ -388,11 +397,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(createActivityHandle), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handlePostInfoInterface), for: .touchUpInside)
         return button
     }()
     
     
-    //test
     private lazy var addButtonInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Tap to create an Event"

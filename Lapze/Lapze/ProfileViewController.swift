@@ -75,7 +75,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func determineRank(_ challenges: [Challenge]) {
         if challenges.count > 0 {
-            self.userRankLabel.text = "Newbie Boobie"
+            self.userRankLabel.text = "\"Rank: Newbie Boobie\""
         }
     }
     
@@ -86,7 +86,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let values = ["\(i)": "\(self.badgeTitles[i])"]
             self.userStore.updateUserData(id: uid!, values: values, child: "badges")
         }
-        //self.badgesCollectionView.reloadData()
     }
 
     func loadUser() {
@@ -339,6 +338,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var activitiesLabel: UILabel = {
         let label = UILabel()
         label.text = "Top Activities"
+        label.textColor = UIColor.gray
+        label.font = UIFont(name: "Gill Sans", size: 15)
         return label
     }()
     internal lazy var challengesLabel: UILabel = {
