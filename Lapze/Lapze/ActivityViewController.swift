@@ -385,7 +385,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         label.layer.shadowRadius = 2
         label.numberOfLines = 2
         label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 1, height: 2)
+        label.shadowOffset = CGSize(width: 1, height: 1)
         return label
     }()
     
