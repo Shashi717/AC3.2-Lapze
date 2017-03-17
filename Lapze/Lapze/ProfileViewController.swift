@@ -212,8 +212,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(pieChart)
         self.view.addSubview(userRankLabel)
         
-        //self.view.addSubview(barStatusContainer)
-        //self.barStatusContainer.addSubview(horiBarChart)
         self.view.addSubview(activitiesLabel)
     
         
@@ -256,12 +254,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.left.equalToSuperview().offset(8.0)
             view.height.equalTo(20)
         }
-//        challengesLabel.snp.makeConstraints { (view) in
-//            view.top.equalTo(activitiesLabel.snp.bottom).offset(16.0)
-//            view.left.equalToSuperview().offset(8.0)
-//            view.right.equalToSuperview().inset(8.0)
-//            view.height.equalTo(50.0)
-////        }
         
         pieChart.snp.makeConstraints { (view) in
             view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
@@ -269,19 +261,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.width.equalToSuperview().multipliedBy(0.6)
             view.centerX.equalToSuperview()
         }
-        
-//        barStatusContainer.snp.makeConstraints { (view) in
-//            view.leading.equalToSuperview()
-//            view.width.equalToSuperview().multipliedBy(0.5)
-//            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8.0)
-//            view.bottom.equalToSuperview()
-//        }
-        
-//        horiBarChart.snp.makeConstraints { (view) in
-//            view.leading.trailing.equalToSuperview()
-//            view.top.bottom.equalToSuperview()
-//            //view.width.equalToSuperview().multipliedBy(0.75)
-//        }
     }
 
     

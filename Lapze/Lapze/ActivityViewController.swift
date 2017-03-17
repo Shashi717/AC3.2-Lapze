@@ -70,27 +70,40 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private func updateInterface(){
         switch viewControllerState{
         case .events:
-            addButtonInfoLabel.text = "Tap to create an Event" //test
             addButton.backgroundColor = ColorPalette.purpleThemeColor
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
             navigationItem.title = "CURRENT EVENTS"
-            animateAddbuttonInfoLabel()//test
+            handleInfoInterface("events") //test
             
         case .challenges:
-            addButtonInfoLabel.text = "Tap to create a Challenge"
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "CHALLENGES"
-            animateAddbuttonInfoLabel()//test
+            handleInfoInterface("challenges")
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
     //test : this hides the addbuttonInfo label
-    @objc private func handleInfoButtons() {
-        addButtonInfoLabel.isHidden = true
+    @objc private func handleInfoInterface(_ state: String) {
+        //addButtonInfoLabel.isHidden = true
+        
+        switch state {
+        case "events":
+            addButtonInfoLabel.text = "Tap to create an EVENT" //test
+            addButtonInfoLabel.backgroundColor = .purple
+            infoThumbImageView.image = UIImage(named: "tap")
+            animateAddbuttonInfo()
+        case "challenges":
+            addButtonInfoLabel.text = "Tap to create a CHALLENGE"
+            addButtonInfoLabel.backgroundColor = .orange
+            infoThumbImageView.image = UIImage(named: "crown")
+            animateAddbuttonInfo()
+        default:
+            break
+        }
     }
     
     @objc private func createActivityHandle(){
@@ -148,7 +161,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animator.startAnimation()
     }
     
-    private func animateAddbuttonInfoLabel() {
+    private func animateAddbuttonInfo() {
         let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
         
         animator.addAnimations({
@@ -160,7 +173,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }, delayFactor: 0.5)
         
         animator.startAnimation()
-        animator.addCompletion({_ in self.animateAddbuttonInfoLabel()})
+        animator.addCompletion({_ in self.animateAddbuttonInfo()})
     }
     
     //MARK:- Views
@@ -168,8 +181,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
         self.view.addSubview(addButtonInfoLabel)
-        self.view.addSubview(addButton)
         self.view.addSubview(infoThumbImageView)
+        self.view.addSubview(addButton)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
         
@@ -183,13 +196,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.centerX.equalToSuperview()
             view.width.equalTo(100)
             view.height.equalTo(addButton.snp.height)
-            view.bottom.equalTo(infoThumbImageView.snp.top)
+            view.bottom.equalTo(addButton.snp.top).offset(-60)
         }
         
         infoThumbImageView.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.size.equalTo(40)
-            view.bottom.equalTo(addButton.snp.top)
+            view.bottom.equalTo(addButton.snp.top).offset(-5)
         }
         
         topInfoView.snp.makeConstraints { (view) in
@@ -243,7 +256,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
     }
     
-    //test
+    
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.endActivity()
@@ -354,7 +367,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(createActivityHandle), for: .touchUpInside)
-        button.addTarget(self, action: #selector(handleInfoButtons), for: .touchUpInside)
         return button
     }()
     
@@ -363,9 +375,17 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private lazy var addButtonInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Tap to create an Event"
+        label.textColor = .white
         label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 10
+        label.layer.shadowOpacity = 0.4
+        label.layer.shadowOffset = CGSize(width: 1, height: 5)
+        label.layer.shadowRadius = 2
         label.numberOfLines = 2
-        label.backgroundColor = .purple
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 1, height: 2)
         return label
     }()
     
