@@ -896,7 +896,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         return label
 
     }()
- 
     
 }
 
