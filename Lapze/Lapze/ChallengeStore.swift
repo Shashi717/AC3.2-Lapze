@@ -14,7 +14,7 @@ class ChallengeStore {
     
     let databaseRef = FIRDatabase.database().reference()
     
-     func getAllChallenges(completion: @escaping ([Challenge]) -> Void) {
+    func getAllChallenges(completion: @escaping ([Challenge]) -> Void) {
         
         var challengeArray: [Challenge] = []
         
@@ -55,8 +55,12 @@ class ChallengeStore {
                                               timeToBeat: timeToBeat,
                                               distance: distance,
                                               path: path)
-                    
-                    challengeArray.append(challenge)
+                    let location = Location(lat: lat, long: long)
+                   
+                    if self.checkChallengeWithinRadius(location: location) {
+                         print("calling")
+                        challengeArray.append(challenge)
+                    }
                 }
             }
             completion(challengeArray)
@@ -150,33 +154,42 @@ class ChallengeStore {
                     }
                     
                     if champion == userId {
-                    let challenge = Challenge(id: id,
-                                              name: name,
-                                              champion: champion,
-                                              lastUpdated: lastUpdated,
-                                              type: type,
-                                              lat: lat,
-                                              long: long,
-                                              timeToBeat: timeToBeat,
-                                              distance: distance,
-                                              path: path)
-                    
-                    challengeArray.append(challenge)
+                        let challenge = Challenge(id: id,
+                                                  name: name,
+                                                  champion: champion,
+                                                  lastUpdated: lastUpdated,
+                                                  type: type,
+                                                  lat: lat,
+                                                  long: long,
+                                                  timeToBeat: timeToBeat,
+                                                  distance: distance,
+                                                  path: path)
+                        
+                        challengeArray.append(challenge)
                     }
                 }
             }
             completion(challengeArray)
         })
-        //dump("challenge array >> \(challengeArray)")
     }
-
-
+    
+    private func checkChallengeWithinRadius(location: Location) -> Bool {
+        
+        let locationStore = LocationStore()
+        let userLocation = LocationManager.sharedManager.currentLocation
+        
+        if let uLocation = userLocation {
+            return locationStore.isUserWithinRadius(userLocation: uLocation, challengeLocation: location, radius: 10000.0)
+        }
+        return false
+    }
+    
     func add(_ challenge: Challenge) {
         FirebaseManager.shared.updateFirebase { databaseReference in
             let childRef = databaseReference.child("Challenge").child(challenge.id)
             childRef.updateChildValues(challenge.toJson()) { (error, ref) in
                 if error != nil{
-                    print(error?.localizedDescription)
+                    print(error!.localizedDescription)
                 }else{
                     print("Success posting event")
                 }

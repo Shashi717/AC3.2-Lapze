@@ -43,8 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         navAppearance.barTintColor = ColorPalette.darkPurple
         navAppearance.tintColor = .white
         
-        
-        
         //Root View
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
