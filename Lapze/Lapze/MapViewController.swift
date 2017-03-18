@@ -283,7 +283,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackDistance()
             addUserLocationToFirebase(location: newLocation)
         case .none:
-            print(trackingBehavior)
+            break
+//            print(trackingBehavior)
         }
     }
     

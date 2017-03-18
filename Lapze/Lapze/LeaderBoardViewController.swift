@@ -25,7 +25,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var users: [User] = [] {
         didSet {
-            print("changed from \(oldValue) to \(users.count)")
             self.leaderBoardCollectionView.reloadData()
         }
     }
@@ -56,7 +55,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     func loadUsers() {
         userStore.getAllUsers { (users) in
             self.users = users
-            dump("users \(users)")
         }
     }
     

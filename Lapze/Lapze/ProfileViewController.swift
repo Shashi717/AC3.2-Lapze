@@ -33,7 +33,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
     let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
-    var userBadges = [String]()
+   
     let cellId = "badges"
     var userProfileImage = "0"
     let uid = FIRAuth.auth()?.currentUser?.uid
@@ -42,12 +42,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
-    //var userChallenges: [Challenge] = []
     var delegate: ProfileDelegate?
     
-    var userChallenges: [Challenge] = [] {
+    var userChallenges: [Challenge] = []
+    var userBadges: [String] = [] {
         didSet {
-            self.badgesCollectionView.reloadData()
+             self.badgesCollectionView.reloadData()
         }
     }
     
@@ -58,11 +58,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
-        loadUser()
         
+        loadUser()
         getUserChallenges()
     }
-    
     
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
@@ -78,7 +77,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
         }
-        
+        print(userChallenges.count)
     }
     
     func determineRank(_ challenges: [Challenge]) {
@@ -147,14 +146,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func pickAvatar() {
-        print("picking pic")
         profileSetting.showAvatars()
     }
     //TEST
     let views = ["1", "2", "3"]
     //MARK: - Collection data flow badges
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return views.count
+        print("user badges count >>>> \(userBadges.count)")
+        return userBadges.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -271,7 +270,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         badgesCollectionView.snp.makeConstraints { (view) in
-            view.width.equalToSuperview()
+            view.left.right.equalToSuperview()
             view.height.equalTo(60)
             view.top.equalTo(topContainerView.snp.bottom)
         }
@@ -298,6 +297,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         activitiesLabel.snp.makeConstraints { (view) in
             view.top.equalTo(badgesCollectionView.snp.bottom)
             view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(20)
         }
         
@@ -306,11 +306,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.6)
             view.centerX.equalToSuperview()
-            //view.leading.equalToSuperview()
         }
     }
-    
-    
     
     //MARK: - Views
     internal var horiBarChart: HorizontalBarChartView = {
@@ -385,8 +382,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var activitiesLabel: UILabel = {
         let label = UILabel()
         label.text = "Top Activities"
+        label.textAlignment = .center
         label.textColor = UIColor.gray
-        label.font = UIFont(name: "Gill Sans", size: 15)
+        label.font = UIFont(name: "Gill Sans", size: 20)
         return label
     }()
     internal lazy var challengesLabel: UILabel = {
