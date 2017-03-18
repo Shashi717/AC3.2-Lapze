@@ -23,12 +23,12 @@ class LocationStore {
         return array
     }
     
-    func isUserWithinRadius(userLocation: CLLocation, challengeLocation: Location) -> Bool {
+    func isUserWithinRadius(userLocation: CLLocation, challengeLocation: Location, radius: Double = 100.0) -> Bool {
         
         let loc = CLLocation(latitude: challengeLocation.latitude, longitude: challengeLocation.longitude)
         let distance = userLocation.distance(from: loc)
         
-        if  distance < 100.0 {
+        if  distance < radius {
             return true
         }
         

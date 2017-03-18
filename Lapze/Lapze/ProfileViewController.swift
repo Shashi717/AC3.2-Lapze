@@ -36,7 +36,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
    
     var userChallenges: [Challenge] = [] {
         didSet {
-            print("changed from \(oldValue) to \(userChallenges)")
             self.badgesCollectionView.reloadData()
         }
     }

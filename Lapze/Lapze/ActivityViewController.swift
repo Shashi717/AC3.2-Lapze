@@ -84,6 +84,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- User Interface Utilities
     private func updateInterface(){
+           mapViewController.getAllChallenges()
         switch viewControllerState{
         case .events:
             addButton.backgroundColor = ColorPalette.purpleThemeColor
@@ -124,7 +125,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animateAddbuttonInfo(false)
         addButtonInfoLabel.removeFromSuperview()
         infoThumbImageView.removeFromSuperview()
-        
     }
     
     @objc private func createActivityHandle(){
@@ -244,7 +244,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.centerX.equalToSuperview()
         }
         
-        
     }
     
     func createAnimationView() {
@@ -304,7 +303,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         topInfoView.titleLabel.text = challenge.name
         
     }
-    
     
     @objc private func endChallenge(){
         print("End challenge infoview")
@@ -386,7 +384,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         alert.addAction(noAction)
         alert.addAction(yesAction)
         present(alert, animated: true, completion: nil)
-        
     }
     
     //MARK:- Views
@@ -404,7 +401,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         segmentedControl.backgroundColor = .clear
         segmentedControl.layer.borderColor = UIColor.white.cgColor
         segmentedControl.layer.cornerRadius = 20
-        
         
         return segmentedControl
     }()
@@ -426,7 +422,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         button.addTarget(self, action: #selector(handlePostInfoInterface), for: .touchUpInside)
         return button
     }()
-    
     
     private lazy var addButtonInfoLabel: UILabel = {
         let label = UILabel()
