@@ -20,12 +20,20 @@ class UserStore {
             
             var userObject: User?
             let id = snapshot.key
+            var badges:[String] = []
             if let name = snapshot.childSnapshot(forPath: "name").value as? String,
                 let profilePic = snapshot.childSnapshot(forPath: "profilePic").value as? String,
-                let badges = snapshot.childSnapshot(forPath: "badges").value as? [String] {
+                let challengeCount = snapshot.childSnapshot(forPath: "challengeCount").value as? Int,
+                let eventCount = snapshot.childSnapshot(forPath: "eventCount").value as? Int {
+                
+                if let userBadges = snapshot.childSnapshot(forPath: "badges").value as? [String] {
+                    badges = userBadges
+                }
                 userObject = User(id: id,
                                   name: name,
                                   profilePic: profilePic,
+                                  challengeCount: challengeCount,
+                                  eventCount: eventCount,
                                   badges: badges)
             }
             if let user = userObject {
@@ -52,12 +60,22 @@ class UserStore {
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
                 
             let id = snap.key
+            var badges:[String] = []
+                
             if let name = snap.childSnapshot(forPath: "name").value as? String,
                 let profilePic = snap.childSnapshot(forPath: "profilePic").value as? String,
-                let badges = snap.childSnapshot(forPath: "badges").value as? [String] {
+                let challengeCount = snap.childSnapshot(forPath: "challengeCount").value as? Int,
+                let eventCount = snap.childSnapshot(forPath: "eventCount").value as? Int {
+                
+                if let userBadges = snap.childSnapshot(forPath: "badges").value as? [String] {
+                    badges = userBadges
+                }
+                
                 let user = User(id: id,
                                   name: name,
                                   profilePic: profilePic,
+                                  challengeCount: challengeCount,
+                                  eventCount: eventCount,
                                   badges: badges)
               
                 

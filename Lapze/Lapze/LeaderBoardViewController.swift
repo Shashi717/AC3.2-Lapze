@@ -10,9 +10,16 @@ import UIKit
 import Firebase
 
 class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     let cellId = "leaderCell"
-     let userStore = UserStore()
+    let userStore = UserStore()
+    
+    var users: [User] = [] {
+        didSet {
+            print(users.count)
+            self.leaderBoardCollectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +28,9 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         self.navigationItem.title = "Leaderboard"
         setup()
         loadUsers()
+        
     }
     
-    var users: [User] = [] {
-        didSet {
-            print("changed from \(oldValue) to \(users.count)")
-            self.leaderBoardCollectionView.reloadData()
-        }
-    }
-
     //MARK: - Utilities
     func setup() {
         self.view.addSubview(topContainerView)
@@ -56,12 +57,10 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     func loadUsers() {
         userStore.getAllUsers { (users) in
             self.users = users
-            dump("users \(users)")
         }
     }
     
     func showBadges() {
-        print("show stickers")
         self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
     }
     
@@ -89,8 +88,8 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         print(indexPath.row)
     }
     
-
-   //MARK: - views
+    
+    //MARK: - views
     internal var leaderBoardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -103,5 +102,5 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         view.backgroundColor = .white
         return view
     }()
-
+    
 }
