@@ -295,9 +295,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         showPopUpController(with: challenge)
         mapViewController.popVc.challengeDescriptionLabel.text = "You just created a challenge!"
         mapViewController.didCreateActivity = true
+        mapViewController.popVc.didCreateActivity = true
         self.didCreateActivity = true
         currentChallenge = challenge
-        mapViewController.didCreateActivity = true
         mapViewController.challenge = challenge
         topInfoView.titleLabel.text = challenge.name
         
