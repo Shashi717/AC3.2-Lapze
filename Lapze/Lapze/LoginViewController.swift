@@ -12,7 +12,10 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
-    
+    private enum LoginBehavior{
+        case register,login
+    }
+    private var viewControllerState: LoginBehavior = .login
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,38 +26,42 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         observeKeyboardNotifications()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
     }
     
     func loginTapped(sender: UIButton) {
         print("Login")
         
-        if let email = emailTextField.text, let password = passwordTextField.text {
+        switch viewControllerState{
             
-            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
-                if let error = error {
-                    print("User Login Error \(error.localizedDescription)")
-                    let alertController = showAlert(title: "Login Failed!", message: "Failed to Login. Please Check Your Email and Password!", useDefaultAction: true)
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-                else {
-                    let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
-                    
-                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+        case .login:
+            if let email = emailTextField.text, let password = passwordTextField.text {
+                
+                FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+                    if let error = error {
+                        print("User Login Error \(error.localizedDescription)")
+                        let alertController = showAlert(title: "Login Failed!", message: "Failed to Login. Please Check Your Email and Password!", useDefaultAction: true)
                         
-                        self.dismiss(animated: true, completion: nil)
-                    }))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            })
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    else {
+                        let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
+                        
+                        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                            
+                            self.dismiss(animated: true, completion: nil)
+                        }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                })
+            }
+        case .register:
+            break
         }
     }
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
-        
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
     }
@@ -82,6 +89,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }, completion: nil)
     }
     
+    @objc private func updateViewController(){
+        switch viewControllerState{
+        case .login:
+            self.loginButton.setTitle("Login", for: .normal)
+            self.gotoRegisterButton.setTitle("Don't have an account?", for: .normal)
+            viewControllerState = .register
+        case .register:
+            self.loginButton.setTitle("Register", for: .normal)
+            self.gotoRegisterButton.setTitle("Already have an account?", for: .normal)
+            viewControllerState = .login
+        }
+    }
+    
     //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
@@ -94,7 +114,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.container.addSubview(gotoRegisterButton)
     }
     
-    func configureConstraints() {
+    private func configureConstraints() {
         
         scrollView.snp.makeConstraints { (view) in
             view.leading.trailing.top.bottom.equalToSuperview()
@@ -109,7 +129,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         logoImageView.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.height.width.equalTo(225.0)
-            view.top.equalToSuperview().offset(40.0)
+            view.top.equalToSuperview().offset(50.0)
         }
         emailTextField.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -133,7 +153,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         gotoRegisterButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.top.equalTo(loginButton.snp.bottom).offset(8.0)
-            view.width.equalTo(200.0)
+            //view.width.equalTo(200.0)
             view.height.equalTo(30.0)
         }
     }
@@ -154,19 +174,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return view
     }()
     //MARK: - View init
-    internal lazy var logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
         return imageView
     }()
-    internal lazy var emailTextField: UITextField = {
+    private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.keyboardType = .emailAddress
         return textField
     }()
-    internal lazy var passwordTextField: UITextField = {
+    private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
@@ -174,7 +196,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         textField.isSecureTextEntry = true
         return textField
     }()
-    internal lazy var loginButton: UIButton = {
+    private lazy var loginButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = ColorPalette.orangeThemeColor
         button.layer.cornerRadius = 8.0
@@ -183,10 +205,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         button.addTarget(self, action: #selector(loginTapped(sender:)), for: .touchUpInside)
         return button
     }()
-    internal lazy var gotoRegisterButton: UIButton = {
+    private lazy var gotoRegisterButton: UIButton = {
         let button = UIButton()
         button.setTitle("Don't have an account?", for: .normal)
-        button.addTarget(self, action: #selector(gotoRegisterTapped(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(updateViewController), for: .touchUpInside)
         return button
     }()
 }
