@@ -24,7 +24,6 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func dismissme() {
-        print("dismissme")
         self.dismiss(animated: true, completion: nil)
     }
     
