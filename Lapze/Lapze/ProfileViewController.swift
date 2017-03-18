@@ -17,6 +17,17 @@ protocol ProfileDelegate {
     func getActivityData(_ challenges: [Challenge])
 }
 
+enum Rank: String {
+    case newbie = "Newbie"
+    case benchwarmer = "Benchwarmer"
+    case challenger = "Challenger"
+    case warrior = "Warrior"
+    case lapzer = "Lapzer"
+    case olympian = "Olympian"
+    case ultimateLapzer = "Ultimate Lapzer"
+    case none = "none"
+}
+
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ProfileDelegate {
     
     let segments = ["Create Event", "Create Challenge"]
@@ -33,13 +44,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     private let challengeStore = ChallengeStore()
     //var userChallenges: [Challenge] = []
     var delegate: ProfileDelegate?
-   
+    
     var userChallenges: [Challenge] = [] {
         didSet {
             self.badgesCollectionView.reloadData()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,11 +60,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         configureConstraints()
         loadUser()
         
-        
         getUserChallenges()
     }
     
-
+    
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
@@ -72,9 +82,34 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func determineRank(_ challenges: [Challenge]) {
-        if challenges.count > 0 {
-            self.userRankLabel.text = "\"Rank: Newbie \""
+        
+        let rank = getRank(challenges.count)
+        self.userRankLabel.text = rank.rawValue
+        
+    }
+    
+    func getRank(_ challengeCount: Int) -> Rank {
+        
+        var rank = Rank.none
+        
+        switch challengeCount {
+        case 0...10:
+            rank = .newbie
+        case 11...25:
+            rank = .benchwarmer
+        case 26...100:
+            rank = .challenger
+        case 101...250:
+            rank = .lapzer
+        case 251...500:
+            rank = .olympian
+        case 501...Int.max:
+            rank = .ultimateLapzer
+        default:
+            rank = .none
         }
+        
+        return rank
     }
     
     //Test: set userchallenge data to implement badge count etc.
@@ -85,7 +120,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.userStore.updateUserData(id: uid!, values: values, child: "badges")
         }
     }
-
+    
     func loadUser() {
         guard let userId = uid else { return }
         userStore.getUser(id: userId) { (user) in
@@ -107,7 +142,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         {
             let alertController = showAlert(title: "Logout Unsuccessul!", message: "Error occured. Please try again.", useDefaultAction: true)
             self.present(alertController, animated: true, completion: nil)
-
+            
         }
     }
     
@@ -149,8 +184,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         let mbvc = MainBadgesViewController()
         self.present(mbvc, animated: true)
     }
-   
-   
+    
+    
     
     //MARK: - pie data
     func setChart(userData: [String: Double]) {
@@ -224,7 +259,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(userRankLabel)
         
         self.view.addSubview(activitiesLabel)
-    
+        
         
     }
     
@@ -274,9 +309,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             //view.leading.equalToSuperview()
         }
     }
-
     
-
+    
+    
     //MARK: - Views
     internal var horiBarChart: HorizontalBarChartView = {
         let view = HorizontalBarChartView()
@@ -312,7 +347,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 300)
         return gradient
     }()
-
+    
     internal var badgesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
@@ -334,7 +369,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         imageView.addGestureRecognizer(tap)
         return imageView
     }()
-
+    
     internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -363,5 +398,5 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         barButton = UIBarButtonItem(title: "Logout", style: .done, target: self, action: #selector(logoutButtonTapped(sender:)))
         return barButton
     }()
-   
+    
 }

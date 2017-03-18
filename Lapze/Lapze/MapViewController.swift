@@ -13,7 +13,7 @@ protocol MapStateProtocal {
     func updateMapState(state:MapViewControllerState)
 }
 
-public enum MapViewControllerState:Int{
+public enum MapViewControllerState: Int {
     case events
     case challenges
 }
