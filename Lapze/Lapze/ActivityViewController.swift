@@ -314,6 +314,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             print("Challenge saved")
             
             self.mapViewController.updateFirebase()
+
             
         }) { (_) in
             print("Challenge not saved")

@@ -170,12 +170,16 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             challenge?.timeToBeat = activityTime
             challenge?.distance = (distance/1609.34).roundTo(places: 2)
             challengeStore.add(challenge!)
+            userStore.updateActivityCounts(activityType: "challengeCount")
         }
             
         else {
             let locationStore = LocationStore()
             if let path = challenge?.path, let endLocation = path.last {
                 if locationStore.isUserWithinRadius(userLocation: self.userCurrentLocation!, challengeLocation: endLocation) {
+                    
+                    userStore.updateActivityCounts(activityType: "challengeCount")
+                    
                     let currentDistance = (self.distance/1609.34).roundTo(places: 2)
                     if activityTime < (challenge?.timeToBeat!)! && (abs(currentDistance - (challenge?.distance!)!) < 0.05) {
                         

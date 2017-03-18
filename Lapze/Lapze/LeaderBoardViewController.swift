@@ -16,7 +16,9 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var users: [User] = [] {
         didSet {
-            print(users.count)
+           users.sort { (a, b) -> Bool in
+                (a.challengeCount + a.eventCount) > (b.challengeCount+b.eventCount)
+            }
             self.leaderBoardCollectionView.reloadData()
         }
     }

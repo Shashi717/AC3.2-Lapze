@@ -86,4 +86,15 @@ class UserStore {
         })
     }
     
+    func updateActivityCounts(activityType: String) {
+        let userId = FirebaseManager.shared.uid!
+         self.databaseRef.child("users").child(userId).child(activityType).observe(.value, with: {(snapshot) in
+            let value = snapshot.value as! Int
+            
+            let dict = [activityType: value+1]
+             self.databaseRef.child("users").child(userId).child(activityType).updateChildValues(dict)
+            
+         })
+    }
+    
 }
