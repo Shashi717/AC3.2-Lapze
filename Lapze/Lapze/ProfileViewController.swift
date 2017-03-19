@@ -325,6 +325,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     internal lazy var profileImageView: UIImageView = {

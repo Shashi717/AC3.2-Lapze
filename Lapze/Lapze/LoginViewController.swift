@@ -19,9 +19,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         setupViewHierarchy()
         configureConstraints()
         
-        observeKeyboardNotifications()
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
         
     }
     
@@ -55,27 +54,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
     }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    fileprivate func observeKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardDidShow, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardDidHide, object: nil)
-    }
-    
-    func showKeyboard() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
-    }
-    
-    func hideKeyboard(notification: NSNotification) {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.frame = CGRect(x: 0, y: 60, width: self.view.frame.width, height: self.view.frame.height)
-            }, completion: nil)
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 
     //MARK: - Setup
