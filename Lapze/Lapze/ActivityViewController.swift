@@ -30,17 +30,29 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-    private var challengeFirebaseRef: FIRDatabaseReference? //test
+    //private var challengeFirebaseRef: FIRDatabaseReference?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateInterface()
         setUpController()
+        configureUserDefaults()
     }
     
     private func setUpController(){
         addMapViewController()
         setUpViews()
+    }
+    
+    private func configureUserDefaults() {
+        let userDefaults = UserDefaults.standard
+        let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
+        
+        if isFirstTime == false {
+            userDefaults.set(true, forKey: "isNotFirstTime")
+            createAnimationView()
+            animateAddbuttonInfo(true)
+        }
     }
     
     private func addMapViewController(){
@@ -72,19 +84,47 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- User Interface Utilities
     private func updateInterface(){
+           mapViewController.getAllChallenges()
         switch viewControllerState{
         case .events:
             addButton.backgroundColor = ColorPalette.purpleThemeColor
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
             navigationItem.title = "Current Events"
+            handleInfoInterface("events")
+            
         case .challenges:
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "Challenges"
+            handleInfoInterface("challenges")
+            
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
+    }
+    
+    //test : this hides the addbuttonInfo label
+    @objc private func handleInfoInterface(_ state: String) {
+        switch state {
+        case "events":
+            addButtonInfoLabel.text = "Tap to create an EVENT" //test
+            addButtonInfoLabel.backgroundColor = .purple
+            infoThumbImageView.image = UIImage(named: "tap")
+        case "challenges":
+            addButtonInfoLabel.text = "Tap to create a CHALLENGE"
+            addButtonInfoLabel.backgroundColor = .orange
+            infoThumbImageView.image = UIImage(named: "crown")
+        default:
+            break
+        }
+    }
+    
+    //test: almost done
+    @objc private func handlePostInfoInterface() {
+        animateAddbuttonInfo(false)
+        addButtonInfoLabel.removeFromSuperview()
+        infoThumbImageView.removeFromSuperview()
     }
     
     @objc private func createActivityHandle(){
@@ -125,7 +165,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
                 }
             })
         }
+        
         animator.startAnimation()
+        
     }
     
     private func animateBottomScrollInfoView(){
@@ -139,16 +181,38 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             self.bottomScrollInfoView.contentOffset = CGPoint(x: 0, y: 0)
         }, delayFactor: 0.7)
         
-        animator.startAnimation()
+    }
+    
+    func animateAddbuttonInfo(_ isAnimating: Bool) {
+        
+        let infoButtonAnimator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
+        
+        infoButtonAnimator.addAnimations({
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            
+        })
+        
+        infoButtonAnimator.addAnimations({
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        }, delayFactor: 0.5)
+        
+        UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: .repeat, animations: {
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            
+            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        }, completion: nil)
+        
     }
     
     //MARK:- Views
-    private func setUpViews(){
+    private func setUpViews() {
         edgesForExtendedLayout = []
         self.view.addSubview(activitySegmentedControl)
         self.view.addSubview(addButton)
         self.view.addSubview(topInfoView)
         self.view.addSubview(bottomScrollInfoView)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handlePostInfoInterface))
+        self.view.addGestureRecognizer(tap)
         
         addButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -179,6 +243,29 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             view.height.equalTo(30.0)
             view.centerX.equalToSuperview()
         }
+        
+    }
+    
+    func createAnimationView() {
+        
+        edgesForExtendedLayout = []
+        
+        self.view.addSubview(infoThumbImageView)
+        self.view.addSubview(addButtonInfoLabel)
+        
+        infoThumbImageView.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.size.equalTo(40)
+            view.bottom.equalTo(addButton.snp.top).offset(5.0)
+        }
+        addButtonInfoLabel.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.width.equalTo(100.0)
+            view.height.equalTo(50.0)
+            view.bottom.equalToSuperview().inset(110.0)
+        }
+        self.view.layoutIfNeeded()
+        
     }
     
     //MARK:- Event Delegate methods
@@ -204,10 +291,10 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //MARK:- Challenge Delegate Methods
-
+    
     func challengeCreated(_ challenge: Challenge) {
-       showPopUpController(with: challenge)
-         popVC.challengeDescriptionLabel.text = "You just created a challenge!"
+        showPopUpController(with: challenge)
+        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
         popVC.didCreateActivity = true
         self.didCreateActivity = true
         currentChallenge = challenge
@@ -217,7 +304,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
     }
     
-    //test
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.activityTime = Double(counter)
@@ -227,17 +313,16 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
             print("Challenge saved")
-
+            
             self.mapViewController.updateFirebase()
-
+            
         }) { (_) in
             print("Challenge not saved")
-            //self.challengeFirebaseRef?.child(challenge.id).removeValue()
             self.mapViewController.removeUserPath()
         }
         
         self.didCreateActivity = false
-       
+        
     }
     
     @objc private func startChallenge(){
@@ -260,7 +345,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Join Challenge Delegate method
     func joinChallenge(_ challenge: Challenge) {
-//        self.mapViewController.didCreateActivity = false
+        //        self.mapViewController.didCreateActivity = false
         self.didCreateActivity = false
         currentChallenge = challenge
         topInfoView.titleLabel.text = challenge.name
@@ -294,12 +379,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     private func showAlertSheet(title:String, message: String?, acceptClosure: ((UIAlertAction)->Void)?, reject: ((UIAlertAction)->Void)?){
         let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        let noAction: UIAlertAction = UIAlertAction(title: "no", style: .cancel, handler: reject)
-        let yesAction: UIAlertAction = UIAlertAction(title: "yes", style: .default, handler: acceptClosure)
+        let noAction: UIAlertAction = UIAlertAction(title: "No", style: .cancel, handler: reject)
+        let yesAction: UIAlertAction = UIAlertAction(title: "Yes", style: .default, handler: acceptClosure)
         alert.addAction(noAction)
         alert.addAction(yesAction)
         present(alert, animated: true, completion: nil)
-        
     }
     
     //MARK:- Views
@@ -308,11 +392,19 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        segmentedControl.backgroundColor = ColorPalette.greenThemeColor
+        //segmentedControl.backgroundColor = ColorPalette.greenThemeColor
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
+        
+        //test
+        
+        segmentedControl.backgroundColor = .clear
+        segmentedControl.layer.borderColor = UIColor.white.cgColor
+        segmentedControl.layer.cornerRadius = 20
+        
         return segmentedControl
     }()
+    
     
     private lazy var addButton: UIButton = {
         let button: UIButton = UIButton()
@@ -327,6 +419,32 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         button.backgroundColor = ColorPalette.purpleThemeColor
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(createActivityHandle), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handlePostInfoInterface), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var addButtonInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Tap to create an Event"
+        label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 10
+        label.layer.shadowOpacity = 0.4
+        label.layer.shadowOffset = CGSize(width: 1, height: 5)
+        label.layer.shadowRadius = 2
+        label.numberOfLines = 2
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 1, height: 1)
+        return label
+    }()
+    
+    private lazy var infoThumbImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "crownThumb")
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
     }()
 }

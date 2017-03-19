@@ -31,7 +31,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         case event
         case none
     }
-
+    
     fileprivate var markerOption: MarkerOption = .event{
         didSet{
             updateMarkers()
@@ -89,7 +89,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         
         locateMeButton.snp.makeConstraints { (view) in
             view.trailing.equalToSuperview().inset(10)
-            view.width.height.equalTo(50)
+            view.width.height.equalTo(40)
             view.bottom.equalToSuperview().inset(10)
         }
     }
@@ -117,7 +117,12 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
         userLocationMarker?.iconView = nil
-        userLocationMarker?.icon = UIImage(named: "010-man-1")
+        userStore.getUser(id: FirebaseManager.shared.uid!) { (user) in
+            
+            if let profileImage = self.resizeImage(user.profilePic) {
+                self.userLocationMarker?.icon = profileImage
+            }
+        }
         markerOption = .none
     }
     
@@ -132,9 +137,22 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.iconView = UserLocationMarker()
         userLocationMarker?.icon = nil
         trackingBehavior = .none
-
+        
         distance = 0.0
         removeUserPath()
+    }
+    
+    func resizeImage(_ profilePic: String) -> UIImage? {
+        let image = UIImage(named: profilePic)
+        let width = 50.0
+        let height = 50.0
+        UIGraphicsBeginImageContext(CGSize(width: width, height: height))
+        
+        image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
     
     public func updateFirebase() {
@@ -202,7 +220,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     //MARK:- Challenge Utilities
-    private func getAllChallenges(){
+    func getAllChallenges(){
         challengeStore.getAllChallenges { (challenges) in
             self.allChallenges = challenges
             self.userChampionshipChallenges = self.getUsersChampionships(challenges)
@@ -302,7 +320,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
         previousLocation = currentLocation
     }
-  
+    
     private func addUserLocationToFirebase(location: CLLocation){
         let location = Location(location: location)
         switch trackUserLocation{
@@ -339,7 +357,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     //MARK:- Google map delegate methods
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         guard marker != userLocationMarker else { return nil }
-        
         
         let thumbView: GoogleMapThumbView = GoogleMapThumbView()
         thumbView.profileImageView.image = marker.icon
@@ -400,7 +417,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
                         self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
-                        
                     })
                     self.popVc.activityId = challenge.id
                     self.popVc.userLocation = LocationManager.sharedManager.currentLocation

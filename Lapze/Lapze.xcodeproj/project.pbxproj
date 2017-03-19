@@ -30,6 +30,7 @@
 		92D592895DAC956AE3213D9B /* Pods_Lapze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3306D834986CC67455EA3764 /* Pods_Lapze.framework */; };
 		9B0767991E738A8C005AA3B8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0767981E738A8C005AA3B8 /* Location.swift */; };
 		9B07679B1E73902F005AA3B8 /* LocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B07679A1E73902F005AA3B8 /* LocationStore.swift */; };
+		9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B1316A11E7BB8AB004430AD /* 17mph.gpx */; };
 		9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */; };
 		9B13480F1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */; };
 		9B1531531E72251C00853B2E /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1531521E72251C00853B2E /* Challenge.swift */; };
@@ -43,7 +44,8 @@
 		9B19204F1E6DED8400868AB2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B19204E1E6DED8400868AB2 /* LoginViewController.swift */; };
 		9B1920511E6DF5E000868AB2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */; };
 		9BC893D31E6A0C4F00FAF0B8 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */; };
-		E35565B31E79E95E00DFEEAB /* toFoursquare.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */; };
+		E330B0061E7BB2A700580551 /* block20mph.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E330B0051E7BB2A700580551 /* block20mph.gpx */; };
+		E330B0081E7BB33D00580551 /* line25.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E330B0071E7BB33D00580551 /* line25.gpx */; };
 		E35565B71E7AA95000DFEEAB /* FoursquareLapze.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */; };
 		E363F2F81E6E182D005BE3B8 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */; };
 		E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = E363F2F91E6F41B2005BE3B8 /* dayStyle.json */; };
@@ -86,6 +88,7 @@
 		386458A086BAF33E40DC98A3 /* Pods-Lapze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lapze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Lapze/Pods-Lapze.release.xcconfig"; sourceTree = "<group>"; };
 		9B0767981E738A8C005AA3B8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		9B07679A1E73902F005AA3B8 /* LocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
+		9B1316A11E7BB8AB004430AD /* 17mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = 17mph.gpx; sourceTree = "<group>"; };
 		9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_15mph.gpx; sourceTree = "<group>"; };
 		9B13480E1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FourSquareToPrinceSt_10mph.gpx; sourceTree = "<group>"; };
 		9B1531521E72251C00853B2E /* Challenge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
@@ -99,7 +102,8 @@
 		9B19204E1E6DED8400868AB2 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B1920501E6DF5E000868AB2 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9BC893D21E6A0C4F00FAF0B8 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
-		E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = toFoursquare.gpx; sourceTree = "<group>"; };
+		E330B0051E7BB2A700580551 /* block20mph.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = block20mph.gpx; sourceTree = "<group>"; };
+		E330B0071E7BB33D00580551 /* line25.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = line25.gpx; sourceTree = "<group>"; };
 		E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FoursquareLapze.gpx; sourceTree = "<group>"; };
 		E363F2F71E6E182D005BE3B8 /* PopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		E363F2F91E6F41B2005BE3B8 /* dayStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dayStyle.json; sourceTree = "<group>"; };
@@ -139,7 +143,9 @@
 				9B13480A1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx */,
 				E363F2F91E6F41B2005BE3B8 /* dayStyle.json */,
 				E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */,
-				E35565B21E79E95E00DFEEAB /* toFoursquare.gpx */,
+				E330B0051E7BB2A700580551 /* block20mph.gpx */,
+				E330B0071E7BB33D00580551 /* line25.gpx */,
+				9B1316A11E7BB8AB004430AD /* 17mph.gpx */,
 				E35565B61E7AA95000DFEEAB /* FoursquareLapze.gpx */,
 				E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */,
 			);
@@ -204,10 +210,10 @@
 			children = (
 				1AA17A751E7B806800286706 /* EventStore.swift */,
 				9B1684951E70911B00377543 /* Path.swift */,
-				9B1531561E7281E700853B2E /* User.swift */,
+				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
 				9B1531521E72251C00853B2E /* Challenge.swift */,
 				9B1531541E72276A00853B2E /* ChallengeStore.swift */,
-				1AEF108D1E7583EC0086C8E6 /* Event.swift */,
+				9B1531561E7281E700853B2E /* User.swift */,
 				9B1531581E72820900853B2E /* UserStore.swift */,
 				9B0767981E738A8C005AA3B8 /* Location.swift */,
 				9B07679A1E73902F005AA3B8 /* LocationStore.swift */,
@@ -316,7 +322,6 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = ZSE2A75FGT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -347,12 +352,14 @@
 				E363F3001E6F4590005BE3B8 /* mirasHome.gpx in Resources */,
 				9B13480B1E7AE60D006554AC /* FourSquareToPrinceSt_15mph.gpx in Resources */,
 				E363F2FA1E6F41B2005BE3B8 /* dayStyle.json in Resources */,
+				9B1316A21E7BB8AB004430AD /* 17mph.gpx in Resources */,
 				9B19204D1E6DEC2800868AB2 /* GoogleService-Info.plist in Resources */,
+				E330B0061E7BB2A700580551 /* block20mph.gpx in Resources */,
 				1A9768011E6789EB00F6B28C /* LaunchScreen.storyboard in Resources */,
+				E330B0081E7BB33D00580551 /* line25.gpx in Resources */,
 				1A9767FE1E6789EB00F6B28C /* Assets.xcassets in Resources */,
 				9B13480F1E7AE6B4006554AC /* FourSquareToPrinceSt_10mph.gpx in Resources */,
 				E35565B71E7AA95000DFEEAB /* FoursquareLapze.gpx in Resources */,
-				E35565B31E79E95E00DFEEAB /* toFoursquare.gpx in Resources */,
 				1AA518CF1E6E17BD00CB830D /* darkBlueStyle.json in Resources */,
 				E363F2FE1E6F42AA005BE3B8 /* darkStyle.json in Resources */,
 			);
@@ -567,7 +574,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;
@@ -583,7 +590,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZSE2A75FGT;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Lapze/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze;

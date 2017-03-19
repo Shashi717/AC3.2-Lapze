@@ -15,6 +15,8 @@ class GoogleMapManager{
     private init(){}
     
     private var dict: [String: GMSMarker] = [:]
+    private var eventMarkerDic: [String:GMSMarker] = [:]
+    private var userLocationMarkerDic: [String:GMSMarker] = [:]
     
     func manage(map: GMSMapView){
         self.map = map
@@ -53,7 +55,7 @@ class GoogleMapManager{
         guard event.id != FirebaseManager.shared.uid else { return}
         let cllocation = CLLocationCoordinate2D(latitude: event.location.latitude, longitude: event.location.longitude)
         let marker = GMSMarker(position: cllocation)
-        self.dict[event.id] = marker
+        self.eventMarkerDic[event.id] = marker
         marker.map = map
         marker.icon = UIImage(named: "010-man")
         marker.title = event.id

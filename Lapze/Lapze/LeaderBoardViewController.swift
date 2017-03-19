@@ -7,23 +7,33 @@
 //
 
 import UIKit
+import Firebase
 
 class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     let cellId = "leaderCell"
+     let userStore = UserStore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
         self.navigationItem.title = "Leaderboard"
         setup()
+        loadUsers()
+    }
+    
+    var users: [User] = [] {
+        didSet {
+            print("changed from \(oldValue) to \(users.count)")
+            self.leaderBoardCollectionView.reloadData()
+        }
     }
 
     //MARK: - Utilities
     func setup() {
         self.view.addSubview(topContainerView)
         self.view.addSubview(leaderBoardCollectionView)
-        self.topContainerView.addSubview(showBadgesButton)
         
         leaderBoardCollectionView.delegate = self
         leaderBoardCollectionView.dataSource = self
@@ -35,17 +45,18 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
             view.height.equalTo(100)
         }
         
-        showBadgesButton.snp.makeConstraints { (view) in
-            view.height.equalTo(150)
-            view.width.equalTo(60)
-            view.center.equalToSuperview()
-        }
-        
         leaderBoardCollectionView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            //view.height.equalTo(300)
-            view.top.equalTo(showBadgesButton.snp.bottom)
+            view.height.equalTo(600)
+            //view.top.equalTo(showBadgesButton.snp.bottom)
             view.bottom.equalToSuperview()
+        }
+    }
+    
+    func loadUsers() {
+        userStore.getAllUsers { (users) in
+            self.users = users
+            dump("users \(users)")
         }
     }
     
@@ -56,12 +67,15 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     
     //MARK: - Collection data flow
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return users.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! LeaderBoardCollectionCell
         
+        cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
+        cell.nameLabel.text = "\(self.users[indexPath.row].name)"
+        cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
         return cell
     }
     
@@ -80,22 +94,14 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     internal var leaderBoardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .purple
+        cv.backgroundColor = .white
         return cv
     }()
     
     internal let topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
         return view
-    }()
-    
-    internal var showBadgesButton: UIButton = {
-        var button = UIButton()
-        button.setTitle("show badges", for: .normal)
-        button.backgroundColor = .red
-        button.addTarget(self, action: #selector(showBadges), for: .touchUpInside)
-        return button
     }()
 
 }

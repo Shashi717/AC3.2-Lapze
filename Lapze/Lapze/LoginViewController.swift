@@ -12,10 +12,12 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
+
     private enum LoginBehavior{
         case register,login
     }
     private var viewControllerState: LoginBehavior = .login
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,7 +31,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func loginTapped(sender: UIButton) {
-        print("Login")
         
         switch viewControllerState{
             
@@ -62,6 +63,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
+
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
     }
@@ -101,7 +103,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             viewControllerState = .login
         }
     }
-    
+
     //MARK: - Setup
     func setupViewHierarchy() {
         self.edgesForExtendedLayout = []

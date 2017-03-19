@@ -19,8 +19,15 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setup()
+        
+      
     }
-
+    
+    func dismissme() {
+        print("dismissme")
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func setup() {
         mainBadgesCollectionView.delegate = self
         mainBadgesCollectionView.dataSource = self
@@ -28,11 +35,12 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         
         self.view.addSubview(topContainerView)
         self.topContainerView.addSubview(titleLabel)
+        self.topContainerView.addSubview(closeButton)
         self.view.addSubview(mainBadgesCollectionView)
         
         topContainerView.snp.makeConstraints { (view) in
             view.width.equalToSuperview()
-            view.height.equalToSuperview().multipliedBy(0.25)
+            view.height.equalToSuperview().multipliedBy(0.15)
             view.top.equalToSuperview()
         }
         
@@ -46,6 +54,11 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
             view.top.equalTo(topContainerView.snp.bottom)
             view.bottom.equalToSuperview()
         }
+        
+        closeButton.snp.makeConstraints { (view) in
+            view.leading.equalToSuperview()
+            view.top.equalToSuperview().offset(10)
+        }
     }
     
     //MARK: - Collection data flow
@@ -57,13 +70,13 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
         
         cell.badgeImageView.image = UIImage(named: "\(badgeTitles[indexPath.row])")
-        cell.badgeLabel.text = "\(badgeTitles[indexPath.row])"
+        //cell.badgeLabel.text = "\(badgeTitles[indexPath.row])"
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        return CGSize(width: 60, height: 60)
         
     }
     
@@ -72,17 +85,11 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         print(indexPath.row)
     }
     
-    func showLeaderboard() {
-        print("show leaderBoard")
-        self.navigationController?.pushViewController(LeaderBoardViewController(), animated: true)
-    }
-    
 
   //MARK: - views
-    
     internal var topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = ColorPalette.greenThemeColor
         return view
     }()
     
@@ -90,6 +97,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let label = UILabel()
         label.text = "Badge Collection"
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -97,8 +105,20 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         let layout = UICollectionViewFlowLayout()
         //layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .purple
+        cv.backgroundColor = ColorPalette.greenThemeColor
         return cv
+    }()
+    
+    internal lazy var closeButton: UIButton = {
+        let button: UIButton = UIButton()
+        button.setImage(UIImage(named: "close"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ (view) in
+            view.size.equalTo(CGSize(width: 20, height: 20))
+        })
+        button.layer.cornerRadius = 20
+        button.addTarget(self, action: #selector(dismissme), for: .touchUpInside)
+        return button
     }()
     
     

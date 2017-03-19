@@ -23,26 +23,27 @@ class MainTabController: UITabBarController{
         
         checkForUserStatus()
         setDefaultViewController()
+        
     }
     override func viewDidAppear(_ animated: Bool) {
-        showLogin()
+       // showLogin()
     }
     
     private func checkForUserStatus(){
         
-//        _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
-//            if user == nil{
-//                self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
-//            }else if !self.userLocationPermissionGranted {
-//                let locationNeededVC = LocationNeededViewController()
-//                self.present(locationNeededVC, animated: true, completion: nil)
-//                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
-//                    self?.setUpTabBar()
-//                }
-//            }else{
-//                self.setUpTabBar()
-//            }
-//        })
+        _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
+            if user == nil{
+                self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
+            }else if !self.userLocationPermissionGranted {
+                let locationNeededVC = LocationNeededViewController()
+                self.present(locationNeededVC, animated: true, completion: nil)
+                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
+                    self?.setUpTabBar()
+                }
+            }else{
+                self.setUpTabBar()
+            }
+        })
         
     }
     
