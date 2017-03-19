@@ -88,8 +88,6 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
         let values = ["profilePic": "\(indexPath.row)"]
         userStore.updateUserData(values: values, child: nil)
         
-        print(indexPath.row)
-        
     }
     //MARK: - Views
     internal var profileImagePicker: UICollectionView = {
