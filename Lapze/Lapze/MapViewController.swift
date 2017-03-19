@@ -144,7 +144,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.icon = nil
         trackingBehavior = .none
         
-        distance = 0.0
         removeUserPath()
     }
     
@@ -293,8 +292,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackDistance()
             addUserLocationToFirebase(location: newLocation)
         case .none:
-            break
-//            print(trackingBehavior)
+            print(trackingBehavior)
         }
     }
     

@@ -83,7 +83,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- User Interface Utilities
     private func updateInterface(){
-           mapViewController.getAllChallenges()
+        mapViewController.getAllChallenges()
         switch viewControllerState{
         case .events:
             addButton.backgroundColor = ColorPalette.purpleThemeColor
@@ -202,7 +202,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }, completion: nil)
         
     }
-
+    
     //MARK:- Views
     private func setUpViews() {
         edgesForExtendedLayout = []
@@ -306,23 +306,18 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.activityTime = Double(counter)
-        mapViewController.endActivity()
-        
+     
         stopTimer()
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
             print("Challenge saved")
-            
             self.mapViewController.updateFirebase()
-
-            
         }) { (_) in
             print("Challenge not saved")
             self.mapViewController.removeUserPath()
         }
-        
+        mapViewController.endActivity()
         self.didCreateActivity = false
-        
     }
     
     @objc private func startChallenge(){

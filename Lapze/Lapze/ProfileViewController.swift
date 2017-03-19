@@ -65,8 +65,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     var user: User! {
         didSet {
-            print("userChallengescount \(userChallenges.count)")
-            print("the rank \(user.rank)")
             let theRank = checkRank(userChallenges.count)
             if user.rank != theRank.rawValue {
                 userStore.updateRank(rank: theRank.rawValue)
@@ -128,8 +126,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
         
-        
-        
         for i in 0..<self.userChallenges.count {
             let values = ["\(i)": "\(self.badgeTitles)"]
             self.userStore.updateUserData(values: values, child: "badges")
@@ -188,14 +184,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //        switch indexPath.row {
-        //        case 1:
-        //            presentMainBadgeView()
-        //        default: break
-        //        }
-        
         presentMainBadgeView()
-        //        self.badgesCollectionView.reloadData()
     }
     
     func presentMainBadgeView() {
