@@ -13,6 +13,7 @@ import Firebase
 class UserStore {
     
     let databaseRef = FIRDatabase.database().reference()
+
     let uId = FIRAuth.auth()?.currentUser?.uid
     
     
@@ -53,9 +54,11 @@ class UserStore {
             return
         }
         if child != nil {
+
             self.databaseRef.child("users").child(userId).child(child!).updateChildValues(values)
         } else {
             self.databaseRef.child("users").child(userId).updateChildValues(values)
+
         }
         
     }
@@ -98,7 +101,7 @@ class UserStore {
     }
     
     func updateActivityCounts(activityType: String) {
-        
+
         guard let userId = uId else {
             return
         }
@@ -106,17 +109,18 @@ class UserStore {
         self.databaseRef.child("users").child(userId).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
             let value = snapshot.value as! Int
             self.databaseRef.child("users").child(userId).child(activityType).setValue(value+1)
+
         })
     }
     
     func updateRank(rank: String) {
-        
         guard let userId = uId else {
             return
         }
         
         self.databaseRef.child("users").child(userId).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
             self.databaseRef.child("users").child(userId).child("rank").setValue(rank)
+
         })
     }
     
