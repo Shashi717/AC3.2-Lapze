@@ -28,17 +28,30 @@ enum Rank: String {
     case none = "none"
 }
 
+enum Badges: String {
+    case firstChallenge = "First Challenge"
+    case firstEvent = "First Event"
+    case benchwarmer = "Benchwarmer"
+    case challenger = "Challenger"
+    case warrior = "Warrior"
+    case lapzer = "Lapzer"
+    case olympian = "Olympian"
+    case ultimateLapzer = "Ultimate Lapzer"
+    case baller = "Baller"
+}
+
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ProfileDelegate {
     
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
-    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
-   
+    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Ultimate Lapzer"]
+    
     let cellId = "badges"
     var userProfileImage = "0"
     let uid = FIRAuth.auth()?.currentUser?.uid
     
     let userStore = UserStore()
+    var user: User!
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -47,7 +60,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     var userChallenges: [Challenge] = []
     var userBadges: [String] = [] {
         didSet {
-             self.badgesCollectionView.reloadData()
+            self.badgesCollectionView.reloadData()
         }
     }
     
@@ -66,7 +79,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
-            self.determineRank(challenges)
+            self.checkRank(challenges.count)
             
             //piechart data
             var activityDataDict = [String: Double]()
@@ -78,14 +91,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func determineRank(_ challenges: [Challenge]) {
-        
-        let rank = getRank(challenges.count)
-        self.userRankLabel.text = rank.rawValue
-        
-    }
-    
-    func getRank(_ challengeCount: Int) -> Rank {
+    func checkRank(_ challengeCount: Int) {
         
         var rank = Rank.none
         
@@ -106,23 +112,33 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             rank = .none
         }
         
-        return rank
+        if user.rank != rank.rawValue {
+            userStore.updateRank(rank: rank.rawValue)
+        }
+        
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
+        
+        
+        
         for i in 0..<self.userChallenges.count {
-            let values = ["\(i)": "\(self.badgeTitles[i])"]
-            self.userStore.updateUserData(id: uid!, values: values, child: "badges")
+            let values = ["\(i)": "\(self.badgeTitles)"]
+            self.userStore.updateUserData(values: values, child: "badges")
         }
+        
+        
     }
     
     func loadUser() {
         guard let userId = uid else { return }
         userStore.getUser(id: userId) { (user) in
+            self.user = user
             self.usernameLabel.text = "\(user.name)"
             self.profileImageView.image = UIImage(named: "\(user.profilePic)")
+            self.userRankLabel.text = user.rank
             
             if let badges = user.badges {
                 self.userBadges = badges //access to global var
@@ -148,7 +164,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func pickAvatar() {
         profileSetting.showAvatars()
     }
-
+    
     //MARK: - Collection data flow badges
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return userBadges.count
@@ -166,14 +182,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        switch indexPath.row {
-//        case 1:
-//            presentMainBadgeView()
-//        default: break
-//        }
+        //        switch indexPath.row {
+        //        case 1:
+        //            presentMainBadgeView()
+        //        default: break
+        //        }
         
         presentMainBadgeView()
-//        self.badgesCollectionView.reloadData()
+        //        self.badgesCollectionView.reloadData()
     }
     
     func presentMainBadgeView() {
