@@ -82,9 +82,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func createChallenge() {
         
-        let date = getCurrentDateString()
-        let userId = FIRAuth.auth()!.currentUser!.uid
+        guard let userId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
         
+        let date = getCurrentDateString()
         let newChallenge = Challenge(name: challengeNameTextField.text!,
                                      champion: userId,
                                      lastUpdated: date,
