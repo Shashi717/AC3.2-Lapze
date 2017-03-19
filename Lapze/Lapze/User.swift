@@ -12,6 +12,7 @@ struct User {
     let id: String
     let name: String
     let profilePic: String
+    let rank: String
     let challengeCount: Int
     let eventCount: Int
     let badges: [String]?

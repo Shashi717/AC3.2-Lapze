@@ -46,7 +46,7 @@ class RegisterViewController: UIViewController {
                     
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         
-                        let userDict = ["name": username, "challengeCount": 0, "eventCount": 0] as [String:Any]
+                        let userDict = ["name": username, "rank": "Newbie", "challengeCount": 0, "eventCount": 0] as [String:Any]
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
 
                         self.clearTextFields()
