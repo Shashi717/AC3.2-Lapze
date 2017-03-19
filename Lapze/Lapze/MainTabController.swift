@@ -26,7 +26,7 @@ class MainTabController: UITabBarController{
         
     }
     override func viewDidAppear(_ animated: Bool) {
-       // showLogin()
+      //  showLogin()
     }
     
     private func checkForUserStatus(){

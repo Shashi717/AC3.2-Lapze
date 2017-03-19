@@ -12,12 +12,11 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
-
     private enum LoginBehavior{
         case register,login
     }
     private var viewControllerState: LoginBehavior = .login
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,39 +30,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func loginTapped(sender: UIButton) {
-        
         switch viewControllerState{
-            
         case .login:
-            if let email = emailTextField.text, let password = passwordTextField.text {
-                
-                FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
-                    if let error = error {
-                        print("User Login Error \(error.localizedDescription)")
-                        let alertController = showAlert(title: "Login Failed!", message: "Failed to Login. Please Check Your Email and Password!", useDefaultAction: true)
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                    else {
-                        let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
-                        
-                        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                            
-                            self.dismiss(animated: true, completion: nil)
-                        }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                })
-            }
+            logInUser()
         case .register:
-            break
+            registerUser()
         }
     }
     
     func gotoRegisterTapped(sender: UIButton) {
         print("signup")
-
+        
         let registerVC = RegisterViewController()
         self.navigationController?.pushViewController(registerVC, animated:true)
     }
@@ -77,14 +54,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardDidHide, object: nil)
     }
     
-    func showKeyboard() {
+    //MARK:- Keyboard
+    @objc private func showKeyboard() {
         self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
-        UIView.animate(withDuration: 0.5) {
-            self.scrollView.contentOffset = CGPoint(x: 0, y: 50)
-        }
+        self.scrollView.setContentOffset(CGPoint(x: 0, y: 50), animated: true)
+        //        UIView.animate(withDuration: 0.5) {
+        //            self.scrollView.contentOffset = CGPoint(x: 0, y: 50)
+        //       }
     }
     
-    func hideKeyboard(notification: NSNotification) {
+    @objc private func hideKeyboard(notification: NSNotification) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
@@ -94,25 +73,133 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc private func updateViewController(){
         switch viewControllerState{
         case .login:
-            self.loginButton.setTitle("Login", for: .normal)
-            self.gotoRegisterButton.setTitle("Don't have an account?", for: .normal)
+            self.actionButton.setTitle("Register", for: .normal)
+            self.gotoRegisterButton.setTitle("Already have an account?", for: .normal)
+            animateUserNameTextfieldIn()
             viewControllerState = .register
         case .register:
-            self.loginButton.setTitle("Register", for: .normal)
-            self.gotoRegisterButton.setTitle("Already have an account?", for: .normal)
+            self.actionButton.setTitle("Login", for: .normal)
+            self.gotoRegisterButton.setTitle("Don't have an account?", for: .normal)
+            animateUserNameTextfieldOut()
             viewControllerState = .login
         }
     }
-
-    //MARK: - Setup
-    func setupViewHierarchy() {
+    
+    //MARK:- User signin utilities
+    private func registerUser(){
+        if let email = emailTextField.text, let password = passwordTextField.text, let username = userNameTextField.text {
+            
+            FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+                if let error = error {
+                    print("User Creating Error \(error.localizedDescription)")
+                    let alertController = showAlert(title: "Registering Failed!", message: "Failed to Register. Please Try Again!", useDefaultAction: true)
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                }
+                else {
+                    let alertController = showAlert(title: "Signup Successful!", message: "Successfully Registered. You will be automatically logged in!", useDefaultAction: false)
+                    
+                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                        
+                        let userDict = ["name": username, "challengeCount": 0, "eventCount": 0] as [String:Any]
+                        FirebaseManager.shared.updateFirebase(closure: { (ref) in
+                            ref.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
+                        })
+                        self.clearTextFields()
+                        let tabVC = EventsViewController()
+                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        
+                    }))
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                }
+            })
+        }
+    }
+    
+    private func logInUser(){
+        if let email = emailTextField.text, let password = passwordTextField.text {
+            
+            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+                if let error = error {
+                    print("User Login Error \(error.localizedDescription)")
+                    let alertController = showAlert(title: "Login Failed!", message: "Failed to Login. Please Check Your Email and Password!", useDefaultAction: true)
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+                else {
+                    let alertController = showAlert(title: "Login Successful!", message: nil, useDefaultAction: false)
+                    
+                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                        
+                        self.dismiss(animated: true, completion: nil)
+                    }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            })
+        }
+    }
+    
+    private func animateUserNameTextfieldIn(){
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, curve: .easeIn)
+        
+        self.userNameTextField.snp.remakeConstraints { (view) in
+            view.top.equalTo(self.passwordTextField.snp.bottom).offset(16.0)
+            view.centerX.equalToSuperview()
+            view.width.equalTo(225.0)
+            view.height.equalTo(30.0)
+        }
+        
+        self.actionButton.snp.remakeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.top.equalTo(self.userNameTextField.snp.bottom).offset(16.0)
+            view.width.equalTo(100.0)
+            view.height.equalTo(30.0)
+        }
+        
+        animator.addAnimations {
+            self.view.layoutIfNeeded()
+           
+        }
+        
+        animator.startAnimation()
+    }
+    
+    private func animateUserNameTextfieldOut(){
+        let animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, curve: .easeIn)
+        self.userNameTextField.snp.remakeConstraints { (view) in
+            view.leading.equalTo(self.view.snp.trailing)
+            view.centerY.equalToSuperview()
+            view.width.equalTo(225.0)
+            view.height.equalTo(30.0)
+        }
+        
+        self.actionButton.snp.remakeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.top.equalTo(self.passwordTextField.snp.bottom).offset(16.0)
+            view.width.equalTo(100.0)
+            view.height.equalTo(30.0)
+        }
+        
+        animator.addAnimations {
+            self.view.layoutIfNeeded()
+        }
+        
+        animator.startAnimation()
+        
+    }
+    
+    //MARK:- Setup
+    private func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(container)
         self.container.addSubview(logoImageView)
         self.container.addSubview(emailTextField)
+        self.container.addSubview(userNameTextField)
         self.container.addSubview(passwordTextField)
-        self.container.addSubview(loginButton)
+        self.container.addSubview(actionButton)
         self.container.addSubview(gotoRegisterButton)
     }
     
@@ -126,6 +213,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             view.leading.trailing.top.bottom.equalToSuperview()
             view.height.equalTo(self.view.snp.height)
             view.width.equalTo(self.view.snp.width)
+        }
+        
+        userNameTextField.snp.makeConstraints { (view) in
+            view.leading.equalTo(self.view.snp.trailing)
+            view.centerY.equalToSuperview()
+            view.width.equalTo(225.0)
+            view.height.equalTo(30.0)
         }
         
         logoImageView.snp.makeConstraints { (view) in
@@ -146,7 +240,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             view.height.equalTo(30.0)
             
         }
-        loginButton.snp.makeConstraints { (view) in
+        actionButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.top.equalTo(passwordTextField.snp.bottom).offset(16.0)
             view.width.equalTo(100.0)
@@ -154,7 +248,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         gotoRegisterButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
-            view.top.equalTo(loginButton.snp.bottom).offset(8.0)
+            view.top.equalTo(actionButton.snp.bottom).offset(8.0)
             //view.width.equalTo(200.0)
             view.height.equalTo(30.0)
         }
@@ -167,15 +261,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
+        scrollView.bounces = false
         return scrollView
     }()
-    
     private let container: UIView = {
         let view: UIView = UIView()
         view.backgroundColor = ColorPalette.logoGreenColor
         return view
     }()
-    //MARK: - View init
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Lapze_Logo")
@@ -198,7 +291,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         textField.isSecureTextEntry = true
         return textField
     }()
-    private lazy var loginButton: UIButton = {
+    private lazy var userNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Username"
+        textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        return textField
+    }()
+    private lazy var actionButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = ColorPalette.orangeThemeColor
         button.layer.cornerRadius = 8.0
