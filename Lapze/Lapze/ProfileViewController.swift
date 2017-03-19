@@ -160,7 +160,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
             present(alertController, animated: true, completion: nil)
-            
         }
         catch
         {

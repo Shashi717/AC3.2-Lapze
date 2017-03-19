@@ -56,7 +56,7 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         
         closeButton.snp.makeConstraints { (view) in
             view.leading.equalToSuperview()
-            view.top.equalToSuperview().offset(10)
+            view.top.equalToSuperview().offset(20.0)
         }
     }
     
@@ -113,9 +113,8 @@ class MainBadgesViewController: UIViewController, UICollectionViewDelegate, UICo
         button.setImage(UIImage(named: "close"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
-            view.size.equalTo(CGSize(width: 20, height: 20))
+            view.size.equalTo(CGSize(width: 25.0, height: 25.0))
         })
-        button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(dismissme), for: .touchUpInside)
         return button
     }()
