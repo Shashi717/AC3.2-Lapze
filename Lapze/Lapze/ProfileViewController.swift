@@ -28,29 +28,49 @@ enum Rank: String {
     case none = "none"
 }
 
+enum Badges: String {
+    case firstChallenge = "First Challenge"
+    case firstEvent = "First Event"
+    case benchwarmer = "Benchwarmer"
+    case challenger = "Challenger"
+    case warrior = "Warrior"
+    case lapzer = "Lapzer"
+    case olympian = "Olympian"
+    case ultimateLapzer = "Ultimate Lapzer"
+    case baller = "Baller"
+}
+
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ProfileDelegate {
     
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
-    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
-    var userBadges = [String]()
+    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Ultimate Lapzer"]
+    
     let cellId = "badges"
     var userProfileImage = "0"
     let uid = FIRAuth.auth()?.currentUser?.uid
     
     let userStore = UserStore()
+   
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
-    //var userChallenges: [Challenge] = []
     var delegate: ProfileDelegate?
     
-    var userChallenges: [Challenge] = [] {
+    var userChallenges: [Challenge] = []
+    var userBadges: [String] = [] {
         didSet {
             self.badgesCollectionView.reloadData()
         }
     }
-    
+    var user: User! {
+        didSet {
+            let theRank = checkRank(userChallenges.count)
+            if user.rank != theRank.rawValue {
+                userStore.updateRank(rank: theRank.rawValue)
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,17 +78,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
-        loadUser()
         
+        loadUser()
         getUserChallenges()
     }
-    
     
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
-            self.determineRank(challenges)
-            //self.userRankLabel.text = "\(self.userChallenges.count)"
             
             //piechart data
             var activityDataDict = [String: Double]()
@@ -78,17 +95,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
         }
-        
     }
     
-    func determineRank(_ challenges: [Challenge]) {
-        
-        let rank = getRank(challenges.count)
-        self.userRankLabel.text = rank.rawValue
-        
-    }
-    
-    func getRank(_ challengeCount: Int) -> Rank {
+    func checkRank(_ challengeCount: Int) -> Rank {
         
         var rank = Rank.none
         
@@ -109,27 +118,35 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             rank = .none
         }
         
-        return rank
+      return rank
+        
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
+        
         for i in 0..<self.userChallenges.count {
-            let values = ["\(i)": "\(self.badgeTitles[i])"]
-            self.userStore.updateUserData(id: uid!, values: values, child: "badges")
+            let values = ["\(i)": "\(self.badgeTitles)"]
+            self.userStore.updateUserData(values: values, child: "badges")
         }
+        
+        
     }
     
     func loadUser() {
         guard let userId = uid else { return }
         userStore.getUser(id: userId) { (user) in
+            self.user = user
             self.usernameLabel.text = "\(user.name)"
             self.profileImageView.image = UIImage(named: "\(user.profilePic)")
+            self.userRankLabel.text = user.rank
             
-            self.userBadges = user.badges //access to global var
+            if let badges = user.badges {
+                self.userBadges = badges //access to global var
+            }
+            
         }
-        challengesLabel.text = "Challenges: Running"
     }
     
     func logoutButtonTapped(sender: UIBarButtonItem) {
@@ -147,14 +164,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func pickAvatar() {
-        print("picking pic")
         profileSetting.showAvatars()
     }
-    //TEST
-    let views = ["1", "2", "3"]
+    
     //MARK: - Collection data flow badges
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return views.count
+        return userBadges.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -169,23 +184,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BadgesCollectionViewCell
-        print("indexpath : \(indexPath.row)")
-        switch indexPath.row {
-        case 1:
-            presentMainBadgeView()
-        default: break
-        }
-        self.badgesCollectionView.reloadData()
+        presentMainBadgeView()
     }
     
     func presentMainBadgeView() {
-        //self.navigationController?.pushViewController(MainBadgesViewController(), animated: true)
         let mbvc = MainBadgesViewController()
         self.present(mbvc, animated: true)
     }
-    
-    
     
     //MARK: - pie data
     func setChart(userData: [String: Double]) {
@@ -217,27 +222,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.pieChart.usePercentValuesEnabled = true
         self.pieChart.sizeToFit()
         
-        
-    }
-    
-    //test
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-    let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0]
-    func setupDataChart(dataPoints: [String], values: [Double]) {
-        var dataEntries: [ChartDataEntry] = []
-        
-        for i in 0..<dataPoints.count {
-            
-            let dataEntry = BarChartDataEntry(x: Double(i), yValues: [values[i]])
-            
-            dataEntries.append(dataEntry)
-        }
-        
-        let chartDataSet = BarChartDataSet(values: dataEntries, label: "Units Sold")
-        
-        let chartData = BarChartData(dataSet: chartDataSet)
-        horiBarChart.data = chartData
-        horiBarChart.chartDescription?.text = ""
     }
     
     //MARK: - setup
@@ -257,9 +241,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.view.addSubview(badgesCollectionView)
         self.view.addSubview(pieChart)
         self.view.addSubview(userRankLabel)
-        
         self.view.addSubview(activitiesLabel)
-        
         
     }
     
@@ -269,13 +251,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             view.height.equalToSuperview().multipliedBy(0.4)
             view.top.equalToSuperview()
         }
-        
         badgesCollectionView.snp.makeConstraints { (view) in
-            view.width.equalToSuperview()
+            view.left.right.equalToSuperview()
             view.height.equalTo(60)
             view.top.equalTo(topContainerView.snp.bottom)
         }
-        
         profileImageView.snp.makeConstraints { (view) in
             view.width.height.equalTo(150.0)
             view.top.equalToSuperview().inset(8.0)
@@ -296,58 +276,50 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         activitiesLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(badgesCollectionView.snp.bottom)
+            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8.0)
             view.left.equalToSuperview().offset(8.0)
+            view.right.equalToSuperview().inset(8.0)
             view.height.equalTo(20)
         }
         
         pieChart.snp.makeConstraints { (view) in
-            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8)
+            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8.0)
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.6)
             view.centerX.equalToSuperview()
-            //view.leading.equalToSuperview()
         }
     }
-    
-    
     
     //MARK: - Views
     internal var horiBarChart: HorizontalBarChartView = {
         let view = HorizontalBarChartView()
         return view
     }()
-    
     internal var barStatusContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .red
         return view
     }()
-    
     internal var barStatusOne: UIView = {
         let view = UIView()
         view.backgroundColor = .green
         return view
     }()
-    
     internal var pieChart: PieChartView = {
         let view = PieChartView()
         return view
     }()
-    
     internal var topContainerView: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
         return view
     }()
-    
     internal lazy var gradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.black.cgColor, UIColor.purple.cgColor]
         gradient.frame = CGRect(x: 0, y: 0, width: 500, height: 300)
         return gradient
     }()
-    
     internal var badgesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
@@ -355,7 +327,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         cv.backgroundColor = .white
         return cv
     }()
-    
     internal lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 75.0
@@ -369,7 +340,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         imageView.addGestureRecognizer(tap)
         return imageView
     }()
-    
     internal lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -385,8 +355,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     internal lazy var activitiesLabel: UILabel = {
         let label = UILabel()
         label.text = "Top Activities"
+        label.textAlignment = .center
         label.textColor = UIColor.gray
-        label.font = UIFont(name: "Gill Sans", size: 15)
+        label.font = UIFont(name: "Gill Sans", size: 20)
         return label
     }()
     internal lazy var challengesLabel: UILabel = {

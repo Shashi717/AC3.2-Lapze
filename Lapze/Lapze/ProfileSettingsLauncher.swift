@@ -86,7 +86,7 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let values = ["profilePic": "\(indexPath.row)"]
-        userStore.updateUserData(id: self.uid!, values: values, child: nil)
+        userStore.updateUserData(values: values, child: nil)
         
         print(indexPath.row)
         

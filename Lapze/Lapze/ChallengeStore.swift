@@ -58,7 +58,6 @@ class ChallengeStore {
                     let location = Location(lat: lat, long: long)
                    
                     if self.checkChallengeWithinRadius(location: location) {
-                         print("calling")
                         challengeArray.append(challenge)
                     }
                 }
