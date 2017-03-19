@@ -13,6 +13,8 @@ import Firebase
 class UserStore {
     
     let databaseRef = FIRDatabase.database().reference()
+    let uId = FIRAuth.auth()?.currentUser?.uid
+    
     
     func getUser(id: String, completion: @escaping (User) -> Void) {
         
@@ -23,6 +25,7 @@ class UserStore {
             var badges:[String] = []
             if let name = snapshot.childSnapshot(forPath: "name").value as? String,
                 let profilePic = snapshot.childSnapshot(forPath: "profilePic").value as? String,
+                let rank = snapshot.childSnapshot(forPath: "rank").value as? String,
                 let challengeCount = snapshot.childSnapshot(forPath: "challengeCount").value as? Int,
                 let eventCount = snapshot.childSnapshot(forPath: "eventCount").value as? Int {
                 
@@ -32,6 +35,7 @@ class UserStore {
                 userObject = User(id: id,
                                   name: name,
                                   profilePic: profilePic,
+                                  rank: rank,
                                   challengeCount: challengeCount,
                                   eventCount: eventCount,
                                   badges: badges)
@@ -43,12 +47,17 @@ class UserStore {
         })
     }
     
-    func updateUserData(id: String, values: [String: Any], child: String?) {
-        if child != nil {
-            self.databaseRef.child("users").child(id).child(child!).updateChildValues(values)
-        } else {
-            self.databaseRef.child("users").child(id).updateChildValues(values)
+    func updateUserData(values: [String: Any], child: String?) {
+        
+        guard let userId = uId else {
+            return
         }
+        if child != nil {
+            self.databaseRef.child("users").child(userId).child(child!).updateChildValues(values)
+        } else {
+            self.databaseRef.child("users").child(userId).updateChildValues(values)
+        }
+        
     }
     
     func getAllUsers(completion: @escaping ([User]) -> Void) {
@@ -64,6 +73,7 @@ class UserStore {
                 
                 if let name = snap.childSnapshot(forPath: "name").value as? String,
                     let profilePic = snap.childSnapshot(forPath: "profilePic").value as? String,
+                    let rank = snap.childSnapshot(forPath: "rank").value as? String,
                     let challengeCount = snap.childSnapshot(forPath: "challengeCount").value as? Int,
                     let eventCount = snap.childSnapshot(forPath: "eventCount").value as? Int {
                     
@@ -74,6 +84,7 @@ class UserStore {
                     let user = User(id: id,
                                     name: name,
                                     profilePic: profilePic,
+                                    rank: rank,
                                     challengeCount: challengeCount,
                                     eventCount: eventCount,
                                     badges: badges)
@@ -87,11 +98,25 @@ class UserStore {
     }
     
     func updateActivityCounts(activityType: String) {
-        let userId = FirebaseManager.shared.uid!
+        
+        guard let userId = uId else {
+            return
+        }
         
         self.databaseRef.child("users").child(userId).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
             let value = snapshot.value as! Int
             self.databaseRef.child("users").child(userId).child(activityType).setValue(value+1)
+        })
+    }
+    
+    func updateRank(rank: String) {
+        
+        guard let userId = uId else {
+            return
+        }
+        
+        self.databaseRef.child("users").child(userId).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.databaseRef.child("users").child(userId).child("rank").setValue(rank)
         })
     }
     

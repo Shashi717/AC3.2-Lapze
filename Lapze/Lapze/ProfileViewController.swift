@@ -28,17 +28,31 @@ enum Rank: String {
     case none = "none"
 }
 
+enum Badges: String {
+    case firstChallenge = "First Challenge"
+    case firstEvent = "First Event"
+    case benchwarmer = "Benchwarmer"
+    case challenger = "Challenger"
+    case warrior = "Warrior"
+    case lapzer = "Lapzer"
+    case olympian = "Olympian"
+    case ultimateLapzer = "Ultimate Lapzer"
+    case baller = "Baller"
+}
+
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ProfileDelegate {
     
     let segments = ["Create Event", "Create Challenge"]
     let profileSetting = ProfileSettingsLauncher()
-    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Something"]
-   
+    let badgeTitles = ["Newbie","First Event","First Challenge","Benchwarmer","Challenger","Warrior", "Olympian", "Baller", "Lapzer", "Ultimate Lapzer"]
+    
     let cellId = "badges"
     var userProfileImage = "0"
-    let uid = FIRAuth.auth()?.currentUser?.uid
+    
     
     let userStore = UserStore()
+    let currentUser = FIRAuth.auth()?.currentUser?.uid
+    
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -47,10 +61,17 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     var userChallenges: [Challenge] = []
     var userBadges: [String] = [] {
         didSet {
-             self.badgesCollectionView.reloadData()
+            self.badgesCollectionView.reloadData()
         }
     }
-    
+    var user: User! {
+        didSet {
+            let theRank = checkRank(userChallenges.count)
+            if user.rank != theRank.rawValue {
+                userStore.updateRank(rank: theRank.rawValue)
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,9 +85,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func getUserChallenges() {
-        challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
+        
+        guard let uId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
+        challengeStore.getAllUserChallenges(userId: uId) { (challenges) in
             self.userChallenges = challenges
-            self.determineRank(challenges)
             
             //piechart data
             var activityDataDict = [String: Double]()
@@ -78,14 +103,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func determineRank(_ challenges: [Challenge]) {
-        
-        let rank = getRank(challenges.count)
-        self.userRankLabel.text = rank.rawValue
-        
-    }
-    
-    func getRank(_ challengeCount: Int) -> Rank {
+    func checkRank(_ challengeCount: Int) -> Rank {
         
         var rank = Rank.none
         
@@ -107,22 +125,28 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         return rank
+        
     }
     
     //Test: set userchallenge data to implement badge count etc.
     func getActivityData(_ challenges: [Challenge]) {
         self.userChallenges = challenges
+        
         for i in 0..<self.userChallenges.count {
-            let values = ["\(i)": "\(self.badgeTitles[i])"]
-            self.userStore.updateUserData(id: uid!, values: values, child: "badges")
+            let values = ["\(i)": "\(self.badgeTitles)"]
+            self.userStore.updateUserData(values: values, child: "badges")
         }
     }
     
     func loadUser() {
-        guard let userId = uid else { return }
-        userStore.getUser(id: userId) { (user) in
+        guard let uId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        userStore.getUser(id: uId) { (user) in
+            self.user = user
             self.usernameLabel.text = "\(user.name)"
             self.profileImageView.image = UIImage(named: "\(user.profilePic)")
+            self.userRankLabel.text = user.rank
             
             if let badges = user.badges {
                 self.userBadges = badges //access to global var
@@ -135,20 +159,20 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         do {
             try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
-            self.present(alertController, animated: true, completion: nil)
+            //present(alertController, animated: true, completion: nil)
+            
         }
         catch
         {
             let alertController = showAlert(title: "Logout Unsuccessul!", message: "Error occured. Please try again.", useDefaultAction: true)
             self.present(alertController, animated: true, completion: nil)
-            
         }
     }
     
     func pickAvatar() {
         profileSetting.showAvatars()
     }
-
+    
     //MARK: - Collection data flow badges
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return userBadges.count
@@ -166,14 +190,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        switch indexPath.row {
-//        case 1:
-//            presentMainBadgeView()
-//        default: break
-//        }
-        
         presentMainBadgeView()
-//        self.badgesCollectionView.reloadData()
     }
     
     func presentMainBadgeView() {
@@ -314,6 +331,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     internal lazy var profileImageView: UIImageView = {

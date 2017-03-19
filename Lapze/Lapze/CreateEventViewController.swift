@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
 
 public enum Activity: String {
     case running = "Running"
@@ -93,9 +94,11 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
     
     private func createEventObject() -> Event{
+        
+        let userId = FIRAuth.auth()?.currentUser?.uid
         let currentLocation = LocationManager.sharedManager.currentLocation
-        //let event = Event(type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
-        let event = Event(id:FirebaseManager.shared.uid! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+       
+        let event = Event(id: userId! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
         return event
     }
     

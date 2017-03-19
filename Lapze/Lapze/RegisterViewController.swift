@@ -11,7 +11,7 @@ import SnapKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class RegisterViewController: UIViewController {
+class RegisterViewController: UIViewController, UITextFieldDelegate {
     
     var databaseRef: FIRDatabaseReference!
     
@@ -23,9 +23,10 @@ class RegisterViewController: UIViewController {
         setupViewHierarchy()
         configureConstraints()
         
-        observeKeyboardNotifications()
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        emailTextField.delegate = self
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
+
     }
     
  
@@ -46,7 +47,7 @@ class RegisterViewController: UIViewController {
                     
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                         
-                        let userDict = ["name": username, "challengeCount": 0, "eventCount": 0] as [String:Any]
+                        let userDict = ["name": username, "rank": "Newbie", "challengeCount": 0, "eventCount": 0] as [String:Any]
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
 
                         self.clearTextFields()
@@ -62,28 +63,9 @@ class RegisterViewController: UIViewController {
         
     }
     
-    
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    fileprivate func observeKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: .UIKeyboardDidShow, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: .UIKeyboardDidHide, object: nil)
-    }
-    
-    func showKeyboard() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
-    }
-    
-    func hideKeyboard() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 50, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     //MARK: - setup

@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMaps
+import FirebaseAuth
 
 protocol MapStateProtocal {
     func updateMapState(state:MapViewControllerState)
@@ -110,6 +111,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     //MARK:- Activity update
     public func startActivity(){
+        
+        guard let userId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
         switch viewControllerState{
         case .challenges:
             trackingBehavior = .followWithPathMarking
@@ -118,7 +124,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
         userLocationMarker?.iconView = nil
-        userStore.getUser(id: FirebaseManager.shared.uid!) { (user) in
+        userStore.getUser(id: userId) { (user) in
             
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
@@ -144,7 +150,6 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         userLocationMarker?.icon = nil
         trackingBehavior = .none
         
-        distance = 0.0
         removeUserPath()
     }
     
@@ -162,6 +167,10 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     public func updateFirebase() {
+        
+        guard let userId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
         
         guard userPathArray.count > 0 else {
             let alertController = showAlert(title: "OOPS", message: "Sorry, we coudn't locate you! Please try again!", useDefaultAction: true)
@@ -192,7 +201,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
                         let currentDate = getCurrentDateString()
                         
                         challenge?.lastUpdated = currentDate
-                        challenge?.champion = FirebaseManager.shared.uid!
+                        challenge?.champion = userId
                         challenge?.timeToBeat = activityTime
                         challenge?.distance = (distance/1609.34).roundTo(places: 2)
                         
@@ -238,10 +247,14 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     private func getUsersChampionships(_ challenges: [Challenge]) -> [String] {
+        
+        guard let userId = FIRAuth.auth()?.currentUser?.uid else {
+            return []
+        }
         var challengeIds: [String] = []
         
         for challenge in challenges {
-            if challenge.champion == FirebaseManager.shared.uid {
+            if challenge.champion == userId {
                 challengeIds.append(challenge.id)
             }
         }
@@ -293,8 +306,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackDistance()
             addUserLocationToFirebase(location: newLocation)
         case .none:
-            break
-//            print(trackingBehavior)
+            print(trackingBehavior)
         }
     }
     

@@ -23,10 +23,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = ColorPalette.logoGreenColor
         setupViewHierarchy()
         configureConstraints()
-        
+
         observeKeyboardNotifications()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+
     }
     
     func loginTapped(sender: UIButton) {
@@ -189,9 +192,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         animator.startAnimation()
         
     }
-    
-    //MARK:- Setup
-    private func setupViewHierarchy() {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+
+    //MARK: - Setup
+        private func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(container)
