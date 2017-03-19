@@ -113,6 +113,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         switch viewControllerState{
         case .challenges:
             trackingBehavior = .followWithPathMarking
+         
         case .events:
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
@@ -122,8 +123,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
             }
+    
         }
-        markerOption = .none
+        
+        if didCreateActivity == true {
+             self.markerOption = .none
+        }
+        
     }
     
     public func endActivity(){
@@ -144,8 +150,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     
     func resizeImage(_ profilePic: String) -> UIImage? {
         let image = UIImage(named: profilePic)
-        let width = 50.0
-        let height = 50.0
+        let width = 30.0
+        let height = 30.0
         UIGraphicsBeginImageContext(CGSize(width: width, height: height))
         
         image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
@@ -170,12 +176,16 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             challenge?.timeToBeat = activityTime
             challenge?.distance = (distance/1609.34).roundTo(places: 2)
             challengeStore.add(challenge!)
+            userStore.updateActivityCounts(activityType: "challengeCount")
         }
             
         else {
             let locationStore = LocationStore()
             if let path = challenge?.path, let endLocation = path.last {
                 if locationStore.isUserWithinRadius(userLocation: self.userCurrentLocation!, challengeLocation: endLocation) {
+                    
+                    userStore.updateActivityCounts(activityType: "challengeCount")
+                    
                     let currentDistance = (self.distance/1609.34).roundTo(places: 2)
                     if activityTime < (challenge?.timeToBeat!)! && (abs(currentDistance - (challenge?.distance!)!) < 0.05) {
                         

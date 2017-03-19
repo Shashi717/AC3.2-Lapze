@@ -59,30 +59,39 @@ class UserStore {
             let enumerator = snapshot.children
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
                 
-            let id = snap.key
-            var badges:[String] = []
+                let id = snap.key
+                var badges:[String] = []
                 
-            if let name = snap.childSnapshot(forPath: "name").value as? String,
-                let profilePic = snap.childSnapshot(forPath: "profilePic").value as? String,
-                let challengeCount = snap.childSnapshot(forPath: "challengeCount").value as? Int,
-                let eventCount = snap.childSnapshot(forPath: "eventCount").value as? Int {
-                
-                if let userBadges = snap.childSnapshot(forPath: "badges").value as? [String] {
-                    badges = userBadges
-                }
-                
-                let user = User(id: id,
-                                  name: name,
-                                  profilePic: profilePic,
-                                  challengeCount: challengeCount,
-                                  eventCount: eventCount,
-                                  badges: badges)
-              
-                
-                userObjects.append(user)
+                if let name = snap.childSnapshot(forPath: "name").value as? String,
+                    let profilePic = snap.childSnapshot(forPath: "profilePic").value as? String,
+                    let challengeCount = snap.childSnapshot(forPath: "challengeCount").value as? Int,
+                    let eventCount = snap.childSnapshot(forPath: "eventCount").value as? Int {
+                    
+                    if let userBadges = snap.childSnapshot(forPath: "badges").value as? [String] {
+                        badges = userBadges
+                    }
+                    
+                    let user = User(id: id,
+                                    name: name,
+                                    profilePic: profilePic,
+                                    challengeCount: challengeCount,
+                                    eventCount: eventCount,
+                                    badges: badges)
+                    
+                    
+                    userObjects.append(user)
                 }
             }
             completion(userObjects)
+        })
+    }
+    
+    func updateActivityCounts(activityType: String) {
+        let userId = FirebaseManager.shared.uid!
+        
+        self.databaseRef.child("users").child(userId).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
+            let value = snapshot.value as! Int
+            self.databaseRef.child("users").child(userId).child(activityType).setValue(value+1)
         })
     }
     
