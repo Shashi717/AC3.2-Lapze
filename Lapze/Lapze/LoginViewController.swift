@@ -132,7 +132,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     //MARK: - View init
     internal lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Lapze_Logo")
+        imageView.image = UIImage(named: "logo")
         return imageView
     }()
     internal lazy var emailTextField: UITextField = {

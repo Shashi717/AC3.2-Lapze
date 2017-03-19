@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         navAppearance.tintColor = .white
         
         //Root View
+        //test
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
 

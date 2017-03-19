@@ -13,7 +13,7 @@ import Firebase
 class UserStore {
     
     let databaseRef = FIRDatabase.database().reference()
-    let userId = FirebaseManager.shared.uid!
+    let userId = FirebaseManager.shared.uid
     
     func getUser(id: String, completion: @escaping (User) -> Void) {
         
@@ -48,9 +48,9 @@ class UserStore {
     
     func updateUserData(values: [String: Any], child: String?) {
         if child != nil {
-            self.databaseRef.child("users").child(self.userId).child(child!).updateChildValues(values)
+            self.databaseRef.child("users").child(self.userId!).child(child!).updateChildValues(values)
         } else {
-            self.databaseRef.child("users").child(self.userId).updateChildValues(values)
+            self.databaseRef.child("users").child(self.userId!).updateChildValues(values)
         }
     }
     
@@ -93,16 +93,16 @@ class UserStore {
     
     func updateActivityCounts(activityType: String) {
         
-        self.databaseRef.child("users").child(self.userId).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
+        self.databaseRef.child("users").child(self.userId!).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
             let value = snapshot.value as! Int
-            self.databaseRef.child("users").child(self.userId).child(activityType).setValue(value+1)
+            self.databaseRef.child("users").child(self.userId!).child(activityType).setValue(value+1)
         })
     }
     
     func updateRank(rank: String) {
         
-        self.databaseRef.child("users").child(self.userId).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
-            self.databaseRef.child("users").child(self.userId).child("rank").setValue(rank)
+        self.databaseRef.child("users").child(self.userId!).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.databaseRef.child("users").child(self.userId!).child("rank").setValue(rank)
         })
     }
     
