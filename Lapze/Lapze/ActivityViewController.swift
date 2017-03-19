@@ -90,14 +90,14 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             addButton.backgroundColor = ColorPalette.purpleThemeColor
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
-            navigationItem.title = "Current Events"
+            navigationItem.title = "EVENTS"
             handleInfoInterface("events")
             
         case .challenges:
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
-            navigationItem.title = "Challenges"
+            navigationItem.title = "CHALLENGES"
             handleInfoInterface("challenges")
             
         }
@@ -185,7 +185,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     func animateAddbuttonInfo(_ isAnimating: Bool) {
         
-        UIView.animate(withDuration: 1, delay: 0.5, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: .repeat, animations: {
+        UIView.animate(withDuration: 1, delay: 0.75, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .repeat, animations: {
 //            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
             self.infoThumbImageView.frame = self.infoThumbImageView.frame.offsetBy(dx: 0, dy: -10)
         }, completion: nil)
