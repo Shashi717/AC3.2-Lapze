@@ -345,7 +345,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Join Challenge Delegate method
     func joinChallenge(_ challenge: Challenge) {
-        //        self.mapViewController.didCreateActivity = false
+        self.mapViewController.popVc.didCreateActivity = false
+        self.mapViewController.didCreateActivity = false
         self.didCreateActivity = false
         currentChallenge = challenge
         topInfoView.titleLabel.text = challenge.name
