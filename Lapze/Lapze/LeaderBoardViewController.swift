@@ -74,8 +74,9 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! LeaderBoardCollectionCell
         
+        //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        cell.nameLabel.text = "\(self.users[indexPath.row].name)"
+        cell.nameLabel.text = "\(self.users[indexPath.row].name) - \(users.count-Int(indexPath.row)) wins"
         cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
         return cell
     }
