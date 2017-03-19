@@ -13,7 +13,8 @@ import Firebase
 class UserStore {
     
     let databaseRef = FIRDatabase.database().reference()
-    let userId = FirebaseManager.shared.uid
+    let uId = FIRAuth.auth()?.currentUser?.uid
+    
     
     func getUser(id: String, completion: @escaping (User) -> Void) {
         
@@ -47,11 +48,16 @@ class UserStore {
     }
     
     func updateUserData(values: [String: Any], child: String?) {
-        if child != nil {
-            self.databaseRef.child("users").child(self.userId!).child(child!).updateChildValues(values)
-        } else {
-            self.databaseRef.child("users").child(self.userId!).updateChildValues(values)
+        
+        guard let userId = uId else {
+            return
         }
+        if child != nil {
+            self.databaseRef.child("users").child(userId).child(child!).updateChildValues(values)
+        } else {
+            self.databaseRef.child("users").child(userId).updateChildValues(values)
+        }
+        
     }
     
     func getAllUsers(completion: @escaping ([User]) -> Void) {
@@ -93,16 +99,24 @@ class UserStore {
     
     func updateActivityCounts(activityType: String) {
         
-        self.databaseRef.child("users").child(self.userId!).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
+        guard let userId = uId else {
+            return
+        }
+        
+        self.databaseRef.child("users").child(userId).child(activityType).observeSingleEvent(of: .value, with: { (snapshot) in
             let value = snapshot.value as! Int
-            self.databaseRef.child("users").child(self.userId!).child(activityType).setValue(value+1)
+            self.databaseRef.child("users").child(userId).child(activityType).setValue(value+1)
         })
     }
     
     func updateRank(rank: String) {
         
-        self.databaseRef.child("users").child(self.userId!).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
-            self.databaseRef.child("users").child(self.userId!).child("rank").setValue(rank)
+        guard let userId = uId else {
+            return
+        }
+        
+        self.databaseRef.child("users").child(userId).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.databaseRef.child("users").child(userId).child("rank").setValue(rank)
         })
     }
     
