@@ -295,9 +295,9 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         showPopUpController(with: challenge)
         mapViewController.popVc.challengeDescriptionLabel.text = "You just created a challenge!"
         mapViewController.didCreateActivity = true
+        mapViewController.popVc.didCreateActivity = true
         self.didCreateActivity = true
         currentChallenge = challenge
-        mapViewController.didCreateActivity = true
         mapViewController.challenge = challenge
         topInfoView.titleLabel.text = challenge.name
         
@@ -314,6 +314,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             print("Challenge saved")
             
             self.mapViewController.updateFirebase()
+
             
         }) { (_) in
             print("Challenge not saved")
@@ -344,7 +345,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Join Challenge Delegate method
     func joinChallenge(_ challenge: Challenge) {
-        //        self.mapViewController.didCreateActivity = false
+        self.mapViewController.popVc.didCreateActivity = false
+        self.mapViewController.didCreateActivity = false
         self.didCreateActivity = false
         currentChallenge = challenge
         topInfoView.titleLabel.text = challenge.name

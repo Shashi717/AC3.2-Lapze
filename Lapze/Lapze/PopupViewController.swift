@@ -79,7 +79,7 @@ class PopupViewController: UIViewController {
             if let id = FIRAuth.auth()?.currentUser?.uid {
                 self.userId = id
             }
-            if didCreateActivity {
+            if didCreateActivity == true {
 
                 dismissPopup()
             }
