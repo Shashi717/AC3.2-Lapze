@@ -52,7 +52,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     let userStore = UserStore()
     let currentUser = FIRAuth.auth()?.currentUser?.uid
-   
+    
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -124,7 +124,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             rank = .none
         }
         
-      return rank
+        return rank
         
     }
     
@@ -159,18 +159,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         do {
             try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
-            self.present(alertController, animated: true, completion: nil)
-
+            present(alertController, animated: true, completion: nil)
+            
         }
         catch
         {
             let alertController = showAlert(title: "Logout Unsuccessul!", message: "Error occured. Please try again.", useDefaultAction: true)
             self.present(alertController, animated: true, completion: nil)
-            
         }
-        
-        let loginVC = LoginViewController()
-        self.present(loginVC, animated: true, completion: nil)
     }
     
     func pickAvatar() {
