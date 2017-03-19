@@ -48,11 +48,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
         //test
-        //if isFirstTime == false {
+        if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        //}
+        }
     }
     
     private func addMapViewController(){
