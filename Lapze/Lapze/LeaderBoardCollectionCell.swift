@@ -18,37 +18,42 @@ class LeaderBoardCollectionCell: BaseCell {
         addSubview(nameLabel)
         addSubview(rankNumLabel)
         
+        rankNumLabel.snp.makeConstraints { (view) in
+            view.leading.equalToSuperview().offset(8.0)
+            view.width.equalTo(20.0)
+            view.centerY.equalToSuperview()
+        }
+        
         profileImageView.snp.makeConstraints { (view) in
-            view.height.equalToSuperview()
-            view.width.equalTo(50)
-            view.leading.equalToSuperview().offset(20)
+            view.centerY.equalToSuperview()
+            view.width.height.equalTo(50.0)
+            view.leading.equalTo(rankNumLabel.snp.trailing).offset(8.0)
         }
         
         nameLabel.snp.makeConstraints { (view) in
-            view.leading.equalTo(profileImageView.snp.trailing).offset(8)
+            view.leading.equalTo(profileImageView.snp.trailing).offset(16.0)
+            view.centerY.equalToSuperview()
             view.width.equalToSuperview()
             view.height.equalTo(20)
         }
         
-        rankNumLabel.snp.makeConstraints { (view) in
-            view.leading.equalToSuperview().offset(5)
-            view.trailing.equalTo(profileImageView.snp.leading).offset(8)
-            view.height.equalTo(profileImageView.snp.height)
-        }
     }
     
     //MARK: - inits
     internal var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "question")
+        imageView.layer.cornerRadius = 25.0
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 50
+        imageView.layer.masksToBounds = false
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .brown
         return imageView
     }()
     
     internal var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "User data here and some action, time"
+        label.text = ""
         return label
     }()
     

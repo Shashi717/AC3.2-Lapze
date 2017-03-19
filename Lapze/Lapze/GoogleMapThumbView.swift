@@ -66,11 +66,13 @@ class GoogleMapThumbView: UIView {
     }
     
     let profileImageView: UIImageView = {
-        let imageview: UIImageView = UIImageView()
-        imageview.image = UIImage(named: "010-man")
-        imageview.contentMode = .scaleAspectFit
-        imageview.layer.cornerRadius = 15
-        return imageview
+        let imageView: UIImageView = UIImageView()
+        imageView.image = UIImage(named: "010-man")
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.masksToBounds = false
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 15
+        return imageView
     }()
     
     var titleLabel: UILabel = {
