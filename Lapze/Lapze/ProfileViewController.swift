@@ -296,9 +296,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     //MARK: - Views
-    internal var horiBarChart: HorizontalBarChartView = {
-        let view = HorizontalBarChartView()
-        return view
+    internal var winLabel: UILabel = {
+        let label = UILabel()
+        
+        return label
     }()
     internal var barStatusContainer: UIView = {
         let view = UIView()

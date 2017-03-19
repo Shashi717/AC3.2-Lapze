@@ -17,6 +17,7 @@ class LeaderBoardCollectionCell: BaseCell {
         addSubview(profileImageView)
         addSubview(nameLabel)
         addSubview(rankNumLabel)
+        addSubview(winIcon)
         
         rankNumLabel.snp.makeConstraints { (view) in
             view.leading.equalToSuperview().offset(8.0)
@@ -36,6 +37,11 @@ class LeaderBoardCollectionCell: BaseCell {
             view.width.equalToSuperview()
             view.height.equalTo(20)
         }
+        
+        winIcon.snp.makeConstraints { (view) in
+            view.leading.equalTo(nameLabel.snp.trailing).offset(5)
+        }
+        
     }
     
     //MARK: - inits
@@ -50,9 +56,16 @@ class LeaderBoardCollectionCell: BaseCell {
         return imageView
     }()
     
+    internal var winIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "crownIcon")
+        return imageView
+    }()
+    
     internal var nameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.textColor = .gray
         return label
     }()
     
@@ -64,4 +77,5 @@ class LeaderBoardCollectionCell: BaseCell {
         label.font = UIFont(name: "Avenir Next", size: 22)
         return label
     }()
+    
 }
