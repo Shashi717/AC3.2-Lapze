@@ -60,10 +60,10 @@ class PopupViewController: UIViewController {
     //MARK: Interface Utilities
     private func setUpViewController(){
         switch mapViewControllerState{
-        case .events:
+        case .challenges:
             self.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.orangeThemeColor
-        case .challenges:
+        case .events:
             self.actionButton.backgroundColor = ColorPalette.purpleThemeColor
             self.popupContainerView.backgroundColor = ColorPalette.purpleThemeColor
         }

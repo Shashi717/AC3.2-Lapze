@@ -14,7 +14,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
-    private let popVC: PopupViewController = PopupViewController()
     private var showInfoWindow: Bool = false
     private var timer: Timer = Timer()
     private var activityTime: Double = 0.0
@@ -79,7 +78,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         
         viewControllerState = activity
         mapViewController.updateMapState(state: activity)
-        popVC.mapViewControllerState = activity
+        mapViewController.popVc.mapViewControllerState = activity
     }
     
     //MARK:- User Interface Utilities
@@ -128,7 +127,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     @objc private func createActivityHandle(){
-        switch viewControllerState{
+        switch viewControllerState {
         case .challenges:
             let challengeVc: CreateChallengeViewController = CreateChallengeViewController()
             navigationController?.pushViewController(challengeVc, animated: true)
@@ -203,7 +202,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }, completion: nil)
         
     }
-    
+
     //MARK:- Views
     private func setUpViews() {
         edgesForExtendedLayout = []
@@ -294,8 +293,8 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     func challengeCreated(_ challenge: Challenge) {
         showPopUpController(with: challenge)
-        popVC.challengeDescriptionLabel.text = "You just created a challenge!"
-        popVC.didCreateActivity = true
+        mapViewController.popVc.challengeDescriptionLabel.text = "You just created a challenge!"
+        mapViewController.didCreateActivity = true
         self.didCreateActivity = true
         currentChallenge = challenge
         mapViewController.didCreateActivity = true
@@ -334,13 +333,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     private func showPopUpController(with challenge: Challenge){
-        popVC.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        popVC.challenge = challenge
-        popVC.modalTransitionStyle = .crossDissolve
-        popVC.modalPresentationStyle = .overCurrentContext
-        popVC.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
-        popVC.delegate = self
-        present(popVC, animated: true, completion: nil)
+        mapViewController.popVc.challengeDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        mapViewController.popVc.challenge = challenge
+        mapViewController.popVc.modalTransitionStyle = .crossDissolve
+        mapViewController.popVc.modalPresentationStyle = .overCurrentContext
+        mapViewController.popVc.actionButton.addTarget(self, action: #selector(startChallenge), for: .touchUpInside)
+        mapViewController.popVc.delegate = self
+        present(mapViewController.popVc, animated: true, completion: nil)
     }
     
     //MARK:- Join Challenge Delegate method

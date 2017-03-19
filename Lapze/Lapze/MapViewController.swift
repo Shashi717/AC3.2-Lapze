@@ -13,7 +13,7 @@ protocol MapStateProtocal {
     func updateMapState(state:MapViewControllerState)
 }
 
-public enum MapViewControllerState:Int{
+public enum MapViewControllerState: Int {
     case events
     case challenges
 }
@@ -283,7 +283,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             trackDistance()
             addUserLocationToFirebase(location: newLocation)
         case .none:
-            print(trackingBehavior)
+            break
+//            print(trackingBehavior)
         }
     }
     

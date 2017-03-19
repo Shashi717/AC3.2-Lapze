@@ -45,11 +45,9 @@ class RegisterViewController: UIViewController {
                     let alertController = showAlert(title: "Signup Successful!", message: "Successfully Registered. You will be automatically logged in!", useDefaultAction: false)
                     
                     alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                        //self.present(tbvc, animated: true, completion: nil)
                         
-                        let userDict = ["name": username]
+                        let userDict = ["name": username, "challengeCount": 0, "eventCount": 0] as [String:Any]
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
-                        print("pressed ok")
 
                         self.clearTextFields()
                         let tabVC = EventsViewController()

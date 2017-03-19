@@ -75,7 +75,7 @@ class FirebaseManager {
         let childRef = databaseReference.child("Location").child(uid!)
         childRef.updateChildValues(location.toJson()) { (error, ref) in
             if error != nil{
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
             }else{
                 print("Success posting location")
             }
