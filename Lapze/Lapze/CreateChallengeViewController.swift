@@ -16,7 +16,7 @@ protocol ChallengeDelegate {
     func challengeCreated(_ challenge: Challenge)
 }
 
-class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
+class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
     
     let activities: [Activity] = [.running, .cycling, .skateBoarding, .rollerSkating, .basketBall, .soccer]
     var shareLocation = false
@@ -33,6 +33,7 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         
         setupViewHierarchy()
         configureConstraints()
+        challengeNameTextField.delegate = self
     }
     
     //MARK: - Utilities
@@ -81,9 +82,11 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
     
     func createChallenge() {
         
-        let date = getCurrentDateString()
-        let userId = FIRAuth.auth()!.currentUser!.uid
+        guard let userId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
         
+        let date = getCurrentDateString()
         let newChallenge = Challenge(name: challengeNameTextField.text!,
                                      champion: userId,
                                      lastUpdated: date,
@@ -142,6 +145,12 @@ class CreateChallengeViewController: UIViewController, UIPickerViewDataSource, U
         pickedActivityLabel.text = pickedActivity.rawValue
         
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
     //MARK: - Setup
     
     func setupViewHierarchy() {

@@ -48,10 +48,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     let cellId = "badges"
     var userProfileImage = "0"
-    let uid = FIRAuth.auth()?.currentUser?.uid
+    
     
     let userStore = UserStore()
-   
+    let currentUser = FIRAuth.auth()?.currentUser?.uid
+    
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -84,7 +85,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func getUserChallenges() {
-        challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
+        
+        guard let uId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        
+        challengeStore.getAllUserChallenges(userId: uId) { (challenges) in
             self.userChallenges = challenges
             
             //piechart data
@@ -118,7 +124,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             rank = .none
         }
         
-      return rank
+        return rank
         
     }
     
@@ -130,13 +136,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let values = ["\(i)": "\(self.badgeTitles)"]
             self.userStore.updateUserData(values: values, child: "badges")
         }
-        
-        
     }
     
     func loadUser() {
-        guard let userId = uid else { return }
-        userStore.getUser(id: userId) { (user) in
+        guard let uId = FIRAuth.auth()?.currentUser?.uid else {
+            return
+        }
+        userStore.getUser(id: uId) { (user) in
             self.user = user
             self.usernameLabel.text = "\(user.name)"
             self.profileImageView.image = UIImage(named: "\(user.profilePic)")
@@ -153,13 +159,12 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         do {
             try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
-            self.present(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
         }
         catch
         {
             let alertController = showAlert(title: "Logout Unsuccessul!", message: "Error occured. Please try again.", useDefaultAction: true)
             self.present(alertController, animated: true, completion: nil)
-            
         }
     }
     
@@ -325,6 +330,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     internal lazy var profileImageView: UIImageView = {

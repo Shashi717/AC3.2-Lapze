@@ -36,7 +36,6 @@ class LeaderBoardCollectionCell: BaseCell {
             view.width.equalToSuperview()
             view.height.equalTo(20)
         }
-        
     }
     
     //MARK: - inits
