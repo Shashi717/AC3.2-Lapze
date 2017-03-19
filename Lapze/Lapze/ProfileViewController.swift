@@ -51,7 +51,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     let uid = FIRAuth.auth()?.currentUser?.uid
     
     let userStore = UserStore()
-    var user: User!
+   
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -63,7 +63,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.badgesCollectionView.reloadData()
         }
     }
-    
+    var user: User! {
+        didSet {
+            print("userChallengescount \(userChallenges.count)")
+            print("the rank \(user.rank)")
+            let theRank = checkRank(userChallenges.count)
+            if user.rank != theRank.rawValue {
+                userStore.updateRank(rank: theRank.rawValue)
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,7 +88,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func getUserChallenges() {
         challengeStore.getAllUserChallenges(userId: uid!) { (challenges) in
             self.userChallenges = challenges
-            self.checkRank(challenges.count)
             
             //piechart data
             var activityDataDict = [String: Double]()
@@ -91,7 +99,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func checkRank(_ challengeCount: Int) {
+    func checkRank(_ challengeCount: Int) -> Rank {
         
         var rank = Rank.none
         
@@ -112,9 +120,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             rank = .none
         }
         
-        if user.rank != rank.rawValue {
-            userStore.updateRank(rank: rank.rawValue)
-        }
+      return rank
         
     }
     
