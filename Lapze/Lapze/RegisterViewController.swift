@@ -51,8 +51,10 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
                         self.databaseRef.child((FIRAuth.auth()?.currentUser?.uid)!).setValue(userDict)
 
                         self.clearTextFields()
-                        let tabVC = EventsViewController()
-                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        let tabVC = MainTabController()
+                        
+                        self.present(tabVC, animated: true, completion: nil)
+
                         
                     }))
                     self.present(alertController, animated: true, completion: nil)

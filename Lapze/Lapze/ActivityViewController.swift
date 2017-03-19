@@ -47,11 +47,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let userDefaults = UserDefaults.standard
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        if isFirstTime == false {
+        //test
+        //if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        }
+        //}
     }
     
     private func addMapViewController(){
@@ -184,22 +185,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     func animateAddbuttonInfo(_ isAnimating: Bool) {
         
-        let infoButtonAnimator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.9)
-        
-        infoButtonAnimator.addAnimations({
-            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
-            
-        })
-        
-        infoButtonAnimator.addAnimations({
-            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
-        }, delayFactor: 0.5)
-        
-        UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: .repeat, animations: {
-            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y + 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
-            
-            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: self.infoThumbImageView.frame.origin.y - 5, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+        UIView.animate(withDuration: 1, delay: 0.5, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: .repeat, animations: {
+//            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            self.infoThumbImageView.frame = self.infoThumbImageView.frame.offsetBy(dx: 0, dy: -10)
         }, completion: nil)
+        
+        
         
     }
     
@@ -255,7 +246,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         infoThumbImageView.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
             view.size.equalTo(40)
-            view.bottom.equalTo(addButton.snp.top).offset(5.0)
+            view.bottom.equalTo(addButton.snp.top).offset(-5)
         }
         addButtonInfoLabel.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()

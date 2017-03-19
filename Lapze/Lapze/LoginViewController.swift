@@ -23,13 +23,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = ColorPalette.logoGreenColor
         setupViewHierarchy()
         configureConstraints()
-
+        
         observeKeyboardNotifications()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         emailTextField.delegate = self
         passwordTextField.delegate = self
-
+        
+        logoAnimation()
+        
     }
     
     func loginTapped(sender: UIButton) {
@@ -163,7 +165,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         animator.addAnimations {
             self.view.layoutIfNeeded()
-           
+            
         }
         
         animator.startAnimation()
@@ -192,14 +194,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         animator.startAnimation()
         
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
-
+    
+    func logoAnimation() {
+        UIView.animate(withDuration: 1, animations: {
+            self.logoOuterRing.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        }, completion: { (_) in
+            self.logoAnimation()
+        })
+    }
+    
     //MARK: - Setup
-        private func setupViewHierarchy() {
+    private func setupViewHierarchy() {
         self.edgesForExtendedLayout = []
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(container)
@@ -209,6 +219,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.container.addSubview(passwordTextField)
         self.container.addSubview(actionButton)
         self.container.addSubview(gotoRegisterButton)
+        self.view.addSubview(logoImageView)
+        self.view.addSubview(logoInnerRing)
+        self.view.addSubview(logoMiddleRing)
+        self.view.addSubview(logoOuterRing)
     }
     
     private func configureConstraints() {
@@ -235,9 +249,31 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             view.height.width.equalTo(225.0)
             view.top.equalToSuperview().offset(50.0)
         }
+        
+        
+        logoOuterRing.snp.makeConstraints { (view) in
+            view.centerX.equalToSuperview()
+            view.top.equalToSuperview().offset(20.0)
+        }
+        
+        logoMiddleRing.snp.makeConstraints { (view) in
+            view.leading.equalTo(logoOuterRing)
+            view.centerY.equalTo(logoOuterRing)
+        }
+        
+        logoInnerRing.snp.makeConstraints { (view) in
+            view.centerY.equalTo(logoOuterRing)
+            view.leading.equalTo(logoOuterRing)
+        }
+        logoImageView.snp.makeConstraints { (view) in
+            view.centerX.equalTo(logoInnerRing)
+            view.centerY.equalTo(logoInnerRing)
+        }
+        
+        //test^^
         emailTextField.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
-            view.top.equalTo(logoImageView.snp.bottom).offset(25.0)
+            view.top.equalTo(logoOuterRing.snp.bottom).offset(25.0)
             view.width.equalTo(225.0)
             view.height.equalTo(30.0)
         }
@@ -277,11 +313,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = ColorPalette.logoGreenColor
         return view
     }()
-    private lazy var logoImageView: UIImageView = {
+    
+    //MARK: - View init
+    internal lazy var logoOuterRing: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Lapze_Logo")
+        imageView.image = UIImage(named: "outerRingw")
         return imageView
     }()
+    
+    internal lazy var logoMiddleRing: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "middleRingw")
+        return imageView
+    }()
+    
+    internal lazy var logoInnerRing: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "innerRingw")
+        return imageView
+    }()
+    
+    //test^^
+    internal lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "logoTitlew")
+        return imageView
+    }()
+    
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
