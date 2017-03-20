@@ -10,14 +10,17 @@ import UIKit
 import GoogleMaps
 import Firebase
 import UserNotifications
+//import CoreLocation
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, CLLocationManagerDelegate {
     
     var window: UIWindow?
+    let locationManager = CLLocationManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+        //Simulate Location
+        //location()
         //Google Maps API Key
         GMSServices.provideAPIKey("AIzaSyDOiTbYY-vEPH42OMTCp3nlmF4BtoVu7Cc")
         //FireBase Init
@@ -57,6 +60,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         //
+    }
+    
+    func location() {
+        locationManager.delegate = self
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
