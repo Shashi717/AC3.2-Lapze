@@ -79,7 +79,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let userDefaults = UserDefaults.standard
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        //test
         if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
@@ -136,11 +135,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
-    //test : this hides the addbuttonInfo label
+    
     @objc private func handleInfoInterface(_ state: String) {
         switch state {
         case "EVENTS":
-            addButtonInfoLabel.text = "Tap to create an EVENT" //test
+            addButtonInfoLabel.text = "Tap to create an EVENT"
             addButtonInfoLabel.backgroundColor = .purple
             infoThumbImageView.image = UIImage(named: "tap")
         case "CHALLENGES":
@@ -152,7 +151,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-    //test: almost done
+
     @objc private func handlePostInfoInterface() {
         animateAddbuttonInfo(false)
         addButtonInfoLabel.removeFromSuperview()
@@ -415,7 +414,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
         
-        //test
+        
         
         segmentedControl.backgroundColor = .clear
         segmentedControl.layer.borderColor = UIColor.white.cgColor

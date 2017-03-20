@@ -69,7 +69,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func privacySwitchValueChanged(sender: UISwitch) {
         shareProfile = !shareProfile
-        //test
+        //test - facebook post
         switch shareProfile {
         case true:
             infoView.titleLabel.text = "Sharing to Facebook!"
@@ -104,7 +104,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
         
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            //test
+            //test - facebook post
             if self.shareProfile {
                 self.shareEventOnFb()
             }
