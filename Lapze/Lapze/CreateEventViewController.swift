@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import FirebaseAuth
+import Social
 
 public enum Activity: String {
     case running = "Running"
@@ -68,6 +69,28 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     func privacySwitchValueChanged(sender: UISwitch) {
         shareProfile = !shareProfile
+        //test
+        switch shareProfile {
+        case true:
+            infoView.titleLabel.text = "Sharing to Facebook!"
+        case false:
+            infoView.titleLabel.text = "Not sharing to Facebook!"
+            break
+        }
+        
+        animateInfoView()
+    }
+    
+    func shareEventOnFb() {
+        if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
+            let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+            facebookSheet.setInitialText("Join my \(self.pickedActivity) event on LAPZE!")
+            self.present(facebookSheet, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     func cancelButtonTapped(sender: UIBarButtonItem) {
@@ -81,12 +104,18 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         let alertController = showAlert(title: "Start this event?", message: "Tap ok to start the event!", useDefaultAction: false)
         
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            //test
+            if self.shareProfile {
+                self.shareEventOnFb()
+            }
             self.dismissViewcontroller()
             self.addEventToFirebase()
         }))
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
+        
+        
     }
     
     func dismissViewcontroller(){
@@ -338,7 +367,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         sharingStatusLabel.snp.makeConstraints { (view) in
             view.top.bottom.equalToSuperview()
             view.left.equalToSuperview().offset(16.0)
-            view.width.equalTo(100.0)
+            view.width.equalTo(200.0)
         }
         privacySwitch.snp.makeConstraints { (view) in
             view.centerY.equalToSuperview()
@@ -464,7 +493,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var sharingStatusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Share Your Location"
+        label.text = "Share On Facebook!"
         return label
     }()
     internal lazy var locationSwitch: UISwitch = {
