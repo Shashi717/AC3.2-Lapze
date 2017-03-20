@@ -92,7 +92,6 @@ class UserStore {
                                     eventCount: eventCount,
                                     badges: badges)
                     
-                    
                     userObjects.append(user)
                 }
             }
