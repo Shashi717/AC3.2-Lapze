@@ -491,13 +491,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         button.setImage(UIImage(named: "locate"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
-            view.size.equalTo(CGSize(width: 30, height: 30))
+            view.size.equalTo(CGSize(width: 20, height: 20))
         })
         button.layer.shadowOpacity = 0.4
         button.layer.shadowOffset = CGSize(width: 1, height: 5)
         button.layer.shadowRadius = 2
         button.backgroundColor = UIColor.white
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(goToUserLocation), for: .touchUpInside)
         return button
     }()

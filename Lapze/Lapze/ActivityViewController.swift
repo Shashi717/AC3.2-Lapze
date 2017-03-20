@@ -1,3 +1,4 @@
+
 //
 //  ActivityViewController.swift
 //  Lapze
@@ -10,8 +11,11 @@ import UIKit
 import SnapKit
 
 import FirebaseDatabase
+import CoreLocation
+import Social
 
-class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate {
+
+class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate, CLLocationManagerDelegate {
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
@@ -31,13 +35,41 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //private var challengeFirebaseRef: FIRDatabaseReference?
+    let locationManager = CLLocationManager() //test
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateInterface()
         setUpController()
         configureUserDefaults()
+        
+        //test
+        //navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(facebook))
     }
+    
+    //test
+   
+    
+    func location() {
+        locationManager.delegate = self
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func facebook() {
+        if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
+            let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+            facebookSheet.setInitialText("Share on Facebook")
+            self.present(facebookSheet, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    //test^^
     
     private func setUpController(){
         addMapViewController()
@@ -48,7 +80,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let userDefaults = UserDefaults.standard
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        //test
         if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
@@ -92,27 +123,27 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
             topInfoView.backgroundColor = ColorPalette.greenThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.greenThemeColor
             navigationItem.title = "EVENTS"
-            handleInfoInterface("events")
+            handleInfoInterface("EVENTS")
             
         case .challenges:
             addButton.backgroundColor = ColorPalette.orangeThemeColor
             topInfoView.backgroundColor = ColorPalette.orangeThemeColor
             bottomScrollInfoView.actionButton.backgroundColor = ColorPalette.orangeThemeColor
             navigationItem.title = "CHALLENGES"
-            handleInfoInterface("challenges")
+            handleInfoInterface("CHALLENGES")
             
         }
         bottomScrollInfoView.actionButton.removeTarget(nil, action: nil, for: .allEvents)
     }
     
-    //test : this hides the addbuttonInfo label
+    
     @objc private func handleInfoInterface(_ state: String) {
         switch state {
-        case "events":
-            addButtonInfoLabel.text = "Tap to create an EVENT" //test
+        case "EVENTS":
+            addButtonInfoLabel.text = "Tap to create an EVENT"
             addButtonInfoLabel.backgroundColor = .purple
             infoThumbImageView.image = UIImage(named: "tap")
-        case "challenges":
+        case "CHALLENGES":
             addButtonInfoLabel.text = "Tap to create a CHALLENGE"
             addButtonInfoLabel.backgroundColor = .orange
             infoThumbImageView.image = UIImage(named: "crown")
@@ -121,7 +152,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-    //test: almost done
+
     @objc private func handlePostInfoInterface() {
         animateAddbuttonInfo(false)
         addButtonInfoLabel.removeFromSuperview()
@@ -384,7 +415,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
         
-        //test
+        
         
         segmentedControl.backgroundColor = .clear
         segmentedControl.layer.borderColor = UIColor.white.cgColor

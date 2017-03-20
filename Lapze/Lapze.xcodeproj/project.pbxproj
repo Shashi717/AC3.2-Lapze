@@ -324,6 +324,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = G6ZU47QNTF;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -578,6 +583,7 @@
 				DEVELOPMENT_TEAM = G6ZU47QNTF;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Lapze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.shashi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -595,6 +601,7 @@
 				DEVELOPMENT_TEAM = G6ZU47QNTF;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Lapze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.lapze.Lapze.shashi;
 				PRODUCT_NAME = "$(TARGET_NAME)";

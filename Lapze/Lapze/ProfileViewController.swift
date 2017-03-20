@@ -61,7 +61,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.badgesCollectionView.reloadData()
         }
     }
-    var user: User?
+    var user: User! {
+        didSet {
+            checkRank()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,15 +95,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
-            
-            self.checkRank(userId: uId)
         }
     }
     
-    func checkRank(userId: String) {
-        let theRank = getRank(userChallenges.count)
+    func checkRank() {
+        let theRank = getRank(user.challengeCount)
         if user?.rank != theRank.rawValue {
-            userStore.updateRank(userId: userId, rank: theRank.rawValue)
+            userStore.updateRank(rank: theRank.rawValue)
         }
     }
     
