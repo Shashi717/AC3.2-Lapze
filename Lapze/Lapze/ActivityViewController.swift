@@ -9,8 +9,9 @@
 import UIKit
 
 import FirebaseDatabase
+import CoreLocation
 
-class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate {
+class ActivityViewController: UIViewController,EventViewControllerDelegate,ChallengeDelegate,JoinActivityDelegate, CLLocationManagerDelegate {
     private let mapViewController: MapViewController = MapViewController()
     private let topInfoView: TopActivityInfoView = TopActivityInfoView()
     private let bottomScrollInfoView: BottomActivityInfoScrollView = BottomActivityInfoScrollView()
@@ -30,12 +31,30 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //private var challengeFirebaseRef: FIRDatabaseReference?
+    let locationManager = CLLocationManager() //test
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateInterface()
         setUpController()
         configureUserDefaults()
+        
+        //test
+        //navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(location))
+        
+    }
+    
+    //test
+    func location() {
+        locationManager.delegate = self
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func startingLocation() {
+        
     }
     
     private func setUpController(){
