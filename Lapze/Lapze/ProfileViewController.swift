@@ -49,10 +49,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     let cellId = "badges"
     var userProfileImage = "0"
     
-    
     let userStore = UserStore()
-    let currentUser = FIRAuth.auth()?.currentUser?.uid
-    
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -75,7 +72,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "My Profile"
+        self.navigationItem.title = "MY PROFILE"
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
@@ -125,7 +122,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         return rank
-        
     }
     
     //Test: set userchallenge data to implement badge count etc.
@@ -151,7 +147,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             if let badges = user.badges {
                 self.userBadges = badges //access to global var
             }
-            
         }
     }
     
