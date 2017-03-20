@@ -273,7 +273,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     //MARK: - Event Utilities
-    private func getAllEvents(){
+    func getAllEvents(){
         EventStore.manager.getAllCurrentEvents { (events) in
             self.allEvents = events
         }
@@ -285,13 +285,12 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
-    private func getEvent(id: String)->Event?{
+    private func getEvent(id: String, closure:@escaping (Event?)->Void){
         for event in allEvents{
             if event.id == id{
-                return event
+                closure(event)
             }
         }
-        return nil
     }
     
     //MARK:- Location manager delegate methods
@@ -388,8 +387,9 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         switch markerOption {
         case .event:
             guard let markerId = marker.title else {return nil}
-            let event = getEvent(id: markerId)
-            thumbView.titleLabel.text = event?.type
+            getEvent(id: markerId, closure: { (event) in
+                thumbView.titleLabel.text = event?.type
+            })
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
             
         case .challenge:

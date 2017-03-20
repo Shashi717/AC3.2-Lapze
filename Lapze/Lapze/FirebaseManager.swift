@@ -10,6 +10,7 @@ import Foundation
 import Firebase
 
 class FirebaseManager {
+    let mapView: MapViewController = MapViewController()
     static let shared: FirebaseManager  = FirebaseManager()
     let uid = FIRAuth.auth()?.currentUser?.uid
     private let databaseReference = FIRDatabase.database().reference()
@@ -28,6 +29,7 @@ class FirebaseManager {
         childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
             if let event = EventStore.manager.createEvent(snapshot: snapshot){
                 GoogleMapManager.shared.addMarker(event: event)
+                self.mapView.getAllEvents()
             }
         })
         

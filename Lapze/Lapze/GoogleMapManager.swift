@@ -72,6 +72,8 @@ class GoogleMapManager{
     func removeMarker(id:String){
         dict[id]?.map = nil
         dict[id] = nil
+        eventMarkerDic[id]?.map = nil
+        eventMarkerDic[id] = nil
     }
     
     func updateMarker(id:String,locationDict:[String:Double]){
@@ -89,6 +91,10 @@ class GoogleMapManager{
         for marker in self.dict{
             marker.value.map = nil
         }
+        for marker in self.eventMarkerDic{
+            marker.value.map = nil
+        }
         self.dict = [:]
+        self.eventMarkerDic = [:]
     }
 }

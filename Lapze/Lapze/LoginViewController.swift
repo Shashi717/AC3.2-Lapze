@@ -165,7 +165,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         animator.addAnimations {
             self.view.layoutIfNeeded()
-            
         }
         
         animator.startAnimation()
@@ -219,10 +218,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.container.addSubview(passwordTextField)
         self.container.addSubview(actionButton)
         self.container.addSubview(gotoRegisterButton)
-        self.view.addSubview(logoImageView)
-        self.view.addSubview(logoInnerRing)
-        self.view.addSubview(logoMiddleRing)
-        self.view.addSubview(logoOuterRing)
+        self.container.addSubview(logoImageView)
+        self.container.addSubview(logoInnerRing)
+        self.container.addSubview(logoMiddleRing)
+        self.container.addSubview(logoOuterRing)
     }
     
     private func configureConstraints() {
@@ -243,13 +242,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             view.width.equalTo(225.0)
             view.height.equalTo(30.0)
         }
-        
-        logoImageView.snp.makeConstraints { (view) in
-            view.centerX.equalToSuperview()
-            view.height.width.equalTo(225.0)
-            view.top.equalToSuperview().offset(50.0)
-        }
-        
         
         logoOuterRing.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
@@ -339,7 +331,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         imageView.image = UIImage(named: "logoTitlew")
         return imageView
     }()
-    
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
