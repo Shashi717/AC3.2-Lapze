@@ -493,7 +493,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
     }()
     internal lazy var sharingStatusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Share On Facebook!"
+        label.text = "Share On Facebook"
         return label
     }()
     internal lazy var locationSwitch: UISwitch = {

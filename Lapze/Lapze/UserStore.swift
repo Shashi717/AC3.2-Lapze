@@ -113,6 +113,7 @@ class UserStore {
     }
     
     func updateRank(rank: String) {
+
         guard let userId = uId else {
             return
         }

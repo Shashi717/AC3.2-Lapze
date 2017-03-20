@@ -63,12 +63,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     var user: User! {
         didSet {
-            let theRank = checkRank(userChallenges.count)
-            if user.rank != theRank.rawValue {
-                userStore.updateRank(rank: theRank.rawValue)
-            }
+            checkRank()
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -100,7 +98,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func checkRank(_ challengeCount: Int) -> Rank {
+    func checkRank() {
+        let theRank = getRank(user.challengeCount)
+        if user?.rank != theRank.rawValue {
+            userStore.updateRank(rank: theRank.rawValue)
+        }
+    }
+    
+    func getRank(_ challengeCount: Int) -> Rank {
         
         var rank = Rank.none
         
