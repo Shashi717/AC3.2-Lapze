@@ -112,11 +112,8 @@ class UserStore {
         })
     }
     
-    func updateRank(rank: String) {
-        guard let userId = uId else {
-            return
-        }
-        
+    func updateRank(userId: String, rank: String) {
+
         self.databaseRef.child("users").child(userId).child("rank").observeSingleEvent(of: .value, with: { (snapshot) in
             self.databaseRef.child("users").child(userId).child("rank").setValue(rank)
 

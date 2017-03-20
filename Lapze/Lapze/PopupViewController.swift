@@ -179,7 +179,7 @@ class PopupViewController: UIViewController {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 40.0
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "004-boy")
+        imageView.image = UIImage(named: "010-man-1")
         //imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
         return imageView
