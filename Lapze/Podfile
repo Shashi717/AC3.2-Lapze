@@ -11,6 +11,7 @@ target 'Lapze' do
   pod 'FirebaseStorage'
   pod 'Firebase/Database'
   pod 'GoogleMaps'
-  pod ‘SnapKit’
+  pod 'SnapKit'
+  pod 'Charts'
 
 end
