@@ -66,7 +66,7 @@ class UserStore {
     func getAllUsers(completion: @escaping ([User]) -> Void) {
         var userObjects: [User] = []
         
-        self.databaseRef.child("users").observe(.value, with: {(snapshot) in
+        self.databaseRef.child("users").observeSingleEvent(of: .value, with: {(snapshot) in
             
             let enumerator = snapshot.children
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
@@ -91,7 +91,6 @@ class UserStore {
                                     challengeCount: challengeCount,
                                     eventCount: eventCount,
                                     badges: badges)
-                    
                     
                     userObjects.append(user)
                 }

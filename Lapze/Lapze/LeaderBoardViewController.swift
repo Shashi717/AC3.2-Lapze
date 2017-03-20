@@ -27,7 +27,7 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        self.navigationItem.title = "Leaderboard"
+        self.navigationItem.title = "LEADERBOARD"
         setup()
         loadUsers()
         
