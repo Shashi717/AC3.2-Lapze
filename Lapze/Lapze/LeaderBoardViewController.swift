@@ -12,7 +12,7 @@ import Firebase
 class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let cellId = "leaderCell"
-    let userStore = UserStore()
+    let userStore = UserStore.manager
     
     var users: [User] = [] {
         didSet {

@@ -324,7 +324,7 @@
 				TargetAttributes = {
 					1A9767F21E6789EB00F6B28C = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -587,9 +587,9 @@
 				DEVELOPMENT_TEAM = "";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Lapze/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze.Shashi;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -605,9 +605,9 @@
 				DEVELOPMENT_TEAM = "";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Lapze/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze.Shashi;
+				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

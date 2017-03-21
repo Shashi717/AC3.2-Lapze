@@ -21,26 +21,25 @@ class MainTabController: UITabBarController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        checkForUserStatus()
+       // checkForUserStatus()
         setDefaultViewController()
         
     }
+    override func viewDidAppear(_ animated: Bool) {
+      checkForUserStatus()
+    }
     
     private func checkForUserStatus(){
-        
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
             }else if !self.userLocationPermissionGranted {
-                let locationNeededVC = LocationNeededViewController()
-                self.present(locationNeededVC, animated: true, completion: nil)
-                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
-                    self?.setUpTabBar()
-                }
+                  self.perform(#selector(self.showLocationNeed), with: nil, afterDelay: 0.01)
             }else{
                 self.setUpTabBar()
             }
         })
+        
     }
     
     fileprivate var userLocationPermissionGranted: Bool {
@@ -49,9 +48,17 @@ class MainTabController: UITabBarController{
     }
     
     @objc private func showLogin(){
-        let loginVC = UINavigationController(rootViewController: LoginViewController())
+        let loginVC = LoginViewController()//UINavigationController(rootViewController: LoginViewController())
         setDefaultViewController()
         present(loginVC, animated: true, completion: nil)
+    }
+    
+    @objc private func showLocationNeed(){
+        let locationNeededVC = LocationNeededViewController()
+        self.present(locationNeededVC, animated: true, completion: nil)
+        locationNeededVC.onLocationPermissionsGranted = { [weak self] in
+            self?.setUpTabBar()
+        }
     }
     
     private func setUpTabBar(){

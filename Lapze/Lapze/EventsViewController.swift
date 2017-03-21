@@ -68,7 +68,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     
     let popVc = PopupViewController()
     private let challengeStore = ChallengeStore()
-    private let userStore = UserStore()
+    private let userStore = UserStore.manager
     let challengePath = Path()
     let userPath = Path()
     
@@ -438,7 +438,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
+                        thumbView.currentChampionNameLabel.text = ("Champion: \(user?.name)")
                     })
                     
                     if self.userChampionshipChallenges.contains(id) {
@@ -484,7 +484,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
+                        self.popVc.challengeDescriptionLabel.text = "\(user?.name): Champion since \(challenge.lastUpdated) "
                         
                     })
                     self.popVc.activityId = challenge.id
@@ -595,7 +595,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
         let firstCoordinate = self.path[0]
         let firstLat = firstCoordinate.latitude
         let firstLong = firstCoordinate.longitude
-        let locationStore = LocationStore()
+        let locationStore = LocationStore.manager
         let pathArray = locationStore.createPathArray(self.path)
         let challengeTime = Double(counter)
         let userDistance = (self.distance/1609.34).roundTo(places: 2)
