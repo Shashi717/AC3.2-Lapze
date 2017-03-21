@@ -76,7 +76,8 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        cell.nameLabel.text = "\(self.users[indexPath.row].name) - \(users.count-Int(indexPath.row)) wins"
+        let user = users[indexPath.row]
+        cell.nameLabel.text = "\(user.name) - \(user.challengeCount) challenges"
         cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
         return cell
     }
