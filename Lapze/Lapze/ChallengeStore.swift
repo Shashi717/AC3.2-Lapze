@@ -174,7 +174,7 @@ class ChallengeStore {
     
     private func checkChallengeWithinRadius(location: Location) -> Bool {
         
-        let locationStore = LocationStore()
+        let locationStore = LocationStore.manager
         let userLocation = LocationManager.sharedManager.currentLocation
         
         if let uLocation = userLocation {

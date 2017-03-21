@@ -40,8 +40,9 @@ class LocationNeededViewController: UIViewController {
         view.addSubview(infoLabel)
         infoLabel.isHidden = true
         infoLabel.snp.makeConstraints { (view) in
-            view.centerY.centerX.equalToSuperview()
-            view.trailing.leading.equalToSuperview()
+            view.centerY.equalToSuperview()
+            view.trailing.equalToSuperview().inset(20)
+            view.leading.equalToSuperview().offset(20)
         }
     }
     

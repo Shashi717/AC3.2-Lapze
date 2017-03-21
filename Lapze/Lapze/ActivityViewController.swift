@@ -69,11 +69,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let userDefaults = UserDefaults.standard
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        //if isFirstTime == false {
+        if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        //}
+        }
     }
     
     private func addMapViewController(){
@@ -281,7 +281,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Event Delegate methods
     func startEvent(name: String, showUserLocation: Bool){
-        topInfoView.titleLabel.text = "Your \(name) session"
+        topInfoView.titleLabel.text = "Your \(name) Session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
@@ -432,7 +432,6 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let label = UILabel()
         label.text = "Tap to create an Event"
         label.textColor = .white
-        label.alpha = 0.6
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.layer.masksToBounds = true
@@ -453,7 +452,4 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         imageView.clipsToBounds = true
         return imageView
     }()
-    
-    
-    
 }

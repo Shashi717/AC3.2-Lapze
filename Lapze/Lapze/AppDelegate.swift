@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         //MARK: - navbar
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-        
+     
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let navAppearance = UINavigationBar.appearance()
         navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir-Book", size: 16)!, NSForegroundColorAttributeName : UIColor.white]
@@ -51,124 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
         
-        launchScreenSetup()
-        animateFuncLogo()
-        
         return true
     }
-    
-    
-    //test
-    var outerRing: UIImageView?
-    var middleRing: UIImageView?
-    var innerRing: UIImageView?
-    var logoTitle: UIImageView?
-    var customizedLaunchScreenView: UIView?
-    
-    func launchScreenSetup() {
-        if let window = self.window {
-            self.customizedLaunchScreenView = UIView(frame: window.bounds)
-            self.customizedLaunchScreenView?.backgroundColor = ColorPalette.darkPurple
-            self.window?.addSubview(self.customizedLaunchScreenView!)
-            self.window?.bringSubview(toFront: self.customizedLaunchScreenView!)
-            
-            
-            //add inits
-            self.outerRing = UIImageView(frame: .zero)
-            self.middleRing = UIImageView(frame: .zero)
-            self.innerRing = UIImageView(frame: .zero)
-            self.logoTitle = UIImageView(frame: .zero)
-            
-            self.outerRing?.image = #imageLiteral(resourceName: "outerRingw")
-            self.middleRing?.image = #imageLiteral(resourceName: "middleRingw")
-            self.innerRing?.image = #imageLiteral(resourceName: "innerRingw")
-            self.logoTitle?.image = #imageLiteral(resourceName: "logoTitlew")
-            
-            //configure
-            self.window?.addSubview(outerRing!)
-            self.window?.addSubview(middleRing!)
-            self.window?.addSubview(innerRing!)
-            self.window?.addSubview(logoTitle!)
-            
-            outerRing?.snp.makeConstraints({ (view) in
-                view.center.equalToSuperview()
-            })
-            middleRing?.snp.makeConstraints({ (view) in
-                view.leading.equalTo(outerRing!)
-                view.centerY.equalTo(outerRing!)
-            })
-            innerRing?.snp.makeConstraints({ (view) in
-                view.leading.equalTo(outerRing!)
-                view.centerY.equalTo(outerRing!)
-            })
-            logoTitle?.snp.makeConstraints({ (view) in
-                view.center.equalTo(innerRing!)
-            })
-            
-            
-        }
-    }
-    
-    
-    func animateFuncLogo() {
-        let duration = 3.0
-        let delay = 0.0
-        let options = UIViewKeyframeAnimationOptions.calculationModeLinear
-        
-        UIView.animateKeyframes(withDuration: duration, delay: delay, options: options, animations: {
-            // within each keyframe the relativeStartTime and relativeDuration need to be values between 0.0 and 1.0
-            
-            
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration:  duration, animations: {
-                self.outerRing?.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_4))
-                self.middleRing?.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_4))
-                self.innerRing?.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_4))
-                //self.innerRing?.transform = CGAffineTransform(scaleX: 2, y: 2)
-                
-            })
-            
-//            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration:  1/2 , animations: {
-//                self.logoTitle?.transform = CGAffineTransform(
-//                
-//            })
-            
-            
-            
-            UIView.addKeyframe(withRelativeStartTime: 1/2, relativeDuration: 1/2, animations: {
-                self.outerRing?.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.middleRing?.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.innerRing?.transform = CGAffineTransform(scaleX: 1, y: 1)
-            })
-            
-            
-        }, completion: { finished in
-            // any code entered here will be applied
-            // once the animation has completed
-            
-            UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut,
-                           animations: { () -> Void in
-                            self.outerRing?.transform = CGAffineTransform(translationX: 0, y: -1000)
-                            self.middleRing?.transform = CGAffineTransform(translationX: 0, y: -1000)
-                            self.innerRing?.transform = CGAffineTransform(translationX: 0, y: -1000)
-                            self.customizedLaunchScreenView?.alpha = 0
-                            
-                            
-            },
-                           completion: {_ in
-                            
-                            _ = [
-                                self.customizedLaunchScreenView,
-                                self.outerRing,
-                                self.middleRing,
-                                self.innerRing,
-                                self.logoTitle
-                                ].map { $0?.removeFromSuperview() }
-            })
-        })
-    }
-    
-    
-    
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler(.alert)
@@ -206,8 +90,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        FirebaseManager.shared.removeEvent()
+        FirebaseManager.shared.removeUserLocation()
     }
-    
-    
 }
 

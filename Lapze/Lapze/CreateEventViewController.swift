@@ -145,8 +145,7 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         let userId = FIRAuth.auth()?.currentUser?.uid
         let currentLocation = LocationManager.sharedManager.currentLocation
-       
-        let event = Event(id: userId! , type: pickedActivity.rawValue, date: Date(), location: Location(location: currentLocation!))
+        let event = Event(id: userId! , type: pickedActivity.rawValue, date: "", location: Location(location: currentLocation!))
         return event
     }
     
