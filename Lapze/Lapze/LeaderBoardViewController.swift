@@ -76,7 +76,8 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        
+
+        //^^ delete NSTextattachment
         let nameString = "\(users[indexPath.row].name) the \(users[indexPath.row].rank) with \(users[indexPath.row].challengeCount) wins "
         cell.nameLabel.text = nameString
         cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
