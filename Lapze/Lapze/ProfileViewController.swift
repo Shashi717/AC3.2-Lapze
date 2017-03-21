@@ -79,6 +79,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         getUserChallenges()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        //self.pieChart.animate(xAxisDuration: 2)
+        
+    }
+    
     func getUserChallenges() {
         
         guard let uId = FIRAuth.auth()?.currentUser?.uid else {
@@ -299,7 +304,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         pieChart.snp.makeConstraints { (view) in
             view.top.equalTo(activitiesLabel.snp.bottom)
             view.bottom.equalToSuperview()
-            view.width.equalToSuperview().multipliedBy(0.6)
+            view.width.equalToSuperview().multipliedBy(0.8)
             view.centerX.equalToSuperview()
         }
     }

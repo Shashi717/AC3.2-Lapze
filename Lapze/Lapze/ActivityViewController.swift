@@ -453,4 +453,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         imageView.clipsToBounds = true
         return imageView
     }()
+    
+    
+    
 }
