@@ -76,7 +76,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        
         // setting Leader icon
         let attachment = NSTextAttachment()
         attachment.image = UIImage(named: "leaderCrown")
