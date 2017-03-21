@@ -55,6 +55,102 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         return true
     }
+    
+    
+    //test
+    var outerRing: UIImageView?
+    var middleRing: UIImageView?
+    var innerRing: UIImageView?
+    var logoTitle: UIImage?
+    var customizedLaunchScreenView: UIView?
+    
+    func launchScreenSetup() {
+        if let window = self.window {
+            self.customizedLaunchScreenView = UIView(frame: window.bounds)
+            self.customizedLaunchScreenView?.backgroundColor = ColorPalette.darkPurple
+            self.window?.addSubview(self.customizedLaunchScreenView!)
+            self.window?.bringSubview(toFront: self.customizedLaunchScreenView!)
+            
+            //self.rollingLogo = UIImageView(frame: .zero)
+            //self.rollingLogo?.image = #imageLiteral(resourceName: "logow")
+            
+            //self.window?.addSubview(rollingLogo!)
+            //self.window?.bringSubview(toFront: rollingLogo!)
+            //            self.rollingLogo?.snp.makeConstraints{ (view) in
+            //                view.centerY.equalTo(window.snp.centerY).offset(10)
+            //                view.centerX.equalTo(window.snp.centerX)
+            //            }
+            
+            
+            //add inits
+            self.outerRing = UIImageView(frame: .zero)
+            self.middleRing = UIImageView(frame: .zero)
+            //self.innerRing = UIImageView(frame: .zero)
+            
+            self.outerRing?.image = #imageLiteral(resourceName: "outerRingw")
+            self.middleRing?.image = #imageLiteral(resourceName: "middleRingw")
+            
+            //configure
+            self.window?.addSubview(outerRing!)
+            self.window?.addSubview(middleRing!)
+            
+            outerRing?.snp.makeConstraints({ (view) in
+                view.center.equalToSuperview()
+            })
+            middleRing?.snp.makeConstraints({ (view) in
+                view.leading.equalTo(outerRing!)
+                view.centerY.equalTo(outerRing!)
+            })
+            
+            
+        }
+    }
+    
+    
+    func animateFuncLogo() {
+        let duration = 2.0
+        let delay = 0.0
+        let options = UIViewKeyframeAnimationOptions.calculationModeLinear
+        
+        UIView.animateKeyframes(withDuration: duration, delay: delay, options: options, animations: {
+            // within each keyframe the relativeStartTime and relativeDuration need to be values between 0.0 and 1.0
+            
+            
+            
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration:  1/2 , animations: {
+                self.outerRing?.transform = CGAffineTransform(scaleX: 2, y: 2)
+                self.middleRing?.transform = CGAffineTransform(scaleX: 2, y: 2)
+                
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 1/2, relativeDuration: 1/2, animations: {
+                self.outerRing?.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.middleRing?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            })
+            
+            
+        }, completion: { finished in
+            // any code entered here will be applied
+            // once the animation has completed
+            
+            UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseOut,
+                           animations: { () -> Void in
+                            self.outerRing?.transform = CGAffineTransform(translationX: 0, y: -1000)
+                            self.middleRing?.transform = CGAffineTransform(translationX: 0, y: -1000)
+                            self.customizedLaunchScreenView?.alpha = 0
+                            
+                            
+            },
+                           completion: {_ in
+                            
+                            _ = [
+                                self.customizedLaunchScreenView,
+                                self.outerRing,
+                                self.middleRing
+                                ].map { $0?.removeFromSuperview() }
+            })
+        })
+    }
 
  
 

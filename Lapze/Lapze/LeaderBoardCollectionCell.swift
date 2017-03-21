@@ -39,7 +39,9 @@ class LeaderBoardCollectionCell: BaseCell {
         }
         
         winIcon.snp.makeConstraints { (view) in
-            view.leading.equalTo(nameLabel.snp.trailing).offset(5)
+            view.top.equalTo(profileImageView).offset(-8)
+            view.centerX.equalTo(profileImageView)
+            view.size.equalTo(20)
         }
         
     }
@@ -58,7 +60,7 @@ class LeaderBoardCollectionCell: BaseCell {
     
     internal var winIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "crownIcon")
+        imageView.image = UIImage(named: "leaderCrown")
         return imageView
     }()
     
