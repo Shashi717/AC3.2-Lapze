@@ -28,7 +28,7 @@ class ProfileSettingsLauncher: NSObject, UICollectionViewDataSource, UICollectio
     var appProfileImages = [String]()
     let databaseRef = FIRDatabase.database().reference()
     let uid = FIRAuth.auth()?.currentUser?.uid
-    private let userStore = UserStore()
+    private let userStore = UserStore.manager
     
     func showAvatars() {
         

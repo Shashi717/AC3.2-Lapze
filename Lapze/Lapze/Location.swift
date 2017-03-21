@@ -28,6 +28,7 @@ struct Location{
         self.longitude = location.coordinate.longitude
     }
     
+    
     func toJson()-> [String:Double]{
         return ["lat":self.latitude,"long":self.longitude]
     }
