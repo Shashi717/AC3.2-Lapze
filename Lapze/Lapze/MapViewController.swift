@@ -47,6 +47,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
     fileprivate var userCurrentLocation: CLLocation?{
         didSet{
             updateUserLocationMarker(location: userCurrentLocation!)
+            
+            if !userFound{
+                goToUserLocation()
+                userFound = !userFound
+            }
         }
     }
     
@@ -61,6 +66,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
     private let userStore = UserStore.manager
+    private var userFound: Bool = false
     let popVc: PopupViewController = PopupViewController()
     private let path: GMSMutablePath = GMSMutablePath()
     let challengePath = Path()
@@ -71,6 +77,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
     var activityTime: Double = 0.0
     var challenge: Challenge?
     var didCreateActivity = true
+    
     
     // MARK:_ Lifecycle functions
     
@@ -140,7 +147,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
         switch viewControllerState{
         case .challenges:
             trackingBehavior = .followWithPathMarking
-         
+            
         case .events:
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
@@ -149,11 +156,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
+            }else{
+                self.userLocationMarker?.icon = self.resizeImage("0")
             }
         }
         
         if didCreateActivity == true {
-             self.markerOption = .none
+            self.markerOption = .none
         }
     }
     
@@ -439,7 +448,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
                 thumbView.titleLabel.text = event.type
                 
                 UserStore.manager.getUser(id: markerId){ user in
-                    thumbView.currentChampionNameLabel.text = user.name
+                    thumbView.currentChampionNameLabel.text = user.name + " created this event"
                 }
             }
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
@@ -491,7 +500,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
+                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated)"
+                        self.popVc.profileImageView.image = UIImage(named: user.profilePic)
                     })
                     self.popVc.activityId = challenge.id
                     self.popVc.userLocation = LocationManager.sharedManager.currentLocation

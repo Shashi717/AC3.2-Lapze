@@ -48,7 +48,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //test
-   
+    
     
     func location() {
         locationManager.delegate = self
@@ -58,18 +58,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         locationManager.startUpdatingLocation()
     }
     
-    func facebook() {
-        if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
-            let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            facebookSheet.setInitialText("Share on Facebook")
-            self.present(facebookSheet, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    //test^^
+    
     
     private func setUpController(){
         addMapViewController()
@@ -152,7 +141,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-
+    
     @objc private func handlePostInfoInterface() {
         animateAddbuttonInfo(false)
         addButtonInfoLabel.removeFromSuperview()
@@ -218,7 +207,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     func animateAddbuttonInfo(_ isAnimating: Bool) {
         
         UIView.animate(withDuration: 1, delay: 0.75, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .repeat, animations: {
-//            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            //            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
             self.infoThumbImageView.frame = self.infoThumbImageView.frame.offsetBy(dx: 0, dy: -10)
         }, completion: nil)
         
@@ -329,7 +318,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.activityTime = Double(counter)
-     
+        
         stopTimer()
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
@@ -411,15 +400,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        //segmentedControl.backgroundColor = ColorPalette.greenThemeColor
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
         
-        
-        
-        segmentedControl.backgroundColor = .clear
+        segmentedControl.backgroundColor = .black
+        segmentedControl.alpha = 0.6
         segmentedControl.layer.borderColor = UIColor.white.cgColor
-        segmentedControl.layer.cornerRadius = 20
         
         return segmentedControl
     }()

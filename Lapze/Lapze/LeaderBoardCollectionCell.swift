@@ -21,7 +21,7 @@ class LeaderBoardCollectionCell: BaseCell {
         
         rankNumLabel.snp.makeConstraints { (view) in
             view.leading.equalToSuperview().offset(8.0)
-            view.width.equalTo(20.0)
+            view.width.equalTo(26.0)
             view.centerY.equalToSuperview()
         }
         
@@ -32,14 +32,16 @@ class LeaderBoardCollectionCell: BaseCell {
         }
         
         nameLabel.snp.makeConstraints { (view) in
-            view.leading.equalTo(profileImageView.snp.trailing).offset(16.0)
+            view.leading.equalTo(profileImageView.snp.trailing).offset(8.0)
             view.centerY.equalToSuperview()
             view.width.equalToSuperview()
             view.height.equalTo(20)
         }
         
         winIcon.snp.makeConstraints { (view) in
-            view.leading.equalTo(nameLabel.snp.trailing).offset(5)
+            view.top.equalTo(profileImageView).offset(-8)
+            view.centerX.equalTo(profileImageView)
+            view.size.equalTo(20)
         }
         
     }
@@ -58,13 +60,14 @@ class LeaderBoardCollectionCell: BaseCell {
     
     internal var winIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "crownIcon")
+        imageView.image = UIImage(named: "leaderCrown")
         return imageView
     }()
     
     internal var nameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.font = UIFont(name: "Gill Sans", size: 16)
         label.textColor = .gray
         return label
     }()
@@ -73,6 +76,7 @@ class LeaderBoardCollectionCell: BaseCell {
         let label = UILabel()
         label.text = "1"
         label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
         label.textColor = .orange
         label.font = UIFont(name: "Avenir Next", size: 22)
         return label

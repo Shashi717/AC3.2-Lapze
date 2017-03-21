@@ -34,7 +34,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    func loginTapped(sender: UIButton) {
+    func loginTapped() {
         switch viewControllerState{
         case .login:
             logInUser()
@@ -60,19 +60,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK:- Keyboard
-    @objc private func showKeyboard() {
-        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
-        self.scrollView.setContentOffset(CGPoint(x: 0, y: 50), animated: true)
-        //        UIView.animate(withDuration: 0.5) {
-        //            self.scrollView.contentOffset = CGPoint(x: 0, y: 50)
-        //       }
+    @objc private func showKeyboard(notification : NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+        
+            self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            UIView.animate(withDuration: 0.5) {
+                self.scrollView.contentOffset = CGPoint(x: 0, y: 50)
+            }
+        }
     }
     
     @objc private func hideKeyboard(notification: NSNotification) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        
+        UIView.animate(withDuration: 0.2) {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
-        }, completion: nil)
+        }
     }
     
     @objc private func updateViewController(){
@@ -112,7 +117,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         })
                         self.clearTextFields()
                         let tabVC = EventsViewController()
-                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        //                        self.navigationController?.pushViewController(tabVC, animated:true)
+                        //                        FIRAuth.auth().
                         
                     }))
                     self.present(alertController, animated: true, completion: nil)
@@ -195,6 +201,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        loginTapped()
         self.view.endEditing(true)
         return false
     }
@@ -362,7 +369,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         button.layer.cornerRadius = 8.0
         button.layer.masksToBounds = false
         button.setTitle("Login", for: .normal)
-        button.addTarget(self, action: #selector(loginTapped(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         return button
     }()
     private lazy var gotoRegisterButton: UIButton = {

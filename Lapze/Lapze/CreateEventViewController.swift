@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 import Social
+import UserNotifications
 
 public enum Activity: String {
     case running = "Running"
@@ -85,12 +86,30 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
             let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
             facebookSheet.setInitialText("Join my \(self.pickedActivity) event on LAPZE!")
+            facebookSheet.completionHandler = {(result:SLComposeViewControllerResult) -> Void in
+                switch result {
+                case SLComposeViewControllerResult.done:
+                    self.notificationEvent()
+                case SLComposeViewControllerResult.cancelled:
+                    break
+                }
+            }
             self.present(facebookSheet, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil )
         }
+    }
+    
+    
+    func notificationEvent() {
+        let content = UNMutableNotificationContent()
+        content.title = "Posted Event!"
+        content.body = "You shared your \(pickedActivity) event onto Facebook! Yay!"
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+        let request = UNNotificationRequest(identifier: "event", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
     func cancelButtonTapped(sender: UIBarButtonItem) {

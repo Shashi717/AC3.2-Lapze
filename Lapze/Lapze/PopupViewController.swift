@@ -80,7 +80,7 @@ class PopupViewController: UIViewController {
                 self.userId = id
             }
             if didCreateActivity == true {
-
+                
                 dismissPopup()
             }
             else {
@@ -135,7 +135,7 @@ class PopupViewController: UIViewController {
         }
         
         challengeNameLabel.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(30.0)
+            view.top.equalToSuperview().offset(70.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
         }
@@ -147,7 +147,7 @@ class PopupViewController: UIViewController {
         }
         
         challengeStatsLabel.snp.makeConstraints { (view) in
-            view.top.equalTo(challengeDescriptionLabel.snp.bottom).offset(25.0)
+            view.top.equalTo(challengeDescriptionLabel.snp.bottom).offset(20.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
             view.bottom.equalToSuperview().inset(25.0)
@@ -180,7 +180,6 @@ class PopupViewController: UIViewController {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 40.0
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "10")
         //imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
         return imageView
@@ -223,6 +222,7 @@ class PopupViewController: UIViewController {
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Start", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.addTarget(self, action: #selector(startActivity), for: .touchUpInside)
         return button
     }()

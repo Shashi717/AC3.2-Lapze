@@ -21,7 +21,7 @@ class UserLocationMarker: UIView {
     
     private func setUpView(){
         
-        self.backgroundColor = ColorPalette.orangeThemeColor
+        self.backgroundColor = ColorPalette.flatRed
         self.layer.cornerRadius = 10
         self.layer.shadowOffset = CGSize(width: 1, height: 5)
         self.layer.shadowRadius = 2

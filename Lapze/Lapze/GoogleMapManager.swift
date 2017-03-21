@@ -79,7 +79,6 @@ class GoogleMapManager{
             let profilePic = UIImage.profileIcon(named: user.profilePic)
             marker.map = self.map
             marker.icon = profilePic
-            
         }
     }
     
@@ -134,8 +133,13 @@ extension UIImage {
         return newImage
     }
     
-    class func eventIcon(named name: String) -> UIImage?{
-        return UIImage(named: name + "Thumb")
+    class func eventIcon(named name: String, iconSize: CGSize = CGSize(width: 30, height: 30)) -> UIImage?{
+        guard let image = UIImage(named: name + "Thumb") else { return nil }
+        UIGraphicsBeginImageContext(iconSize)
+        image.draw(in: CGRect(x :0, y:0, width: iconSize.width, height: iconSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
     }
 }
 

@@ -21,25 +21,20 @@ class MainTabController: UITabBarController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        checkForUserStatus()
+       // checkForUserStatus()
         setDefaultViewController()
         
     }
     override func viewDidAppear(_ animated: Bool) {
-      //  showLogin()
+      checkForUserStatus()
     }
     
     private func checkForUserStatus(){
-        
         _ = FIRAuth.auth()?.addStateDidChangeListener({ (auth, user) in
             if user == nil{
                 self.perform(#selector(self.showLogin), with: nil, afterDelay: 0.01)
             }else if !self.userLocationPermissionGranted {
-                let locationNeededVC = LocationNeededViewController()
-                self.present(locationNeededVC, animated: true, completion: nil)
-                locationNeededVC.onLocationPermissionsGranted = { [weak self] in
-                    self?.setUpTabBar()
-                }
+                  self.perform(#selector(self.showLocationNeed), with: nil, afterDelay: 0.01)
             }else{
                 self.setUpTabBar()
             }
@@ -56,6 +51,14 @@ class MainTabController: UITabBarController{
         let loginVC = LoginViewController()//UINavigationController(rootViewController: LoginViewController())
         setDefaultViewController()
         present(loginVC, animated: true, completion: nil)
+    }
+    
+    @objc private func showLocationNeed(){
+        let locationNeededVC = LocationNeededViewController()
+        self.present(locationNeededVC, animated: true, completion: nil)
+        locationNeededVC.onLocationPermissionsGranted = { [weak self] in
+            self?.setUpTabBar()
+        }
     }
     
     private func setUpTabBar(){
@@ -76,7 +79,7 @@ class MainTabController: UITabBarController{
         
         self.tabBar.backgroundColor = ColorPalette.greenThemeColor
         self.tabBar.barTintColor = .white
-        self.tabBar.tintColor = ColorPalette.greenThemeColor
+        self.tabBar.tintColor = ColorPalette.lightPurple
         
         self.selectedIndex = 0
     }

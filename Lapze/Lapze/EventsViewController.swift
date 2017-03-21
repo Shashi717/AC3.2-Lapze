@@ -72,7 +72,6 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
     let challengePath = Path()
     let userPath = Path()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
