@@ -48,7 +48,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     }
     
     //test
-   
+    
     
     func location() {
         locationManager.delegate = self
@@ -58,7 +58,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         locationManager.startUpdatingLocation()
     }
     
-  
+    
     
     private func setUpController(){
         addMapViewController()
@@ -67,13 +67,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     private func configureUserDefaults() {
         let userDefaults = UserDefaults.standard
-        //let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
+        let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        //if isFirstTime == false {
+        if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        //}
+        }
     }
     
     private func addMapViewController(){
@@ -141,7 +141,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         }
     }
     
-
+    
     @objc private func handlePostInfoInterface() {
         animateAddbuttonInfo(false)
         addButtonInfoLabel.removeFromSuperview()
@@ -207,7 +207,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     func animateAddbuttonInfo(_ isAnimating: Bool) {
         
         UIView.animate(withDuration: 1, delay: 0.75, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .repeat, animations: {
-//            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
+            //            self.infoThumbImageView.frame = CGRect(x: self.infoThumbImageView.frame.origin.x, y: -10, width: self.infoThumbImageView.frame.width, height: self.infoThumbImageView.frame.height)
             self.infoThumbImageView.frame = self.infoThumbImageView.frame.offsetBy(dx: 0, dy: -10)
         }, completion: nil)
         
@@ -318,7 +318,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     @objc private func endChallenge(){
         print("End challenge infoview")
         mapViewController.activityTime = Double(counter)
-     
+        
         stopTimer()
         animateInfoWindow()
         showAlertSheet(title: "Keep this challenge", message: nil, acceptClosure: { (_) in
