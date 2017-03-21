@@ -15,7 +15,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = ColorPalette.logoGreenColor
+        self.view.backgroundColor = ColorPalette.darkPurple
         setupViewHierarchy()
         configureConstraints()
         
