@@ -79,6 +79,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         getUserChallenges()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.pieChart.animate(yAxisDuration: 2)
+    }
+    
     func getUserChallenges() {
         
         guard let uId = FIRAuth.auth()?.currentUser?.uid else {
@@ -226,6 +230,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.pieChart.legend.enabled =  false
         self.pieChart.chartDescription?.text = ""
         self.pieChart.usePercentValuesEnabled = true
+        self.pieChart.animate(yAxisDuration: 2)
         self.pieChart.sizeToFit()
         
     }
