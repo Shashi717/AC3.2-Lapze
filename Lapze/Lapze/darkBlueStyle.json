@@ -70,10 +70,27 @@
   },
   {
   "featureType": "poi",
+  "stylers": [
+              {
+              "visibility": "off"
+              }
+              ]
+  },
+  {
+  "featureType": "poi",
   "elementType": "geometry",
   "stylers": [
               {
               "color": "#283d6a"
+              }
+              ]
+  },
+  {
+  "featureType": "poi",
+  "elementType": "labels.text",
+  "stylers": [
+              {
+              "visibility": "off"
               }
               ]
   },
@@ -96,6 +113,22 @@
               ]
   },
   {
+  "featureType": "poi.business",
+  "stylers": [
+              {
+              "visibility": "off"
+              }
+              ]
+  },
+  {
+  "featureType": "poi.park",
+  "stylers": [
+              {
+              "visibility": "on"
+              }
+              ]
+  },
+  {
   "featureType": "poi.park",
   "elementType": "geometry.fill",
   "stylers": [
@@ -114,11 +147,28 @@
               ]
   },
   {
+  "featureType": "poi.sports_complex",
+  "stylers": [
+              {
+              "visibility": "on"
+              }
+              ]
+  },
+  {
   "featureType": "road",
   "elementType": "geometry",
   "stylers": [
               {
               "color": "#304a7d"
+              }
+              ]
+  },
+  {
+  "featureType": "road",
+  "elementType": "labels.icon",
+  "stylers": [
+              {
+              "visibility": "off"
               }
               ]
   },
@@ -173,6 +223,14 @@
   "stylers": [
               {
               "color": "#023e58"
+              }
+              ]
+  },
+  {
+  "featureType": "transit",
+  "stylers": [
+              {
+              "visibility": "off"
               }
               ]
   },

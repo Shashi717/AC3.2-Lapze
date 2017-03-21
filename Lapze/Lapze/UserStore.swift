@@ -11,13 +11,18 @@ import FirebaseAuth
 import Firebase
 
 class UserStore {
-    
+    static let manager: UserStore = UserStore()
     let databaseRef = FIRDatabase.database().reference()
-
     let uId = FIRAuth.auth()?.currentUser?.uid
-    
-    
+    private var userCache: [String: User] = [:]
+    private init() {}
+  
     func getUser(id: String, completion: @escaping (User) -> Void) {
+
+        if let user = userCache[id] {
+            completion(user)
+            return
+        }
         
         self.databaseRef.child("users").child(id).observe(.value, with: {(snapshot) in
             
@@ -42,7 +47,10 @@ class UserStore {
                                   badges: badges)
             }
             if let user = userObject {
+                self.userCache[id] = user
                 completion(user)
+                return
+
             }
             
         })
@@ -93,6 +101,7 @@ class UserStore {
                                     badges: badges)
                     
                     userObjects.append(user)
+                    self.userCache[id] = user
                 }
             }
             completion(userObjects)

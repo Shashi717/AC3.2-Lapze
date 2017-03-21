@@ -281,7 +281,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Event Delegate methods
     func startEvent(name: String, showUserLocation: Bool){
-        topInfoView.titleLabel.text = "Your \(name) session"
+        topInfoView.titleLabel.text = "Your \(name) Session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
@@ -400,15 +400,12 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        segmentedControl.backgroundColor = ColorPalette.darkBlue
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
         
-        
-        
-        segmentedControl.backgroundColor = .clear
+        segmentedControl.backgroundColor = .black
+        segmentedControl.alpha = 0.6
         segmentedControl.layer.borderColor = UIColor.white.cgColor
-        segmentedControl.layer.cornerRadius = 20
         
         return segmentedControl
     }()

@@ -25,7 +25,7 @@ class PopupViewController: UIViewController {
     var didCreateActivity = false
     var userLocation: CLLocation?
     var challengeLocation: Location?
-    let locationStore = LocationStore()
+    let locationStore = LocationStore.manager
     
     override func viewDidLoad() {
         super.viewDidLoad()

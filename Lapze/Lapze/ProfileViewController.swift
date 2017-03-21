@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     let cellId = "badges"
     var userProfileImage = "0"
     
-    let userStore = UserStore()
+    let userStore = UserStore.manager
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -159,7 +159,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         do {
             try FIRAuth.auth()?.signOut()
             let alertController = showAlert(title: "Logout Successful!", message: "You have logged out successfully. Please log back in if you want to enjoy the features.", useDefaultAction: true)
-            present(alertController, animated: true, completion: nil)
+            //present(alertController, animated: true, completion: nil)
+            
         }
         catch
         {
