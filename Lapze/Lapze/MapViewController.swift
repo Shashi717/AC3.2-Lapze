@@ -153,11 +153,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
         }
         userLocationMarker?.iconView = nil
         userStore.getUser(id: userId) { (user) in
-            
-            if let profileImage = self.resizeImage(user.profilePic) {
-                self.userLocationMarker?.icon = profileImage
+            if let user = user{
+                guard let profileImage = self.resizeImage(user.profilePic) else { return }
+                  self.userLocationMarker?.icon = profileImage
+                
             }else{
-                self.userLocationMarker?.icon = self.resizeImage("0")
+                guard let image = self.resizeImage("0") else { return }
+                self.userLocationMarker?.icon = image
             }
         }
         
@@ -448,7 +450,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
                 thumbView.titleLabel.text = event.type
                 
                 UserStore.manager.getUser(id: markerId){ user in
-                    thumbView.currentChampionNameLabel.text = user.name + " created this event"
+                    thumbView.currentChampionNameLabel.text = (user?.name)! + " created this event"
                 }
             }
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
@@ -460,7 +462,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
+                        thumbView.currentChampionNameLabel.text = ("Champion: \(user?.name)")
                     })
                     
                     if self.userChampionshipChallenges.contains(id) {
@@ -500,8 +502,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated)"
-                        self.popVc.profileImageView.image = UIImage(named: user.profilePic)
+                        self.popVc.challengeDescriptionLabel.text = "\(user?.name): Champion since \(challenge.lastUpdated)"
+                        self.popVc.profileImageView.image = UIImage(named: (user?.profilePic)!)
                     })
                     self.popVc.activityId = challenge.id
                     self.popVc.userLocation = LocationManager.sharedManager.currentLocation

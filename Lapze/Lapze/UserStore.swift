@@ -17,7 +17,7 @@ class UserStore {
     private var userCache: [String: User] = [:]
     private init() {}
     
-    func getUser(id: String, completion: @escaping (User) -> Void) {
+    func getUser(id: String, completion: @escaping (User?) -> Void) {
         if let user = userCache[id] {
             completion(user)
             return
@@ -48,6 +48,9 @@ class UserStore {
             if let user = userObject {
                 self.userCache[id] = user
                 completion(user)
+                return
+            }else{
+                completion(nil)
             }
             
         })
