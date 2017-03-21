@@ -63,6 +63,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func logoAnimation() {
+        
         UIView.animate(withDuration: 1, animations: { 
              self.logoOuterRing.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         }, completion: { (_) in
@@ -127,7 +128,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         gotoRegisterButton.snp.makeConstraints { (view) in
             view.centerX.equalToSuperview()
-            view.top.equalTo(loginButton.snp.bottom).offset(8.0)
+            //view.top.equalTo(loginButton.snp.bottom).offset(8.0)
+            view.bottom.equalToSuperview()
             view.width.equalTo(200.0)
             view.height.equalTo(30.0)
         }

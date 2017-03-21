@@ -71,16 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             self.window?.addSubview(self.customizedLaunchScreenView!)
             self.window?.bringSubview(toFront: self.customizedLaunchScreenView!)
             
-            //self.rollingLogo = UIImageView(frame: .zero)
-            //self.rollingLogo?.image = #imageLiteral(resourceName: "logow")
-            
-            //self.window?.addSubview(rollingLogo!)
-            //self.window?.bringSubview(toFront: rollingLogo!)
-            //            self.rollingLogo?.snp.makeConstraints{ (view) in
-            //                view.centerY.equalTo(window.snp.centerY).offset(10)
-            //                view.centerX.equalTo(window.snp.centerX)
-            //            }
-            
             
             //add inits
             self.outerRing = UIImageView(frame: .zero)

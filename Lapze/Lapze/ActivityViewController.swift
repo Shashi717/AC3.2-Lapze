@@ -69,11 +69,11 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let userDefaults = UserDefaults.standard
         let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        if isFirstTime == false {
+        //if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        }
+        //}
     }
     
     private func addMapViewController(){
@@ -432,6 +432,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let label = UILabel()
         label.text = "Tap to create an Event"
         label.textColor = .white
+        label.alpha = 0.6
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.layer.masksToBounds = true

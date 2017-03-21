@@ -92,6 +92,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             var activityDataDict = [String: Double]()
             for challenge in challenges {
                 activityDataDict[challenge.type] = activityDataDict[challenge.type] ?? 1
+                activityDataDict[challenge.type]! += 1.0
             }
             self.setChart(userData: activityDataDict)
             self.getActivityData(challenges)
@@ -225,8 +226,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.pieChart.legend.enabled =  false
         self.pieChart.chartDescription?.text = ""
         self.pieChart.usePercentValuesEnabled = true
+        self.pieChart.animate(xAxisDuration: 2)
         self.pieChart.sizeToFit()
         
+        self.pieChart.isUserInteractionEnabled = true
+        let tap = UIGestureRecognizer(target: self, action: #selector(tapThat))
+        self.pieChart.addGestureRecognizer(tap)
+        
+    }
+    func tapThat() {
+        print("Tapped it")
     }
     
     //MARK: - setup
@@ -288,7 +297,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         pieChart.snp.makeConstraints { (view) in
-            view.top.equalTo(badgesCollectionView.snp.bottom).offset(8.0)
+            view.top.equalTo(activitiesLabel.snp.bottom)
             view.bottom.equalToSuperview()
             view.width.equalToSuperview().multipliedBy(0.6)
             view.centerX.equalToSuperview()
