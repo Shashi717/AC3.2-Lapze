@@ -72,7 +72,7 @@ class MainTabController: UITabBarController{
         
         self.tabBar.backgroundColor = ColorPalette.greenThemeColor
         self.tabBar.barTintColor = .white
-        self.tabBar.tintColor = ColorPalette.greenThemeColor
+        self.tabBar.tintColor = ColorPalette.lightPurple
         
         self.selectedIndex = 0
     }

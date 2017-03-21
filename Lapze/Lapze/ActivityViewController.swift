@@ -58,18 +58,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         locationManager.startUpdatingLocation()
     }
     
-    func facebook() {
-        if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
-            let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            facebookSheet.setInitialText("Share on Facebook")
-            self.present(facebookSheet, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    //test^^
+  
     
     private func setUpController(){
         addMapViewController()
@@ -78,13 +67,13 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     private func configureUserDefaults() {
         let userDefaults = UserDefaults.standard
-        let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
+        //let isFirstTime = userDefaults.bool(forKey: "isNotFirstTime")
         
-        if isFirstTime == false {
+        //if isFirstTime == false {
             userDefaults.set(true, forKey: "isNotFirstTime")
             createAnimationView()
             animateAddbuttonInfo(true)
-        }
+        //}
     }
     
     private func addMapViewController(){
@@ -411,7 +400,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
         let font = UIFont.systemFont(ofSize: 14)
         segmentedControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
         segmentedControl.tintColor = .white
-        //segmentedControl.backgroundColor = ColorPalette.greenThemeColor
+        segmentedControl.backgroundColor = ColorPalette.darkBlue
         segmentedControl.addTarget(self, action: #selector(changeMapState(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
         
