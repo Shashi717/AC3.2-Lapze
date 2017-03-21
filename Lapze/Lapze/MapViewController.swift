@@ -119,7 +119,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         switch viewControllerState{
         case .challenges:
             trackingBehavior = .followWithPathMarking
-         
+            
         case .events:
             trackingBehavior = .limitedFollow//.limitedFollow(radius: 10)
         }
@@ -129,11 +129,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
             }
-    
+            
         }
         
         if didCreateActivity == true {
-             self.markerOption = .none
+            self.markerOption = .none
         }
         
     }
@@ -439,7 +439,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
+                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated)"
+                        self.popVc.profileImageView.image = UIImage(named: user.profilePic)
                     })
                     self.popVc.activityId = challenge.id
                     self.popVc.userLocation = LocationManager.sharedManager.currentLocation

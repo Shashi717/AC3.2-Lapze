@@ -29,7 +29,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Lapze would like to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Lapze would like to track your location during your activity</string>
+	<string>Lapze would like to track your location during your activities</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<false/>
 	<key>UIBackgroundModes</key>
