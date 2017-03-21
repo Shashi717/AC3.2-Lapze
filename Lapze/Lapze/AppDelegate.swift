@@ -42,24 +42,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
      
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let navAppearance = UINavigationBar.appearance()
-        navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir-Book", size: 20)!, NSForegroundColorAttributeName : UIColor.white]
-        navAppearance.barTintColor = ColorPalette.lightPurple
+        navAppearance.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir-Book", size: 16)!, NSForegroundColorAttributeName : UIColor.white]
+        navAppearance.barTintColor = ColorPalette.darkPurple
         navAppearance.tintColor = .white
         
         //Root View
         //test
         self.window?.rootViewController = MainTabController()
         self.window?.makeKeyAndVisible()
-
+        
+        
+        
         return true
     }
+
+ 
+
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler(.alert)
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //
+        
     }
     
     func location() {
@@ -91,6 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
     
 }
 

@@ -65,6 +65,7 @@ class LeaderBoardCollectionCell: BaseCell {
     internal var nameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.font = UIFont(name: "Gill Sans", size: 16)
         label.textColor = .gray
         return label
     }()

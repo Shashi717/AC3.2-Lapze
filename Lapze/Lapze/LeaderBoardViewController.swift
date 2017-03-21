@@ -76,10 +76,25 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        cell.nameLabel.text = "\(self.users[indexPath.row].name) - \(users.count-Int(indexPath.row)) wins"
+        
+        // setting Leader icon
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(named: "leaderCrown")
+        let attachmentString = NSAttributedString(attachment: attachment)
+        let nameString = "\(users[indexPath.row].name) the \(users[indexPath.row].rank) with \(users[indexPath.row].challengeCount) wins "
+        let cellString = NSMutableAttributedString(string: nameString)
+        cellString.append(attachmentString)
+        
+        if indexPath.row == 0 {
+            cell.nameLabel.attributedText = cellString
+        } else {
+            cell.nameLabel.text = nameString
+        }
         cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
         return cell
     }
+    
+   
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
