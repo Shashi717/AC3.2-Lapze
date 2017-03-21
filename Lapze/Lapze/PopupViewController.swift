@@ -25,7 +25,7 @@ class PopupViewController: UIViewController {
     var didCreateActivity = false
     var userLocation: CLLocation?
     var challengeLocation: Location?
-    let locationStore = LocationStore()
+    let locationStore = LocationStore.manager
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,10 +131,11 @@ class PopupViewController: UIViewController {
         profileImageView.snp.makeConstraints { (view) in
             view.height.width.equalTo(100.0)
             view.centerY.equalTo(popupContainerView.snp.top)
+            view.centerX.equalTo(popupContainerView)
         }
         
         challengeNameLabel.snp.makeConstraints { (view) in
-            view.top.equalToSuperview().offset(25.0)
+            view.top.equalToSuperview().offset(30.0)
             view.left.equalToSuperview().offset(8.0)
             view.right.equalToSuperview().inset(8.0)
         }
@@ -179,7 +180,7 @@ class PopupViewController: UIViewController {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 40.0
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "004-boy")
+        imageView.image = UIImage(named: "10")
         //imageView.layer.borderWidth = 2
         imageView.layer.masksToBounds = false
         return imageView
@@ -189,6 +190,7 @@ class PopupViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
+        label.font = UIFont(name: "", size: 40)
         return label
     }()
     
@@ -203,7 +205,9 @@ class PopupViewController: UIViewController {
     
     lazy var challengeStatsLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = ColorPalette.lightPurple
+        label.font = UIFont(name: "Avenir Next", size: 25)
+        label.font = UIFont.boldSystemFont(ofSize: 25)
         label.textAlignment = .center
         return label
     }()

@@ -9,15 +9,30 @@
 import Foundation
 import Firebase
 
+enum UpdateType {
+    case created
+    case changed
+    case removed
+}
+
+protocol FirebaseNodeObserver {
+    func nodeDidUpdate(snapshot: FIRDataSnapshot, updateType type: UpdateType)
+}
+
+struct NodeObserverContainer {
+    let childAddedHandler: UInt
+    let childRemovedHandler: UInt
+    let childChangedHandler: UInt
+}
+
 class FirebaseManager {
-    let mapView: MapViewController = MapViewController()
     static let shared: FirebaseManager  = FirebaseManager()
     let uid = FIRAuth.auth()?.currentUser?.uid
     private let databaseReference = FIRDatabase.database().reference()
-    private var childAddedhandler: UInt?
-    private var childRemovedhandler: UInt?
-    private var childChangedhandler: UInt?
+    private var nodeObserversForIdentifier: [String: NodeObserverContainer] = [:]
     private init(){}
+    
+    fileprivate var nodeObservers: [FirebaseNodeObserver] = [EventStore.manager, LocationStore.manager]
     
     enum FirebaseNode: String{
         case location,event
@@ -26,22 +41,28 @@ class FirebaseManager {
     func startObserving(node: FirebaseNode){
         let childRef = databaseReference.child(node.rawValue.capitalized)
         
-        childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
-            if let event = EventStore.manager.createEvent(snapshot: snapshot){
-                GoogleMapManager.shared.addMarker(event: event)
-                self.mapView.getAllEvents()
-            }
+        let childAddedhandler = childRef.observe(.childAdded, with: { (snapshot) in
+            self.notifyObservers(snapshot: snapshot, updateType: .created)
         })
         
-        childChangedhandler = childRef.observe(.childChanged, with: { (snapshot) in
-            if let dict = self.getSnapshotValue(snapshot: snapshot){
-                GoogleMapManager.shared.updateMarker(id: snapshot.key, locationDict: dict)
-            }
+        let childChangedhandler = childRef.observe(.childChanged, with: { (snapshot) in
+            self.notifyObservers(snapshot: snapshot, updateType: .changed)
         })
         
-        childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
-            GoogleMapManager.shared.removeMarker(id: snapshot.key)
+        let childRemovedhandler = childRef.observe(.childRemoved, with: { (snapshot) in
+            self.notifyObservers(snapshot: snapshot, updateType: .removed)
         })
+        
+        nodeObserversForIdentifier[node.rawValue.capitalized] = NodeObserverContainer(childAddedHandler: childAddedhandler,
+                                                                                      childRemovedHandler: childRemovedhandler,
+                                                                                      childChangedHandler: childChangedhandler)
+    }
+    
+    func stopObserving(node: FirebaseNode) {
+        guard let nodeObserver = nodeObserversForIdentifier[node.rawValue.capitalized] else { return }
+        databaseReference.removeObserver(withHandle: nodeObserver.childAddedHandler)
+        databaseReference.removeObserver(withHandle: nodeObserver.childRemovedHandler)
+        databaseReference.removeObserver(withHandle: nodeObserver.childChangedHandler)
     }
     
     func stopObserving(){
@@ -92,4 +113,9 @@ class FirebaseManager {
         return snapshot.value as? [String:Double]
     }
     
+    fileprivate func notifyObservers(snapshot: FIRDataSnapshot, updateType type: UpdateType) {
+        for observer in nodeObservers {
+            observer.nodeDidUpdate(snapshot: snapshot, updateType: type)
+        }
+    }
 }

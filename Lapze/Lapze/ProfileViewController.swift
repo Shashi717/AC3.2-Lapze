@@ -49,10 +49,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     let cellId = "badges"
     var userProfileImage = "0"
     
-    
-    let userStore = UserStore()
-    let currentUser = FIRAuth.auth()?.currentUser?.uid
-    
+    let userStore = UserStore.manager
     var challengeRef: FIRDatabaseReference!
     let databaseRef = FIRDatabase.database().reference()
     private let challengeStore = ChallengeStore()
@@ -66,16 +63,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     var user: User! {
         didSet {
-            let theRank = checkRank(userChallenges.count)
-            if user.rank != theRank.rawValue {
-                userStore.updateRank(rank: theRank.rawValue)
-            }
+            checkRank()
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "My Profile"
+        self.navigationItem.title = "MY PROFILE"
         self.view.backgroundColor = .white
         setupViewHierarchy()
         configureConstraints()
@@ -103,7 +98,14 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func checkRank(_ challengeCount: Int) -> Rank {
+    func checkRank() {
+        let theRank = getRank(user.challengeCount)
+        if user?.rank != theRank.rawValue {
+            userStore.updateRank(rank: theRank.rawValue)
+        }
+    }
+    
+    func getRank(_ challengeCount: Int) -> Rank {
         
         var rank = Rank.none
         
@@ -125,7 +127,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         return rank
-        
     }
     
     //Test: set userchallenge data to implement badge count etc.
@@ -151,7 +152,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             if let badges = user.badges {
                 self.userBadges = badges //access to global var
             }
-            
         }
     }
     

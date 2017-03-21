@@ -11,13 +11,17 @@ import FirebaseAuth
 import Firebase
 
 class UserStore {
-    
+    static let manager: UserStore = UserStore()
     let databaseRef = FIRDatabase.database().reference()
-
     let uId = FIRAuth.auth()?.currentUser?.uid
-    
+    private var userCache: [String: User] = [:]
+    private init() {}
     
     func getUser(id: String, completion: @escaping (User) -> Void) {
+        if let user = userCache[id] {
+            completion(user)
+            return
+        }
         
         self.databaseRef.child("users").child(id).observe(.value, with: {(snapshot) in
             
@@ -42,6 +46,7 @@ class UserStore {
                                   badges: badges)
             }
             if let user = userObject {
+                self.userCache[id] = user
                 completion(user)
             }
             
@@ -66,7 +71,7 @@ class UserStore {
     func getAllUsers(completion: @escaping ([User]) -> Void) {
         var userObjects: [User] = []
         
-        self.databaseRef.child("users").observe(.value, with: {(snapshot) in
+        self.databaseRef.child("users").observeSingleEvent(of: .value, with: {(snapshot) in
             
             let enumerator = snapshot.children
             while let snap = enumerator.nextObject() as? FIRDataSnapshot {
@@ -92,8 +97,8 @@ class UserStore {
                                     eventCount: eventCount,
                                     badges: badges)
                     
-                    
                     userObjects.append(user)
+                    self.userCache[id] = user
                 }
             }
             completion(userObjects)
@@ -114,6 +119,7 @@ class UserStore {
     }
     
     func updateRank(rank: String) {
+
         guard let userId = uId else {
             return
         }

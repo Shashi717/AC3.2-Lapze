@@ -19,7 +19,10 @@ public enum MapViewControllerState: Int {
     case challenges
 }
 
-class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
+class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,EventObserver,LocationObserver {
+    
+    let identifier: String = "MapViewController"
+    
     fileprivate enum TrackingBehavior {
         case followWithPathMarking
         // case limitedFollow(radius:Int)
@@ -51,12 +54,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     private var allChallenges: [Challenge] = []
     private var allEvents: [Event] = []{
         didSet{
+            guard markerOption == .event else { return }
             self.showEventMarkers()
         }
     }
     private var userChampionshipChallenges: [String] = []
     private let challengeStore = ChallengeStore()
-    private let userStore = UserStore()
+    private let userStore = UserStore.manager
     let popVc: PopupViewController = PopupViewController()
     private let path: GMSMutablePath = GMSMutablePath()
     let challengePath = Path()
@@ -68,6 +72,8 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     var challenge: Challenge?
     var didCreateActivity = true
     
+    // MARK:_ Lifecycle functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViewController()
@@ -75,10 +81,25 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         googleMapView.delegate = self
         line.map = googleMapView
         FirebaseManager.shared.startObserving(node: .event)
+        FirebaseManager.shared.startObserving(node: .location)
         GoogleMapManager.shared.manage(map: self.googleMapView)
         getAllChallenges()
         getAllEvents()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        EventStore.manager.add(observer: self)
+        LocationStore.manager.add(observer: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        EventStore.manager.remove(observer: self)
+        LocationStore.manager.remove(observer: self)
+    }
+    
+    // MARK: Update views
     
     private func setUpViewController(){
         self.view.addSubview(googleMapView)
@@ -129,13 +150,11 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
             }
-    
         }
         
         if didCreateActivity == true {
              self.markerOption = .none
         }
-        
     }
     
     public func endActivity(){
@@ -189,7 +208,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
             
         else {
-            let locationStore = LocationStore()
+            let locationStore = LocationStore.manager
             if let path = challenge?.path, let endLocation = path.last {
                 if locationStore.isUserWithinRadius(userLocation: self.userCurrentLocation!, challengeLocation: endLocation) {
                     
@@ -273,7 +292,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
     }
     
     //MARK: - Event Utilities
-    func getAllEvents(){
+    private func getAllEvents(){
         EventStore.manager.getAllCurrentEvents { (events) in
             self.allEvents = events
         }
@@ -285,15 +304,44 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         }
     }
     
-    private func getEvent(id: String, closure:@escaping (Event?)->Void){
+    func getEvent(id: String) -> Event?{
         for event in allEvents{
             if event.id == id{
-                closure(event)
+                return event
             }
+        }
+        return nil
+    }
+    
+    //MARK: - EventObserver method
+    func eventsDidUpdate(event: Event, updateType type: UpdateType) {
+        switch type {
+        case .removed:
+            allEvents = allEvents.filter { $0.id != event.id }
+            GoogleMapManager.shared.removeMarker(id: event.id, type: .event)
+        case .changed:
+            allEvents = allEvents.map { original in
+                if original.id == event.id {
+                    return event
+                } else { return original }
+            }
+        case .created:
+            allEvents.append(event)
         }
     }
     
-    //MARK:- Location manager delegate methods
+    //MARK:- LocationObserver method
+    
+    func locationsDidUpdate(id: String, location: Location, updateType type: UpdateType) {
+        switch type {
+        case .removed:
+            GoogleMapManager.shared.removeMarker(id: id, type: .profile)
+        default:
+            GoogleMapManager.shared.addMarker(id: id, location: location)
+        }
+    }
+    
+    //MARK:- LocationManager delegate methods
     func locationDidUpdate(newLocation: CLLocation) {
         userCurrentLocation = newLocation
         switch trackingBehavior{
@@ -387,9 +435,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         switch markerOption {
         case .event:
             guard let markerId = marker.title else {return nil}
-            getEvent(id: markerId, closure: { (event) in
-                thumbView.titleLabel.text = event?.type
-            })
+            if let event = getEvent(id: markerId){
+                thumbView.titleLabel.text = event.type
+                
+                UserStore.manager.getUser(id: markerId){ user in
+                    thumbView.currentChampionNameLabel.text = user.name
+                }
+            }
             thumbView.backgroundColor = ColorPalette.purpleThemeColor
             
         case .challenge:
@@ -491,13 +543,13 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate {
         button.setImage(UIImage(named: "locate"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.imageView?.snp.makeConstraints({ (view) in
-            view.size.equalTo(CGSize(width: 30, height: 30))
+            view.size.equalTo(CGSize(width: 20, height: 20))
         })
         button.layer.shadowOpacity = 0.4
         button.layer.shadowOffset = CGSize(width: 1, height: 5)
         button.layer.shadowRadius = 2
         button.backgroundColor = UIColor.white
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(goToUserLocation), for: .touchUpInside)
         return button
     }()
