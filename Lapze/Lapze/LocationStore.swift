@@ -18,7 +18,9 @@ protocol LocationObserver {
 class LocationStore: FirebaseNodeObserver {
     static let manager: LocationStore = LocationStore()
     private var observers: [String: LocationObserver] = [:]
+
     private var userCurrentLocation: [Location] = []
+
     private init(){}
     
     func createPathArray(_ locationArray: [Location]) -> [[String:Any]] {

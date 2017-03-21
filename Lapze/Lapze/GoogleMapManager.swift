@@ -75,7 +75,6 @@ class GoogleMapManager{
             self.userLocationMarkerDic[id] = nil
             let marker = GMSMarker(position: cllocation)
             self.userLocationMarkerDic[id] = marker
-            
             let profilePic = UIImage.profileIcon(named: (user.profilePic))
             marker.map = self.map
             marker.icon = profilePic

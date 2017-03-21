@@ -153,15 +153,15 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
         }
         userLocationMarker?.iconView = nil
         userStore.getUser(id: userId) { (user) in
-            
             if let profileImage = self.resizeImage(user.profilePic) {
                 self.userLocationMarker?.icon = profileImage
             }
-            
         }
+        
             if didCreateActivity == true {
                 self.markerOption = .none
             }
+
         }
         
         public func endActivity(){
@@ -218,7 +218,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
                 let locationStore = LocationStore.manager
                 if let path = challenge?.path, let endLocation = path.last {
                     if locationStore.isUserWithinRadius(userLocation: self.userCurrentLocation!, challengeLocation: endLocation) {
-                        
+            
                         userStore.updateActivityCounts(activityType: "challengeCount")
                         
                         let currentDistance = (self.distance/1609.34).roundTo(places: 2)
@@ -396,6 +396,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
                 distance += lastDistance!
             }
             previousLocation = currentLocation
+
         }
         
         private func addUserLocationToFirebase(location: CLLocation){
@@ -423,7 +424,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             guard userPathArray.count > 0 else { return }
             let pathJsonArray = userPath.toJson(array: userPathArray)
         }
-        
+
         private func addLocationToPathArray(_ location:CLLocation){
             let location = Location(location: location)
             userPathArray.append(location)
@@ -450,6 +451,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
                 if let event = getEvent(id: markerId){
                     thumbView.titleLabel.text = event.type
                     thumbView.descriptionLabel.text = event.date
+
                     
                     UserStore.manager.getUser(id: markerId){ user in
                         thumbView.currentChampionNameLabel.text = (user.name) + " created this event"
@@ -495,7 +497,7 @@ class MapViewController: UIViewController,LocationConsuming,GMSMapViewDelegate,E
             }
             return thumbView
         }
-        
+    
         func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
             challengePath.removePolyline()
         }
