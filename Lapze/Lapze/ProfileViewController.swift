@@ -145,11 +145,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         userStore.getUser(id: uId) { (user) in
             self.user = user
-            self.usernameLabel.text = "\(user?.name)"
-            self.profileImageView.image = UIImage(named: "\(user?.profilePic)")
-            self.userRankLabel.text = user?.rank
+            self.usernameLabel.text = "\(user.name)"
+            self.profileImageView.image = UIImage(named: "\(user.profilePic)")
+            self.userRankLabel.text = user.rank
             
-            if let badges = user?.badges {
+            if let badges = user.badges {
                 self.userBadges = badges //access to global var
             }
         }

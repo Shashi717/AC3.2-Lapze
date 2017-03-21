@@ -438,7 +438,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        thumbView.currentChampionNameLabel.text = ("Champion: \(user?.name)")
+                        thumbView.currentChampionNameLabel.text = ("Champion: \(user.name)")
                     })
                     
                     if self.userChampionshipChallenges.contains(id) {
@@ -484,7 +484,7 @@ class EventsViewController:UIViewController,CLLocationManagerDelegate,GMSMapView
             if let id = marker.title {
                 challengeStore.getChallenge(id: id) { (challenge) in
                     self.userStore.getUser(id: challenge.champion, completion: { (user) in
-                        self.popVc.challengeDescriptionLabel.text = "\(user?.name): Champion since \(challenge.lastUpdated) "
+                        self.popVc.challengeDescriptionLabel.text = "\(user.name): Champion since \(challenge.lastUpdated) "
                         
                     })
                     self.popVc.activityId = challenge.id
