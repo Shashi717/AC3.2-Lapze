@@ -53,7 +53,7 @@ class EventStore: FirebaseNodeObserver {
             guard let lat = locationDic["lat"], let long = locationDic["long"] else { return nil }
             
             let location = Location(lat: lat, long: long)
-            let event = Event(id: snapshot.key, type: type, date: Date(), location: location)
+            let event = Event(id: snapshot.key, type: type, date: date, location: location)
             return event
         }
         return nil
