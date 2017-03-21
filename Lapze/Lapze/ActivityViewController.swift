@@ -281,7 +281,7 @@ class ActivityViewController: UIViewController,EventViewControllerDelegate,Chall
     
     //MARK:- Event Delegate methods
     func startEvent(name: String, showUserLocation: Bool){
-        topInfoView.titleLabel.text = "Your \(name) session"
+        topInfoView.titleLabel.text = "Your \(name) Session"
         bottomScrollInfoView.actionButton.setTitle("End Event", for: .normal)
         bottomScrollInfoView.actionButton.addTarget(nil, action: #selector(endEvent), for: .touchUpInside)
         mapViewController.startActivity()
