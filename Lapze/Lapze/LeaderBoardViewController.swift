@@ -76,20 +76,16 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //hack test
         cell.rankNumLabel.text = "\(Int(indexPath.row) + 1)"
-        // setting Leader icon
-        let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "leaderCrown")
-        let attachmentString = NSAttributedString(attachment: attachment)
+
+        //^^ delete NSTextattachment
         let nameString = "\(users[indexPath.row].name) the \(users[indexPath.row].rank) with \(users[indexPath.row].challengeCount) wins "
-        let cellString = NSMutableAttributedString(string: nameString)
-        cellString.append(attachmentString)
-        
-        if indexPath.row == 0 {
-            cell.nameLabel.attributedText = cellString
-        } else {
-            cell.nameLabel.text = nameString
-        }
+        cell.nameLabel.text = nameString
         cell.profileImageView.image = UIImage(named: "\(self.users[indexPath.row].profilePic)")
+        
+        if indexPath.row != 0 {
+            cell.winIcon.image = nil
+        }
+        
         return cell
     }
     
@@ -119,5 +115,6 @@ class LeaderBoardViewController: UIViewController, UICollectionViewDelegate, UIC
         view.backgroundColor = .white
         return view
     }()
+  
     
 }

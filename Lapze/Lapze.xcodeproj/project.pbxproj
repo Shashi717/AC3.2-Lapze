@@ -110,6 +110,7 @@
 		E363F2FD1E6F42AA005BE3B8 /* darkStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = darkStyle.json; sourceTree = "<group>"; };
 		E363F2FF1E6F4590005BE3B8 /* mirasHome.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = mirasHome.gpx; sourceTree = "<group>"; };
 		E363F3011E6F4F46005BE3B8 /* CreateChallengeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChallengeViewController.swift; sourceTree = "<group>"; };
+		E37557E61E80E93B00673507 /* Lapze.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lapze.entitlements; sourceTree = "<group>"; };
 		E39BA25E1E74CC60007A9D90 /* ProfileSettingsLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingsLauncher.swift; sourceTree = "<group>"; };
 		E39BA2601E74DD61007A9D90 /* ProfileSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingCell.swift; sourceTree = "<group>"; };
 		E39BA2641E75171B007A9D90 /* BadgesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -250,6 +251,7 @@
 		1A9767F51E6789EB00F6B28C /* Lapze */ = {
 			isa = PBXGroup;
 			children = (
+				E37557E61E80E93B00673507 /* Lapze.entitlements */,
 				1A4AA7C71E678C34006EC158 /* UI */,
 				1A4AA7C61E678BFC006EC158 /* Models */,
 				1A4AA7C51E678BE6006EC158 /* Controller Cells */,
@@ -326,6 +328,9 @@
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
 							};
 						};
 					};
@@ -584,11 +589,7 @@
 				INFOPLIST_FILE = Lapze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze;
-
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze.Shashi;
-
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -606,11 +607,7 @@
 				INFOPLIST_FILE = Lapze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-
-				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze;
-
 				PRODUCT_BUNDLE_IDENTIFIER = nyc.c4q.ac32.Lapze.Shashi;
-
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

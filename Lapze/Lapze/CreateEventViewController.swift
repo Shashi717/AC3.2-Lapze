@@ -86,27 +86,22 @@ class CreateEventViewController: UIViewController, UIPickerViewDataSource, UIPic
         if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook){
             let facebookSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
             facebookSheet.setInitialText("Join my \(self.pickedActivity) event on LAPZE!")
+            facebookSheet.completionHandler = {(result:SLComposeViewControllerResult) -> Void in
+                switch result {
+                case SLComposeViewControllerResult.done:
+                    self.notificationEvent()
+                case SLComposeViewControllerResult.cancelled:
+                    break
+                }
+            }
             self.present(facebookSheet, animated: true, completion: nil)
-            self.notificationEvent()
         } else {
             let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: { (_) in
-                self.notificationEvent()
-            })
+            self.present(alert, animated: true, completion: nil )
         }
     }
     
-    /*
-    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            //test - facebook post
-            if self.shareProfile {
-                self.shareEventOnFb()
-            }
-            self.dismissViewcontroller()
-            self.addEventToFirebase()
-        }))
-    */
     
     func notificationEvent() {
         let content = UNMutableNotificationContent()
